@@ -1,4 +1,4 @@
-#COVID-19 (Coronavirus) ABM(Agent Based Model)  🦠
+# COVID-19 (Coronavirus) ABM(Agent Based Model)  🦠
 
 Agent model simulations of social strategies to stop the spread of covid-19 disease.
 
