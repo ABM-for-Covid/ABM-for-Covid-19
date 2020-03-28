@@ -110,15 +110,15 @@ public class Transitions {
         }
 
         // transition to I2
-        if ( human.wantToMoveToI2 || getRandomBoolean(1 - prob_score)) {
+        if (human.wantToMoveToI2 || getRandomBoolean(1 - prob_score)) {
             human.wantToMoveToI2 = true;
-            if (env.hospitalCount > 0 ) {
+            if (env.hospitalCount > 0) {
                 human.setInfectionState(2);
                 env.hospitalCount--;
                 return;
-            }else {
+            } else {
                 //calculate transition to D
-                if (getRandomBoolean(1 - prob_score)){
+                if (getRandomBoolean(1 - prob_score)) {
                     human.setDead(true);
                     human.setInfected(false);
                     env.hospitalCount++;
@@ -181,7 +181,6 @@ public class Transitions {
         human.count_I2++;
 
     }
-
 
     public static void calculateI3Transition(Human human) {
         int a_x = human.get_age_score();
