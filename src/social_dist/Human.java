@@ -17,6 +17,7 @@ public /*strictfp*/ class Human extends Agent {
     public boolean weakImmune = false;
     public int coMorbid_score = 0; // [-2,-1,0]
     public int overallHealth = 3; // health [0,1,2,3]
+    public int sim_count = 0; // health [0,1,2,3]
 
     public int get_age_score(){
         int a_x = 0;
@@ -95,6 +96,11 @@ public /*strictfp*/ class Human extends Agent {
         env hb = (env) state;
         double distance2DesiredLocation = 1e30;
 
+        // if social distancing is being practiced
+        if (this.isolated && env.isSocialDistancing())
+            return;
+        if (this.dead) return;
+
         // interaction of two agents when they are in infection distance
         Bag mysteriousObjects = hb.HumansEnvironment.getNeighborsWithinDistance(agentLocation, 10.0 * env.INFECTION_DISTANCE);
         if (mysteriousObjects != null) {
@@ -124,23 +130,9 @@ public /*strictfp*/ class Human extends Agent {
                 }
             }
         }
-        if (this.isExposed())
-            Transitions.calculateE_I0toI1(this);
-        else if (this.getInfectionState() == 0)
-            Transitions.calculateI0Transition(this);
-        else if (this.getInfectionState() == 1)
-            Transitions.calculateI1Transition(this);
-        else if (this.getInfectionState() == 2)
-            Transitions.calculateI2Transition(this);
-        else if (this.getInfectionState() == 3)
-            Transitions.calculateI3Transition(this);
+
         steps--;
 
-
-        // if social distancing is being practiced
-        if (this.isolated && env.isSocialDistancing())
-            return;
-        if (this.dead) return;
 
         if (desiredLocation == null || steps <= 0) {
             desiredLocation = new Double2D((state.random.nextDouble() - 0.5) * ((env.XMAX - env.XMIN) / 5 - env.DIAMETER) +
@@ -175,9 +167,26 @@ public /*strictfp*/ class Human extends Agent {
                 Double2D(agentLocation.x + dx, agentLocation.y + dy))) {
             steps = 0;
         } else {
+            sim_count++;
             agentLocation = new Double2D(agentLocation.x + dx, agentLocation.y + dy);
+            if (sim_count %500 == 0){
+                if (this.isExposed())
+                    Transitions.calculateE_I0toI1(this);
+                else if (this.getInfectionState() == 0)
+                    Transitions.calculateI0Transition(this);
+                else if (this.getInfectionState() == 1)
+                    Transitions.calculateI1Transition(this);
+                else if (this.getInfectionState() == 2)
+                    Transitions.calculateI2Transition(this);
+                else if (this.getInfectionState() == 3)
+                    Transitions.calculateI3Transition(this);
+            }
+
+
             hb.HumansEnvironment.setObjectLocation(this, agentLocation);
         }
+
+
 
     }
 
