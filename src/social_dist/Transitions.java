@@ -26,7 +26,7 @@ public class Transitions {
                 exposedHuman.setInfected(true);
                 exposedHuman.setInfectionState(1);
                 exposedHuman.setExposed(false);
-                exposedHuman.count_I1++;
+                exposedHuman.count_I1 = 0;
                 return;
             }
             // otherwise it try to go to I0 with some latent period probability type A disease!
@@ -42,7 +42,7 @@ public class Transitions {
                 exposedHuman.setInfected(true);
                 exposedHuman.setInfectionState(1);
                 exposedHuman.setExposed(false);
-                exposedHuman.count_I1++;
+                exposedHuman.count_I1 = 0;
                 return;
             }
             // otherwise it try to go to I0 with some latent period probability type A disease!
@@ -72,7 +72,7 @@ public class Transitions {
     public static void calculateI0Transition(Human i0Human) {
 
         // I0->R is based on the time duration agent stays in the i0 state probabilistically 
-        if (i0Human.count_EI0 >= 14) {
+        if (i0Human.count_EI0 >= 12) {
             i0Human.setRecovered(true);
             i0Human.setInfected(false);
             i0Human.setInfectionState(-1);
@@ -102,10 +102,9 @@ public class Transitions {
         if (prob_score < 0) prob_score = 0;
 
         // transition to R
-        if (human.count_I1 > env.i1Period) {
+        if (human.count_I1 > env.i1Period && !human.wantToMoveToI2) {
             human.setRecovered(true);
             human.setInfected(false);
-            human.setInfectionState(-1);
             return;
         }
 
@@ -126,7 +125,6 @@ public class Transitions {
                 }
 
             }
-
         }
         //stay in I1
         human.count_I1++;
@@ -164,9 +162,11 @@ public class Transitions {
                 }
             }
             //todo if already ICUed once, then increase the prob to D ? how?
-            human.setInfectionState(3);
-            env.icuCount--;
-            return;
+            else {
+                human.setInfectionState(3);
+                env.icuCount--;
+                return;
+            }
         }
 
         // probability to I1
@@ -209,10 +209,12 @@ public class Transitions {
         score = a_x + human.overallHealth + human.coMorbid_score + 2;
         prob_score = score / (8 * (1 + human.count_I3));
         if (getRandomBoolean(prob_score)) {
-            human.setInfectionState(1);
-            human.count_I2 = 0;
-            env.hospitalCount--;
-            return;
+            if (env.hospitalCount > 0) {
+                human.setInfectionState(1);
+                human.count_I2 = 0;
+                env.hospitalCount--;
+                return;
+            }
         }
 
         human.count_I3++;
