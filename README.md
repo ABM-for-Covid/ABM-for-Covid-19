@@ -11,7 +11,7 @@ Have Java in your machine; Adding all the jar files here for quick setup.
 # Agent Parameters 
 ![](https://raw.githubusercontent.com/codeAshu/covid-19-Multiagent-Simulations/master/results/exp-2/parameters.png)
 
-# resultant graphs
+# Resultant graphs
 ![](https://raw.githubusercontent.com/codeAshu/covid-19-Multiagent-Simulations/master/results/exp-2/infection.png)
 
 
