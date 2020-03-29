@@ -15,11 +15,11 @@ public /*strictfp*/ class env extends SimState {
     public static final double YMAX = 800;
     public static final double DIAMETER = 15;
     public static final double HYGIENE_CONST = 0.2;
-    public static final double INCUBATION_PERIOD_LOW = 1;
     public static final double INCUBATION_PERIOD_High = 14;
-    public static final double INCUBATION_PERIOD_High_Weak = 5;
     public static final double INFECTION_DISTANCE = 20;
     public static final double INFECTION_DISTANCE_SQUARED = INFECTION_DISTANCE * INFECTION_DISTANCE;
+
+    public static  int sim_count = 0;
 
     // todo - set some random locations as hospitals
     // if I2 and I3 ->  update location of agent to hospital loc
@@ -55,7 +55,7 @@ public /*strictfp*/ class env extends SimState {
     public static double incubationMean = 5;
 
     public static int hospitalCount = 100;
-    public static int icuCount = (int) 0.5 * hospitalCount;
+    public static int icuCount = (int) (0.05 * hospitalCount);
 
     public static void setGlassView(boolean glassView) {
         env.glassView = glassView;
@@ -188,6 +188,56 @@ public /*strictfp*/ class env extends SimState {
         return expoCount;
     }
 
+    public int getRecoveredHumans()
+    //  return the count of recovered humans to inspectors.*/
+    {
+        int recCount = 0;
+        Bag mysteriousObjects = HumansEnvironment.getAllObjects();
+        for (int i = 0; i < mysteriousObjects.numObjs; i++) {
+            if (mysteriousObjects.objs[i] != null) {
+                Agent ta = (Agent) (mysteriousObjects.objs[i]);
+                if (ta.recovered) {
+                    recCount++;
+                }
+            }
+        }
+        return recCount;
+    }
+
+    public int getDeadHumans()
+    //  return the count of dead humans to inspectors.*/
+    {
+        int deadCount = 0;
+
+        Bag mysteriousObjects = HumansEnvironment.getAllObjects();
+        for (int i = 0; i < mysteriousObjects.numObjs; i++) {
+            if (mysteriousObjects.objs[i] != null) {
+                Agent ta = (Agent) (mysteriousObjects.objs[i]);
+                if (ta.dead) {
+                    deadCount++;
+                }
+            }
+        }
+        return deadCount;
+    }
+
+    public int getInfectiousAsymptomaticHumans()
+    //  return the count of exposed humans to inspectors.*/
+    {
+        int infI0Count = 0;
+
+        Bag mysteriousObjects = HumansEnvironment.getAllObjects();
+        for (int i = 0; i < mysteriousObjects.numObjs; i++) {
+            if (mysteriousObjects.objs[i] != null) {
+                Agent ta = (Agent) (mysteriousObjects.objs[i]);
+                if (ta.getInfectionState() == 0) {
+                    infI0Count++;
+                }
+            }
+        }
+        return infI0Count;
+    }
+
 
     public static void setInitialInfectionPercent(double initialInfectionPercent) {
         env.initialInfectionPercent = initialInfectionPercent;
@@ -289,7 +339,6 @@ public /*strictfp*/ class env extends SimState {
                 agent.age = (int) (triangularDistribution(ageMin, ageMax, agePeak));
                 if (agent.age > 100 || agent.age <=1)
                     continue;
-                System.out.println("Age of the agent "+agent.age);
 
                 // imunity flag
                 if (Transitions.getRandomBoolean(0.1))
