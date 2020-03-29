@@ -11,9 +11,6 @@ Have Java in your machine; Adding all the jar files here for quick setup.
 # Agent Parameters 
 ![](https://raw.githubusercontent.com/codeAshu/covid-19-Multiagent-Simulations/master/results/exp-2/parameters.png)
 
-# Resultant graphs
-![](https://raw.githubusercontent.com/codeAshu/covid-19-Multiagent-Simulations/master/results/exp-2/infection.png)
-
 
 ### Natural spread
 Natural spread case run:
@@ -41,8 +38,12 @@ Graphs
 ```
 ![](https://raw.githubusercontent.com/codeAshu/covid-19-Multiagent-Simulations/master/videos/exp-2.gif)
 
+# INFECTION CURVE
+![](https://raw.githubusercontent.com/codeAshu/covid-19-Multiagent-Simulations/master/results/exp-2/infection.png)
+
+
 ## Future work
-- create environment and define mobility of agent
+- Create environment and define mobility.
 - Test more lock-down strategies.
 - Improve the code and suggestions to scale.
 
