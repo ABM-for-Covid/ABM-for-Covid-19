@@ -1,6 +1,5 @@
 package social_dist;
 
-import com.sun.xml.internal.ws.policy.EffectiveAlternativeSelector;
 import sim.engine.Steppable;
 import sim.portrayal.DrawInfo2D;
 import sim.portrayal.SimplePortrayal2D;
@@ -30,13 +29,13 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
     protected boolean dead = false;
 
     // agent mobility
-    protected boolean isolated = true;
+    protected boolean isolated = false;
 
 
     // infectiion state (I0, I1, I2, I3)
     public int infectionState = -1;
     public int previousState = -1;
-    public boolean wantToMoveToI2 = false;
+    public int wantToMoveToI2 = 0;
 
     // state counters ( considering 10 simulation count as 1 day)
     public int count_EI0 = 0;
@@ -65,6 +64,9 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
 
     public void setInfectionState(int infectionState) {
         this.infectionState = infectionState;
+        if (infectionState == 2 || infectionState == 3) this.setIsolation(true);
+        if (infectionState == 0 || infectionState == 1) this.setIsolation(false);
+
     }
 
     public void setState(String state) {
@@ -108,8 +110,8 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
     public abstract String getType();
 
     public boolean hitObject(Object object, DrawInfo2D info) {
-        double diamx = info.draw.width * env.DIAMETER;
-        double diamy = info.draw.height * env.DIAMETER;
+        double diamx = info.draw.width * Env.DIAMETER;
+        double diamy = info.draw.height * Env.DIAMETER;
 
         Ellipse2D.Double ellipse = new Ellipse2D.Double((int) (info.draw.x - diamx / 2), (int) (info.draw.y - diamy / 2), (int) (diamx), (int) (diamy));
         return (ellipse.intersects(info.clip.x, info.clip.y, info.clip.width, info.clip.height));
