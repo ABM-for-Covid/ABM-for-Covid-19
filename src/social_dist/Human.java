@@ -1,10 +1,7 @@
 package social_dist;
 import sim.engine.SimState;
-import sim.portrayal.DrawInfo2D;
 import sim.util.Bag;
 import sim.util.Double2D;
-
-import java.awt.*;
 
 public /*strictfp*/ class Human extends Agent {
     private static final long serialVersionUID = 1;
@@ -93,16 +90,13 @@ public /*strictfp*/ class Human extends Agent {
      * Step the simulation
      ************************************************************************************/
     public void step(final SimState state) {
-        env hb = (env) state;
+        Env hb = (Env) state;
         double distance2DesiredLocation = 1e30;
 
-        // if social distancing is being practiced
-        if (this.isolated && env.isSocialDistancing())
-            return;
         if (this.dead) return;
 
         // interaction of two agents when they are in infection distance
-        Bag mysteriousObjects = hb.HumansEnvironment.getNeighborsWithinDistance(agentLocation, 10.0 * env.INFECTION_DISTANCE);
+        Bag mysteriousObjects = hb.HumansEnvironment.getNeighborsWithinDistance(agentLocation, 10.0 * Env.INFECTION_DISTANCE);
         if (mysteriousObjects != null) {
             for (int i = 0; i < mysteriousObjects.numObjs; i++) {
                 if (mysteriousObjects.objs[i] != null &&
@@ -114,7 +108,7 @@ public /*strictfp*/ class Human extends Agent {
 
                     if (hb.withinInfectionDistance(this, agentLocation, ta, ta.agentLocation)) {
                         //calculate S->E transition
-                        if (ta.isInfected() && this.isSusceptible()) {
+                        if ((ta.getInfectionState() == 0 || ta.getInfectionState() ==1 || ta.getInfectionState() == 2) && this.isSusceptible()) {
                             Transitions.calculateStoE(this, ta);
                         }
 
@@ -135,12 +129,12 @@ public /*strictfp*/ class Human extends Agent {
 
 
         if (desiredLocation == null || steps <= 0) {
-            desiredLocation = new Double2D((state.random.nextDouble() - 0.5) * ((env.XMAX - env.XMIN) / 5 - env.DIAMETER) +
+            desiredLocation = new Double2D((state.random.nextDouble() - 0.5) * ((Env.XMAX - Env.XMIN) / 5 - Env.DIAMETER) +
                     //infection.XMIN
                     agentLocation.x
                     //+infection.DIAMETER/2
                     ,
-                    (state.random.nextDouble() - 0.5) * ((env.YMAX - env.YMIN) / 5 - env.DIAMETER) +
+                    (state.random.nextDouble() - 0.5) * ((Env.YMAX - Env.YMIN) / 5 - Env.DIAMETER) +
                             agentLocation.y
                     //infection.YMIN
                     //+infection.DIAMETER/2
@@ -182,62 +176,12 @@ public /*strictfp*/ class Human extends Agent {
                     Transitions.calculateI3Transition(this);
             }
 
-
+            if (this.isolated)
+                return;
             hb.HumansEnvironment.setObjectLocation(this, agentLocation);
+            hb.BlackBoxEnvironment.setObjectLocation(this, agentLocation);
         }
-
-
-
     }
-
-
-    protected Color humanColor = new Color(15, 165, 189);
-    protected Color exposedColor = new Color(192, 183, 76);
-    protected Color infectedColorI0 = new Color(255, 122, 47);
-    protected Color infectedColorI1 = new Color(230, 23, 255);
-    protected Color infectedColorI2 = new Color(255, 27, 59);
-    protected Color infectedColorI3 = new Color(255, 27, 59);
-    protected Color deadColor = new Color(15, 19, 17);
-    protected Color recoveredColor = new Color(9, 255, 42);
-
-
-    public final void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-        double diamx = info.draw.width * env.DIAMETER;
-        double diamy = info.draw.height * env.DIAMETER;
-        if (env.glassView) {
-            if (isExposed()) {
-                exposedColor = new Color(192, 156, 30, getOpacity());
-                graphics.setColor(exposedColor);
-            } else if (this.getInfectionState() == 0) {
-                infectedColorI0 = new Color(255, 122, 47, getOpacity());
-                graphics.setColor(infectedColorI0);
-            } else if (this.getInfectionState() == 1) {
-                infectedColorI1 = new Color(230, 23, 255, getOpacity());
-                graphics.setColor(infectedColorI1);
-            } else if (this.getInfectionState() == 2 || this.getInfectionState() == 3 ) {
-                graphics.setColor(infectedColorI3);
-            } else if (this.dead) graphics.setColor(deadColor);
-            else if (this.recovered) graphics.setColor(recoveredColor);
-            else {
-                humanColor = new Color(11, 172, 189, getOpacity());
-                graphics.setColor(humanColor);
-            }
-        }
-        else {
-            if (this.getInfectionState() == 1 || this.getInfectionState() == 2 || this.getInfectionState() == 3){
-                graphics.setColor(infectedColorI3);
-            }
-            else if (this.dead) graphics.setColor(deadColor);
-
-            else {
-                humanColor = new Color(11, 172, 189, getOpacity());
-                graphics.setColor(humanColor);
-            }
-        }
-
-        graphics.fillOval((int) (info.draw.x - diamx / 2), (int) (info.draw.y - diamy / 2), (int) (diamx), (int) (diamy));
-    }
-
 
     public String getType() {
         if (isInfected())
