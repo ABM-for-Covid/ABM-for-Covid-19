@@ -5,7 +5,7 @@ import sim.field.continuous.Continuous2D;
 import sim.util.Bag;
 import sim.util.Double2D;
 
-public /*strictfp*/ class env extends SimState {
+public /*strictfp*/ class Env extends SimState {
     private static final long serialVersionUID = 1;
 
     //    all environment variables here
@@ -13,8 +13,14 @@ public /*strictfp*/ class env extends SimState {
     public static final double XMAX = 1000;
     public static final double YMIN = 0;
     public static final double YMAX = 800;
+
+    public static final double XMIN_HOSP = 1020;
+    public static final double XMAX_HOSP = 2000;
+
     public static final double DIAMETER = 15;
     public static final double HYGIENE_CONST = 0.2;
+    public static final double I2toD_CONST = 0.1;
+
     public static final double INCUBATION_PERIOD_High = 14;
     public static final double INFECTION_DISTANCE = 20;
     public static final double INFECTION_DISTANCE_SQUARED = INFECTION_DISTANCE * INFECTION_DISTANCE;
@@ -25,12 +31,18 @@ public /*strictfp*/ class env extends SimState {
     // if I2 and I3 ->  update location of agent to hospital loc
     // don't move the agent
 
-
     //Inefection state related parameters
     // period in which agent goes to R from I1, if doesn't transit to I2
-    public static int i1Period = 10;
+    public static int i1Period = 5;
     public static double i2ToDProbability = 0.8;
 
+    public static int getI1Period() {
+        return i1Period;
+    }
+
+    public static void setI1Period(int i1Period) {
+        Env.i1Period = i1Period;
+    }
 
     //    all model parameters here
     public static int num_humans = 150;
@@ -58,7 +70,7 @@ public /*strictfp*/ class env extends SimState {
     public static int icuCount = (int) (0.05 * hospitalCount);
 
     public static void setGlassView(boolean glassView) {
-        env.glassView = glassView;
+        Env.glassView = glassView;
     }
 
     public static boolean isGlassView() {
@@ -70,7 +82,7 @@ public /*strictfp*/ class env extends SimState {
     }
 
     public static void setHospitalCount(int hospitalCount) {
-        env.hospitalCount = hospitalCount;
+        Env.hospitalCount = hospitalCount;
     }
 
     public static int getIcuCount() {
@@ -78,7 +90,7 @@ public /*strictfp*/ class env extends SimState {
     }
 
     public static void setIcuCount(int icuCount) {
-        env.icuCount = icuCount;
+        Env.icuCount = icuCount;
     }
 
     // recovery time - Uniform distribution between 21 and 42 days
@@ -87,12 +99,13 @@ public /*strictfp*/ class env extends SimState {
 
 
     public static Continuous2D HumansEnvironment = null;
+    public static Continuous2D BlackBoxEnvironment = null;
 
     /**
      * Add all the inspectors here
      */
     public static void setSocialDistancing(boolean socialDistancing) {
-        env.socialDistancing = socialDistancing;
+        Env.socialDistancing = socialDistancing;
     }
 
     public static boolean isSocialDistancing() {
@@ -108,23 +121,23 @@ public /*strictfp*/ class env extends SimState {
     }
 
     public static void setHygieneMean(double hygieneMean) {
-        env.hygieneMean = hygieneMean;
+        Env.hygieneMean = hygieneMean;
     }
 
     public static void setHygieneVariance(double hygieneVariance) {
-        env.hygieneVariance = hygieneVariance;
+        Env.hygieneVariance = hygieneVariance;
     }
 
     public static void setAgeMin(double ageMin) {
-        env.ageMin = ageMin;
+        Env.ageMin = ageMin;
     }
 
     public static void setAgeMax(double ageMax) {
-        env.ageMax = ageMax;
+        Env.ageMax = ageMax;
     }
 
     public static void setAgePeak(double agePeak) {
-        env.agePeak = agePeak;
+        Env.agePeak = agePeak;
     }
 
     public static double getAgeMin() {
@@ -144,7 +157,7 @@ public /*strictfp*/ class env extends SimState {
     }
 
     public static void setNum_humans(int num_humans) {
-        env.num_humans = num_humans;
+        Env.num_humans = num_humans;
     }
 
     public static boolean checkICUAvailability() {
@@ -240,7 +253,7 @@ public /*strictfp*/ class env extends SimState {
 
 
     public static void setInitialInfectionPercent(double initialInfectionPercent) {
-        env.initialInfectionPercent = initialInfectionPercent;
+        Env.initialInfectionPercent = initialInfectionPercent;
     }
 
     public static double getInitialInfectionPercent() {
@@ -250,7 +263,7 @@ public /*strictfp*/ class env extends SimState {
     /**
      * Creates a infection simulation with the given random number seed.
      */
-    public env(long seed) {
+    public Env(long seed) {
         super(seed);
     }
 
@@ -302,6 +315,7 @@ public /*strictfp*/ class env extends SimState {
         super.start();  // clear out the schedule
 
         HumansEnvironment = new Continuous2D(25.0, (XMAX - XMIN), (YMAX - YMIN));
+        BlackBoxEnvironment = new Continuous2D(25.0, (XMAX_HOSP - XMIN_HOSP), (YMAX - YMIN));
 
         // Schedule the agents -- we could instead use a RandomSequence, which would be faster,
         // but this is a good test of the scheduler
@@ -323,11 +337,6 @@ public /*strictfp*/ class env extends SimState {
                     agent.setInfected(true);
                     agent.setSusceptible(false);
                     agent.setInfectionState(0);
-                }
-
-                // mark some agents static
-                if (step_int % 10 == 2) {
-                    agent.setIsolation(false);
                 }
 
                 // set hygiene for every human
@@ -377,7 +386,7 @@ public /*strictfp*/ class env extends SimState {
     }
 
     public static void main(String[] args) {
-        doLoop(env.class, args);
+        doLoop(Env.class, args);
         System.exit(0);
     }
 }
