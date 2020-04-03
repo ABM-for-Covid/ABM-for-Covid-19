@@ -1,6 +1,7 @@
 package social_dist;
 
 public class Transitions {
+    public static double inf_score_scaler = 5.0;
 
     static boolean getRandomBoolean(double probability) {
         double randomValue = Math.random();  //0.0 to 0.99
@@ -29,10 +30,11 @@ public class Transitions {
         /*
         Just set age a parameter of expose to infection
          */
+        int a_x = exposedHuman.get_age_score();
+
         // if weak immune person exposed, it will go to high chance to I1
         if (exposedHuman.weakImmune) {
-            // todo - do scaling based on age!
-            if (getRandomBooleanRange(1 / Env.incubationMean, 1)) {
+            if (getRandomBooleanRange(1 / Env.incubationMean, 1/(1+a_x))) {
                 exposedHuman.setInfected(true);
                 exposedHuman.setInfectionState(1);
                 exposedHuman.setExposed(false);
@@ -41,7 +43,7 @@ public class Transitions {
             }
             // otherwise it try to go to I0 with some latent period probability type A disease!
             else if (getRandomBooleanRange(1 / (Env.incubationMean - 2), 1 / (Env.incubationMean - 3))
-            && exposedHuman.isExposed() ) {
+                    && exposedHuman.isExposed()) {
                 exposedHuman.setInfected(true);
                 exposedHuman.setInfectionState(0);
                 exposedHuman.setExposed(false);
@@ -49,7 +51,7 @@ public class Transitions {
                 return;
             }
         } else {
-            if (getRandomBooleanRange(1 / Env.INCUBATION_PERIOD_High, 1 / Env.incubationMean)) {
+            if (getRandomBoolean(1 / Env.INCUBATION_PERIOD_High)) {
                 exposedHuman.setInfected(true);
                 exposedHuman.setInfectionState(1);
                 exposedHuman.setExposed(false);
@@ -58,7 +60,7 @@ public class Transitions {
             }
             // otherwise it try to go to I0 with some latent period probability type A disease!
             else if (getRandomBooleanRange(1 / (Env.incubationMean - 2), 1 / (Env.incubationMean - 3))
-            && exposedHuman.isExposed()) {
+                    && exposedHuman.isExposed()) {
                 exposedHuman.setInfected(true);
                 exposedHuman.setInfectionState(0);
                 exposedHuman.setExposed(false);
@@ -94,7 +96,7 @@ public class Transitions {
 
         // no of days stayed in I1 has an impact on the score
         if (human.count_I1 > 4) {
-            inf_score = human.count_I1 / 5.0;
+            inf_score = human.count_I1 / inf_score_scaler;
         }
 
         // score ranges from -2 to 6
@@ -115,17 +117,25 @@ public class Transitions {
 
         // transition to I2
         if (human.wantToMoveToI2 > 2 || getRandomBoolean((1 - prob_score))) {
-            human.wantToMoveToI2 ++;
-            if (Env.hospitalCount > 0) {
+            human.wantToMoveToI2++;
+            if (Env.HospitalBedCount > 0) {
+
+                // if human is not isolated, then only do the contact tracing
+                // this sets contact tracing to single level.
+                if (Env.contactTracing && !human.quarantined){
+                    human.findAndMarkTraces();
+                    human.setPrime(true);
+                    human.setQuarantined(true);
+                }
                 human.setInfectionState(2);
-                Env.hospitalCount--;
+                Env.HospitalBedCount--;
                 return;
             } else {
                 //calculate transition to D
-                if (getRandomBoolean((Env.I2toD_CONST*(1 - prob_score)))){
+                if (getRandomBoolean((Env.I2toD_CONST * (1 - prob_score)))) {
                     human.setDead(true);
                     human.setInfected(false);
-                    Env.hospitalCount++;
+                    Env.HospitalBedCount++;
                     return;
                 }
 
@@ -141,7 +151,7 @@ public class Transitions {
 
         // no of days stayed in I2 has an impact on the score
         if (human.count_I2 > 4) {
-            inf_score = human.count_I2 / 3.0;
+            inf_score = human.count_I2 / inf_score_scaler;
         }
 
         // score ranges from -2 to 6
@@ -162,7 +172,7 @@ public class Transitions {
                 if (getRandomBoolean(Env.i2ToDProbability)) {
                     human.setDead(true);
                     human.setInfected(false);
-                    Env.hospitalCount++;
+                    Env.HospitalBedCount++;
                     return;
                 }
             }
@@ -193,7 +203,7 @@ public class Transitions {
 
         // no of days stayed in I3 has an impact on the score
         if (human.count_I3 > 4) {
-            inf_score = human.count_I3 / 3.0;
+            inf_score = human.count_I3 /inf_score_scaler;
         }
 
         // score ranges from -2 to 6
@@ -214,14 +224,19 @@ public class Transitions {
         score = a_x + human.overallHealth + human.coMorbid_score + 2;
         prob_score = score / (8 * (1 + human.count_I3));
         if (getRandomBoolean(prob_score)) {
-                human.setInfectionState(2);
-                human.count_I2 = 0;
-                Env.icuCount++;
-                return;
+            human.setInfectionState(2);
+            human.count_I2 = 0;
+            Env.icuCount++;
+            return;
         }
-
         human.count_I3++;
 
+    }
+
+    public static void countQuarantinedDays(Human human) {
+        if (human.count_iso >= Env.quarantine_day_limit)
+            human.setQuarantined(false);
+        else human.count_iso++;
     }
 }
 

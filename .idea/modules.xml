@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$USER_HOME$/ABMS-Evacuation/MCR scenairo hetro/MCR scenairo hetro.iml" filepath="$USER_HOME$/ABMS-Evacuation/MCR scenairo hetro/MCR scenairo hetro.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../case_0/case_0.iml" filepath="$PROJECT_DIR$/../case_0/case_0.iml" />
+      <module fileurl="file://$PROJECT_DIR$/covid-19_social_distancing.iml" filepath="$PROJECT_DIR$/covid-19_social_distancing.iml" />
+    </modules>
+  </component>
+</project>

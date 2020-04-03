@@ -1,6 +1,7 @@
 package social_dist;
 
 import sim.engine.Steppable;
+import sim.field.continuous.Continuous2D;
 import sim.portrayal.DrawInfo2D;
 import sim.portrayal.SimplePortrayal2D;
 import sim.util.Double2D;
@@ -22,15 +23,17 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
     }
 
     // check for SEIR states
+    public int aindex = 0;
     protected boolean susceptible = true;
     protected boolean exposed = false;
     protected boolean infected = false;
     protected boolean recovered = false;
     protected boolean dead = false;
+    public boolean prime = false;
 
     // agent mobility
-    protected boolean isolated = false;
-
+    public boolean isolated = false;
+    public boolean quarantined = false;
 
     // infectiion state (I0, I1, I2, I3)
     public int infectionState = -1;
@@ -42,8 +45,13 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
     public int count_I1 = 0;
     public int count_I2 = 0;
     public int count_I3 = 0;
+    public int count_iso = 0;
 
+    public Continuous2D plotEnv = null;
 
+    public void setQuarantined(boolean quarantined) {
+        this.quarantined = quarantined;
+    }
     public int getInfectionState() {
         return infectionState;
     }
@@ -65,7 +73,7 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
     public void setInfectionState(int infectionState) {
         this.infectionState = infectionState;
         if (infectionState == 2 || infectionState == 3) this.setIsolation(true);
-        if (infectionState == 0 || infectionState == 1) this.setIsolation(false);
+        else this.setIsolation(false);
 
     }
 
@@ -78,6 +86,10 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
 
     public final void setIsolation(boolean b) {
         isolated = b;
+    }
+
+    public final void setPrime(boolean b) {
+        prime = b;
     }
 
     public final void setInfected(boolean b) {

@@ -1,7 +1,10 @@
 package social_dist;
+
 import sim.engine.SimState;
 import sim.util.Bag;
 import sim.util.Double2D;
+
+import java.util.*;
 
 public /*strictfp*/ class Human extends Agent {
     private static final long serialVersionUID = 1;
@@ -14,13 +17,13 @@ public /*strictfp*/ class Human extends Agent {
     public boolean weakImmune = false;
     public int coMorbid_score = 0; // [-2,-1,0]
     public int overallHealth = 3; // health [0,1,2,3]
-    public int sim_count = 0; // health [0,1,2,3]
+    public int sim_count = 0;
 
-    public int get_age_score(){
+    public int get_age_score() {
         int a_x = 0;
         if (age <= 1)
             a_x = 1;
-        else  if (age <= 60 && age >40)
+        else if (age <= 60 && age > 40)
             a_x = 2;
         else if (age <= 40 && age > 1)
             a_x = 3;
@@ -96,7 +99,7 @@ public /*strictfp*/ class Human extends Agent {
         if (this.dead) return;
 
         // interaction of two agents when they are in infection distance
-        Bag mysteriousObjects = hb.HumansEnvironment.getNeighborsWithinDistance(agentLocation, 10.0 * Env.INFECTION_DISTANCE);
+        Bag mysteriousObjects = hb.HumansEnvironment.getNeighborsWithinDistance(agentLocation, Env.INFECTION_DISTANCE);
         if (mysteriousObjects != null) {
             for (int i = 0; i < mysteriousObjects.numObjs; i++) {
                 if (mysteriousObjects.objs[i] != null &&
@@ -108,7 +111,10 @@ public /*strictfp*/ class Human extends Agent {
 
                     if (hb.withinInfectionDistance(this, agentLocation, ta, ta.agentLocation)) {
                         //calculate S->E transition
-                        if ((ta.getInfectionState() == 0 || ta.getInfectionState() ==1 || ta.getInfectionState() == 2) && this.isSusceptible()) {
+                        if (Env.contactTracing && this.getInfectionState() >= 0)
+                            Env.contacts.put(id, ta);
+
+                        if ((ta.getInfectionState() == 0 || ta.getInfectionState() == 1 || ta.getInfectionState() == 2) && this.isSusceptible()) {
                             Transitions.calculateStoE(this, ta);
                         }
 
@@ -155,15 +161,16 @@ public /*strictfp*/ class Human extends Agent {
                 dy /= temp;
             }
         }
-
-        if (!hb.acceptablePosition(this, new
-
-                Double2D(agentLocation.x + dx, agentLocation.y + dy))) {
+        if (!hb.acceptablePosition(this, new Double2D(agentLocation.x + dx, agentLocation.y + dy))) {
             steps = 0;
-        } else {
+        }
+        else {
             sim_count++;
             agentLocation = new Double2D(agentLocation.x + dx, agentLocation.y + dy);
-            if (sim_count %500 == 0){
+            if (sim_count % 500 == 0) {
+
+                if (this.quarantined)
+                    Transitions.countQuarantinedDays(this);
                 if (this.isExposed())
                     Transitions.calculateE_I0toI1(this);
                 else if (this.getInfectionState() == 0)
@@ -176,10 +183,23 @@ public /*strictfp*/ class Human extends Agent {
                     Transitions.calculateI3Transition(this);
             }
 
-            if (this.isolated)
-                return;
-            hb.HumansEnvironment.setObjectLocation(this, agentLocation);
-            hb.BlackBoxEnvironment.setObjectLocation(this, agentLocation);
+            if (this.isolated || this.quarantined) {
+                Double2D q_location = Env.QuarantinedEnvironment.getObjectLocation(this);
+                if (q_location !=null){
+//                    Double2D new_loc = hb.moveInQuarantineLoc(this);
+//                    if (new_loc !=null)
+//                        Env.QuarantinedEnvironment.setObjectLocation(this, new_loc);
+                    return;
+                }
+                Env.QuarantinedEnvironment.setObjectLocation(this, Env.assignQurantineLocation(this));
+                Env.HumansEnvironment.remove(this);
+                Env.BlackBoxEnvironment.remove(this);
+
+            } else {
+                Env.HumansEnvironment.setObjectLocation(this, agentLocation);
+                Env.BlackBoxEnvironment.setObjectLocation(this, agentLocation);
+            }
+
         }
     }
 
@@ -188,5 +208,32 @@ public /*strictfp*/ class Human extends Agent {
             return "Infected Human";
         else
             return "Healthy Human";
+    }
+
+    public void findAndMarkTraces() {
+        List<Human> traces = fetch_contacts(Env.contact_trace_capacity);
+        for (Human h : traces) {
+            h.setQuarantined(true);
+        }
+    }
+
+    public List<Human> fetch_contacts(int how_many) {
+        Collection<Human> contacts = Env.contacts.get(this.id);
+        List<Human> cList = new ArrayList<Human>();
+        cList.addAll(contacts);
+        Collections.reverse(cList);
+
+        Set<Human> set = new LinkedHashSet<Human>();
+        set.addAll(cList);
+        cList.clear();
+        cList.addAll(set);
+        return cList;
+
+//        int lsize = cList.size();
+//        // if we need more than the elements in the list, restrict how_many param.
+//        if (how_many > lsize) how_many = lsize;
+//
+//        // return last how_many human contacts.
+//        return cList.subList(0, how_many);
     }
 }

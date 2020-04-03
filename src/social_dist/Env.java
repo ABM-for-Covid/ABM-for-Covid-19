@@ -1,5 +1,7 @@
 package social_dist;
 
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Multimap;
 import sim.engine.SimState;
 import sim.field.continuous.Continuous2D;
 import sim.util.Bag;
@@ -14,18 +16,123 @@ public /*strictfp*/ class Env extends SimState {
     public static final double YMIN = 0;
     public static final double YMAX = 800;
 
-    public static final double XMIN_HOSP = 1020;
-    public static final double XMAX_HOSP = 2000;
+    public static final double Q_XMAX = 2000;
+    public static final double Q_YMAX = 1600;
 
     public static final double DIAMETER = 15;
     public static final double HYGIENE_CONST = 0.2;
     public static final double I2toD_CONST = 0.1;
 
     public static final double INCUBATION_PERIOD_High = 14;
-    public static final double INFECTION_DISTANCE = 20;
+    public static final double INFECTION_DISTANCE = DIAMETER + 3;
     public static final double INFECTION_DISTANCE_SQUARED = INFECTION_DISTANCE * INFECTION_DISTANCE;
 
-    public static  int sim_count = 0;
+    /**************************
+     Contact Tracing Variables
+     **************************/
+    //contact tracing hashMap
+    //implement contact tracing
+    public static Multimap<String, Human> contacts = LinkedListMultimap.create();
+    public static boolean contactTracing = true;
+    public static boolean isContactTracing() {
+        return contactTracing;
+    }
+    public static void setContactTracing(boolean contactTracing) {
+        Env.contactTracing = contactTracing;
+    }
+
+    //how many contact traces you can pull up.
+    public static int contact_trace_capacity = 5;
+    public static void setContact_trace_capacity(int contact_trace_capacity) {
+        Env.contact_trace_capacity = contact_trace_capacity;
+    }
+
+    public static int getContact_trace_capacity() {
+        return contact_trace_capacity;
+    }
+
+    public static int quarantine_day_limit = 21;
+    public static void setQuarantine_day_limit(int quarantine_day_limit) {
+        Env.quarantine_day_limit = quarantine_day_limit;
+    }
+
+    public static int getQuarantine_day_limit() {
+        return quarantine_day_limit;
+    }
+    public static int uiIndent = 100;
+    public  static int q_dx = uiIndent;
+    public  static int q_dy = uiIndent;
+
+//    public ArrayList<Double2D> QuarntineBoundries = create_quarantine_env();
+//
+//    public ArrayList<Double2D> create_quarantine_env(){
+//
+//        ArrayList<Double2D> tempeBoundries = new ArrayList<>();
+//        for (int x = 0; x < num_humans; x++){
+//
+//            Double2D agentLocation;
+//
+//            if (q_dx == uiIndent && q_dy == uiIndent)
+//                agentLocation = new Double2D(q_dx, q_dy);
+//            else{
+//                if (q_dx >= Q_XMAX){
+//                    q_dy = q_dy + uiIndent;
+//                    q_dx = uiIndent;
+//                }
+//                agentLocation = new Double2D(q_dx, q_dy);
+//
+//            }
+//            tempeBoundries.add(agentLocation);
+//            q_dx = q_dx + uiIndent;
+//
+//        }
+//        return tempeBoundries;
+//
+//    }
+
+    public static Double2D assignQurantineLocation(Human hu){
+        // initial condition
+        Double2D agentLocation;
+
+        if (q_dx == uiIndent && q_dy == uiIndent)
+            agentLocation = new Double2D(q_dx, q_dy);
+        else{
+            if (q_dx >= Q_XMAX || hu.prime){
+                q_dy = q_dy + uiIndent;
+                q_dx = uiIndent;
+            }
+            agentLocation = new Double2D(q_dx, q_dy);
+
+        }
+        q_dx = q_dx + uiIndent;
+
+        return agentLocation;
+    }
+
+//    public Double2D moveInQuarantineLoc(Human hu){
+//        // create a new random location
+//        Double2D desiredLocation = new Double2D( (random.nextDouble() - 0.5) * (uiIndent / 5.0 - Env.DIAMETER) + hu.agentLocation.x ,
+//        (random.nextDouble() - 0.5) * (uiIndent / 5.0 - Env.DIAMETER) + hu.agentLocation.y);
+//
+//        double dx = desiredLocation.x - hu.agentLocation.x;
+//        double dy = desiredLocation.y - hu.agentLocation.y;
+//
+//        Double2D new_loc = new Double2D(hu.agentLocation.x + dx, hu.agentLocation.y + dy);
+//
+//        //get the central loc around which we will move it
+//        Double2D centralLoc = QuarntineBoundries.get(hu.aindex);
+//
+//        //check boundry condition
+//        if (new_loc.x < DIAMETER / 2 || new_loc.x > centralLoc.x + uiIndent/2.0 - DIAMETER / 2 ||
+//                new_loc.x < centralLoc.x - uiIndent/2.0 + DIAMETER / 2||
+//                new_loc.y < DIAMETER / 2 || new_loc.y >centralLoc.y + uiIndent/2.0 - DIAMETER / 2||
+//                new_loc.y < centralLoc.y - uiIndent/2.0 + DIAMETER / 2)
+//            return null;
+//
+//        return new_loc;
+//
+//    }
+
 
     // todo - set some random locations as hospitals
     // if I2 and I3 ->  update location of agent to hospital loc
@@ -33,6 +140,7 @@ public /*strictfp*/ class Env extends SimState {
 
     //Inefection state related parameters
     // period in which agent goes to R from I1, if doesn't transit to I2
+
     public static int i1Period = 5;
     public static double i2ToDProbability = 0.8;
 
@@ -45,14 +153,16 @@ public /*strictfp*/ class Env extends SimState {
     }
 
     //    all model parameters here
-    public static int num_humans = 150;
+    public static int num_humans = 50;
     public static double initialInfectionPercent = 0.1;
 
     // implement distancing
-    public static  boolean socialDistancing = false;
+    public static boolean socialDistancing = false;
+
+
 
     // flag to see actual glass view ( This will show each patient tested and event I0, R etc. )
-    public static  boolean glassView = true;
+    public static boolean glassView = true;
 
     // age is a triangular distribution between 1, 90 with peak at 25
     public static double ageMin = 1;
@@ -66,8 +176,10 @@ public /*strictfp*/ class Env extends SimState {
     // incubation period distribution - Average 5 with a positive skew, so sampling from an exponential distribution
     public static double incubationMean = 5;
 
-    public static int hospitalCount = 100;
-    public static int icuCount = (int) (0.05 * hospitalCount);
+    public static int HospitalBedCount = 150;
+    public static int icuCount = (int) (0.05 * HospitalBedCount);
+
+
 
     public static void setGlassView(boolean glassView) {
         Env.glassView = glassView;
@@ -77,12 +189,12 @@ public /*strictfp*/ class Env extends SimState {
         return glassView;
     }
 
-    public static int getHospitalCount() {
-        return hospitalCount;
+    public static int getHospitalBedCount() {
+        return HospitalBedCount;
     }
 
-    public static void setHospitalCount(int hospitalCount) {
-        Env.hospitalCount = hospitalCount;
+    public static void setHospitalBedCount(int hospitalBedCount) {
+        Env.HospitalBedCount = hospitalBedCount;
     }
 
     public static int getIcuCount() {
@@ -100,7 +212,7 @@ public /*strictfp*/ class Env extends SimState {
 
     public static Continuous2D HumansEnvironment = null;
     public static Continuous2D BlackBoxEnvironment = null;
-
+    public static Continuous2D QuarantinedEnvironment = null;
     /**
      * Add all the inspectors here
      */
@@ -179,8 +291,19 @@ public /*strictfp*/ class Env extends SimState {
                     infCount++;
                 }
             }
+        }
+
+        mysteriousObjects = QuarantinedEnvironment.getAllObjects();
+        for (int i = 0; i < mysteriousObjects.numObjs; i++) {
+            if (mysteriousObjects.objs[i] != null) {
+                Agent ta = (Agent) (mysteriousObjects.objs[i]);
+                if (ta.infected) {
+                    infCount++;
+                }
+            }
 
         }
+
         return infCount;
     }
 
@@ -217,7 +340,7 @@ public /*strictfp*/ class Env extends SimState {
         return recCount;
     }
 
-    public int getDeadHumans()
+    public int getDeath_Count()
     //  return the count of dead humans to inspectors.*/
     {
         int deadCount = 0;
@@ -231,6 +354,16 @@ public /*strictfp*/ class Env extends SimState {
                 }
             }
         }
+        mysteriousObjects = QuarantinedEnvironment.getAllObjects();
+        for (int i = 0; i < mysteriousObjects.numObjs; i++) {
+            if (mysteriousObjects.objs[i] != null) {
+                Agent ta = (Agent) (mysteriousObjects.objs[i]);
+                if (ta.dead) {
+                    deadCount++;
+                }
+            }
+        }
+
         return deadCount;
     }
 
@@ -281,11 +414,8 @@ public /*strictfp*/ class Env extends SimState {
         return ((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) <= INFECTION_DISTANCE_SQUARED);
     }
 
-//    public boolean withinHealingDistance(final Agent agent1, final Double2D a, final Agent agent2, final Double2D b) {
-//        return ((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) <= HEALING_DISTANCE_SQUARED);
-//    }
-
     boolean acceptablePosition(final Agent agent, final Double2D location) {
+
         if (location.x < DIAMETER / 2 || location.x > (XMAX - XMIN)/*HumansEnvironment.getXSize()*/ - DIAMETER / 2 ||
                 location.y < DIAMETER / 2 || location.y > (YMAX - YMIN)/*HumansEnvironment.getYSize()*/ - DIAMETER / 2)
             return false;
@@ -302,20 +432,12 @@ public /*strictfp*/ class Env extends SimState {
         return true;
     }
 
-    public void setObjectLocation(final Human hu, Double2D location) {
-
-        HumansEnvironment.setObjectLocation(hu, location);
-
-        // to speed up the simulation, each Human knows where it is located (gets rid of a hash get call)
-        hu.x = location.x;
-        hu.y = location.y;
-    }
 
     public void start() {
         super.start();  // clear out the schedule
-
         HumansEnvironment = new Continuous2D(25.0, (XMAX - XMIN), (YMAX - YMIN));
-        BlackBoxEnvironment = new Continuous2D(25.0, (XMAX_HOSP - XMIN_HOSP), (YMAX - YMIN));
+        QuarantinedEnvironment = new Continuous2D(25.0, (Q_XMAX - XMIN), (Q_YMAX - YMIN));
+        BlackBoxEnvironment = new Continuous2D(25.0, (XMAX - XMIN), (YMAX - YMIN));
 
         // Schedule the agents -- we could instead use a RandomSequence, which would be faster,
         // but this is a good test of the scheduler
@@ -328,10 +450,8 @@ public /*strictfp*/ class Env extends SimState {
                 loc = new Double2D(random.nextDouble() * (XMAX - XMIN - DIAMETER) + XMIN + DIAMETER / 2,
                         random.nextDouble() * (YMAX - YMIN - DIAMETER) + YMIN + DIAMETER / 2);
 
-                // todo - calculate all the things for this new agent here and pass to constructor Human.
-                agent = new Human("Human" + x, loc);
 
-
+                agent = new Human("Human-" + x, loc);
                 //add agent as infected according to initial value
                 if (step_int < num_humans * initialInfectionPercent) {
                     agent.setInfected(true);
@@ -340,23 +460,23 @@ public /*strictfp*/ class Env extends SimState {
                 }
 
                 // set hygiene for every human
-                agent.hygiene = hygieneMean + random.nextGaussian() * Math.sqrt(hygieneVariance) ;
-                if (!(agent.hygiene > 0.0 && agent.hygiene <=1))
-                        continue;
+                agent.hygiene = hygieneMean + random.nextGaussian() * Math.sqrt(hygieneVariance);
+                if (!(agent.hygiene > 0.0 && agent.hygiene <= 1))
+                    continue;
 
                 // set age
                 agent.age = (int) (triangularDistribution(ageMin, ageMax, agePeak));
-                if (agent.age > 100 || agent.age <=1)
+                if (agent.age > 100 || agent.age <= 1)
                     continue;
 
                 // imunity flag
                 if (Transitions.getRandomBoolean(0.1))
-                        agent.weakImmune = true;
+                    agent.weakImmune = true;
 
                 //co-morbidity
                 if (Transitions.getRandomBoolean(0.1))
                     agent.coMorbid_score = -2;
-                else  if (Transitions.getRandomBoolean(0.23))
+                else if (Transitions.getRandomBoolean(0.23))
                     agent.coMorbid_score = -1;
 
                 //overall health
@@ -370,10 +490,14 @@ public /*strictfp*/ class Env extends SimState {
                 }
             } while (!acceptablePosition(agent, loc));
             HumansEnvironment.setObjectLocation(agent, loc);
+            agent.aindex = step_int;
             schedule.scheduleRepeating(agent);
             step_int++;
         }
     }
+
+
+
 
     public double triangularDistribution(double low, double high, double peak) {
         double F = (peak - low) / (high - low);
