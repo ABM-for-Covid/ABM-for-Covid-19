@@ -84,6 +84,40 @@ public /*strictfp*/ class Env extends SimState {
         return agentLocation;
     }
 
+
+    /****************************************************************/
+
+    /*
+    Testing related variables
+     */
+    public static int testing_capacity = 5;
+    public static double test_false_negative = 0.3;
+    public static int test_delay = 2;
+
+    public static int getTesting_capacity() {
+        return testing_capacity;
+    }
+
+    public static void setTesting_capacity(int testing_capacity) {
+        Env.testing_capacity = testing_capacity;
+    }
+
+    public static double getTest_false_negative() {
+        return test_false_negative;
+    }
+
+    public static void setTest_false_negative(double test_false_negative) {
+        Env.test_false_negative = test_false_negative;
+    }
+
+    public static int getTest_delay() {
+        return test_delay;
+    }
+
+    public static void setTest_delay(int test_delay) {
+        Env.test_delay = test_delay;
+    }
+
     public static int i1Period = 5;
     public static double i2ToDProbability = 0.8;
 

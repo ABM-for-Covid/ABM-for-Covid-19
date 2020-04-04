@@ -19,6 +19,11 @@ public /*strictfp*/ class Human extends Agent {
     public int overallHealth = 3; // health [0,1,2,3]
     public int sim_count = 0;
 
+    //agent test parameters
+    public boolean tested = false;
+    public boolean test_result_positive = false;
+
+
     public int get_age_score() {
         int a_x = 0;
         if (age <= 1)

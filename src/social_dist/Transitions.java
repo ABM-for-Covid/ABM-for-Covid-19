@@ -1,4 +1,9 @@
 package social_dist;
+import sim.util.Bag;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Transitions {
     public static double inf_score_scaler = 5.0;
@@ -79,8 +84,6 @@ public class Transitions {
         // I0->R is based on the time duration agent stays in the i0 state probabilistically 
         if (i0Human.count_EI0 >= 12) {
             i0Human.setRecovered(true);
-            i0Human.setInfected(false);
-            i0Human.setInfectionState(-1);
         }
         // I0-> I1 -> transition into I1 depend on weakImmune and age
         // stay in I0
@@ -110,7 +113,6 @@ public class Transitions {
         // transition to R
         if (human.count_I1 > Env.i1Period && human.wantToMoveToI2 < 2) {
             human.setRecovered(true);
-            human.setInfected(false);
             return;
         }
 
@@ -233,10 +235,58 @@ public class Transitions {
     }
 
     public static void countQuarantinedDays(Human human) {
-        if (human.count_iso >= Env.quarantine_day_limit)
+        if (human.count_iso >= Env.quarantine_day_limit && human.infectionState <=0)
             human.setQuarantined(false);
         else human.count_iso++;
     }
+
+
+    public static void run_tests(){
+        // if env says no tests now
+        if (Env.testing_capacity == 0)
+            return;
+        ArrayList<Human> sample_list = new ArrayList<>();
+        Bag all_agents = Env.HumansEnvironment.getAllObjects();
+        for (int i = 0; i < all_agents.numObjs; i++) {
+            if (all_agents.objs[i] != null) {
+                Human ta = (Human) (all_agents.objs[i]);
+                if (ta.infectionState <= 1 && !ta.tested) {
+                    sample_list.add(ta);
+                }
+            }
+        }
+        if(sample_list.size()==0) return;
+
+        //shuffle the list to pick random agents
+        Collections.shuffle(sample_list);
+        int test_to_perform = Env.testing_capacity;
+        if (sample_list.size() < Env.testing_capacity) test_to_perform = sample_list.size();
+
+        int count_false_negative = (int) (test_to_perform* Env.test_false_negative);
+        for (int i = 0; i < test_to_perform; i++) {
+            Human hu = sample_list.get(i);
+
+            // generate result based on false negative %
+            if (i<count_false_negative){
+
+            if (hu.infected) hu.test_result_positive = false;
+            }
+
+            else {
+                if (hu.infected){
+                    hu.test_result_positive = true;
+                    if (Env.contactTracing)
+                        hu.setPrime(true);
+                        hu.setQuarantined(true);
+                        hu.findAndMarkTraces();
+                }
+
+            }
+
+        }
+
+    }
+
 }
 
 

@@ -110,6 +110,8 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
 
     public final void setRecovered(boolean b) {
         recovered = b;
+        infectionState = -1;
+        infected = false;
     }
 
     public final void setDead(boolean b) {
