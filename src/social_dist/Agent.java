@@ -1,7 +1,6 @@
 package social_dist;
 
 import sim.engine.Steppable;
-import sim.field.continuous.Continuous2D;
 import sim.portrayal.DrawInfo2D;
 import sim.portrayal.SimplePortrayal2D;
 import sim.util.Double2D;
@@ -47,7 +46,9 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
     public int count_I3 = 0;
     public int count_iso = 0;
 
-    public Continuous2D plotEnv = null;
+    //agent test parameters
+    public boolean tested = false;
+    public boolean test_result_positive = false;
 
     public void setQuarantined(boolean quarantined) {
         this.quarantined = quarantined;
@@ -76,6 +77,9 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
         this.infectionState = infectionState;
         if (infectionState == 2 || infectionState == 3) this.setIsolation(true);
         else this.setIsolation(false);
+        // when change infection state/ the tests are invalid
+        tested = false;
+        test_result_positive = false;
 
     }
 

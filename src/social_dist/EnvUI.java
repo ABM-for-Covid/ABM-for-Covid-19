@@ -12,20 +12,24 @@ import sim.portrayal.continuous.ContinuousPortrayal2D;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 
 public class EnvUI extends GUIState {
-
+    public ArrayList<Display2D> displays_abm = new ArrayList<>();
     public Display2D display;
     public Display2D display2;
     public Display2D display3;
+    public Display2D display4;
     public JFrame displayFrame;
     public JFrame displayFrame2;
     public JFrame displayFrame3;
+    public JFrame displayFrame4;
 
     ContinuousPortrayal2D glassBox = new ContinuousPortrayal2D();
     ContinuousPortrayal2D blackBox = new ContinuousPortrayal2D();
     ContinuousPortrayal2D quarantinedBox = new ContinuousPortrayal2D();
+    ContinuousPortrayal2D testingdBox = new ContinuousPortrayal2D();
 
     public Object getSimulationInspectedObject() {
         return state;
@@ -64,6 +68,14 @@ public class EnvUI extends GUIState {
         setupPortrayals();
     }
 
+    public void paint_displays(Display2D display){
+        Color backdrop_color = new Color(57, 78, 96);
+        display.reset();
+        display.setBackdrop(backdrop_color);
+        display.repaint();
+    }
+
+
     protected Color humanColor = new Color(15, 165, 189);
     protected Color exposedColor = new Color(192, 183, 76);
     protected Color infectedColorI0 = new Color(255, 122, 47);
@@ -73,11 +85,44 @@ public class EnvUI extends GUIState {
     protected Color deadColor = new Color(15, 19, 17);
     protected Color recoveredColor = new Color(9, 255, 42);
 
+
+    public void add_glassView_colors(Human human, Graphics2D graphics){
+        if (human.isExposed()) {
+            exposedColor = new Color(192, 156, 30, human.getOpacity());
+            graphics.setColor(exposedColor);
+        } else if (human.getInfectionState() == 0) {
+            infectedColorI0 = new Color(255, 122, 47, human.getOpacity());
+            graphics.setColor(infectedColorI0);
+        } else if (human.getInfectionState() == 1) {
+            infectedColorI1 = new Color(230, 23, 255, human.getOpacity());
+            graphics.setColor(infectedColorI1);
+        } else if (human.getInfectionState() == 2 || human.getInfectionState() == 3) {
+            graphics.setColor(infectedColorI3);
+        } else if (human.dead) graphics.setColor(deadColor);
+        else if (human.recovered) graphics.setColor(recoveredColor);
+        else {
+            humanColor = new Color(11, 172, 189, human.getOpacity());
+            graphics.setColor(humanColor);
+        }
+    }
+
+    public void add_blackBoxView_colors(Human human, Graphics2D graphics){
+        if (human.getInfectionState() == 1 || human.getInfectionState() == 2 || human.getInfectionState() == 3) {
+            graphics.setColor(infectedColorI3);
+        } else if (human.dead) graphics.setColor(deadColor);
+
+        else {
+            humanColor = new Color(11, 172, 189, human.getOpacity());
+            graphics.setColor(humanColor);
+        }
+    }
+
     public void setupPortrayals() {
         // tell the portrays what to portray and how to portray them
         glassBox.setField(Env.HumansEnvironment);
         blackBox.setField(Env.BlackBoxEnvironment);
         quarantinedBox.setField(Env.QuarantinedEnvironment);
+        testingdBox.setField(Env.TestEnvironment);
 
         glassBox.setPortrayalForAll(new SimplePortrayal2D() {
                                         public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
@@ -86,65 +131,32 @@ public class EnvUI extends GUIState {
                                             double diamy = info.draw.height * Env.DIAMETER;
 
                                             if (Env.glassView) {
-                                                if (human.isExposed()) {
-                                                    exposedColor = new Color(192, 156, 30, human.getOpacity());
-                                                    graphics.setColor(exposedColor);
-                                                } else if (human.getInfectionState() == 0) {
-                                                    infectedColorI0 = new Color(255, 122, 47, human.getOpacity());
-                                                    graphics.setColor(infectedColorI0);
-                                                } else if (human.getInfectionState() == 1) {
-                                                    infectedColorI1 = new Color(230, 23, 255, human.getOpacity());
-                                                    graphics.setColor(infectedColorI1);
-                                                } else if (human.getInfectionState() == 2 || human.getInfectionState() == 3) {
-                                                    graphics.setColor(infectedColorI3);
-                                                } else if (human.dead) graphics.setColor(deadColor);
-                                                else if (human.recovered) graphics.setColor(recoveredColor);
-                                                else {
-                                                    humanColor = new Color(11, 172, 189, human.getOpacity());
-                                                    graphics.setColor(humanColor);
-                                                }
-                                            } else {
-                                                if (human.getInfectionState() == 1 || human.getInfectionState() == 2 || human.getInfectionState() == 3) {
-                                                    graphics.setColor(infectedColorI3);
-                                                } else if (human.dead) graphics.setColor(deadColor);
+                                                add_glassView_colors(human, graphics);
 
-                                                else {
-                                                    humanColor = new Color(11, 172, 189, human.getOpacity());
-                                                    graphics.setColor(humanColor);
-                                                }
+                                            } else {
+                                                add_blackBoxView_colors(human, graphics);
                                             }
                                             if (!(human.isolated || human.quarantined))
                                                 graphics.fillOval((int) (info.draw.x - diamx / 2), (int) (info.draw.y - diamy / 2), (int) (diamx), (int) (diamy));
-                                            //graphics.drawOval((int) (info.draw.x - 2.5 - diamx / 2), (int) (info.draw.y - 2.5 - diamy / 2), (int) (diamx + 5), (int) (diamy + 5));
-
                                             super.draw(human, graphics, info);
                                         }
                                     }
         );
 
-        SimplePortrayal2D black_box_view = new SimplePortrayal2D() {
+        blackBox.setPortrayalForAll(new SimplePortrayal2D() {
             public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
                 Human human = (Human) object;
                 double diamx = info.draw.width * Env.DIAMETER;
                 double diamy = info.draw.height * Env.DIAMETER;
+                add_blackBoxView_colors(human, graphics);
 
-                if (human.getInfectionState() == 1 || human.getInfectionState() == 2 || human.getInfectionState() == 3) {
-                    graphics.setColor(infectedColorI3);
-                } else if (human.dead) graphics.setColor(deadColor);
-
-                else {
-                    humanColor = new Color(11, 172, 189, human.getOpacity());
-                    graphics.setColor(humanColor);
-                }
                 if (!(human.isolated || human.quarantined))
                     graphics.fillOval((int) (info.draw.x - diamx / 2), (int) (info.draw.y - diamy / 2), (int) (diamx), (int) (diamy));
                 //graphics.drawOval((int) (info.draw.x - 2.5 - diamx / 2), (int) (info.draw.y - 2.5 - diamy / 2), (int) (diamx + 5), (int) (diamy + 5));
 
                 super.draw(human, graphics, info);
             }
-        };
-
-        blackBox.setPortrayalForAll(black_box_view);
+        });
 
         quarantinedBox.setPortrayalForAll(new SimplePortrayal2D() {
             public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
@@ -152,23 +164,7 @@ public class EnvUI extends GUIState {
                 double diamx = info.draw.width * Env.DIAMETER;
                 double diamy = info.draw.height * Env.DIAMETER;
 
-                if (human.isExposed()) {
-                    exposedColor = new Color(192, 156, 30, human.getOpacity());
-                    graphics.setColor(exposedColor);
-                } else if (human.getInfectionState() == 0) {
-                    infectedColorI0 = new Color(255, 122, 47, human.getOpacity());
-                    graphics.setColor(infectedColorI0);
-                } else if (human.getInfectionState() == 1) {
-                    infectedColorI1 = new Color(230, 23, 255, human.getOpacity());
-                    graphics.setColor(infectedColorI1);
-                } else if (human.getInfectionState() == 2 || human.getInfectionState() == 3) {
-                    graphics.setColor(infectedColorI3);
-                } else if (human.dead) graphics.setColor(deadColor);
-                else if (human.recovered) graphics.setColor(recoveredColor);
-                else {
-                    humanColor = new Color(11, 172, 189, human.getOpacity());
-                    graphics.setColor(humanColor);
-                }
+                add_glassView_colors(human, graphics);
 
                 if (human.isolated || human.quarantined) {
                     graphics.fillOval((int) (info.draw.x - 10 - diamx / 2), (int) (info.draw.y - 10 - diamy / 2), (int) (diamx + 20), (int) (diamy + 20));
@@ -182,26 +178,32 @@ public class EnvUI extends GUIState {
             }
         });
 
+        testingdBox.setPortrayalForAll(new SimplePortrayal2D() {
+            public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
+                Human human = (Human) object;
+                double diamx = info.draw.width * Env.DIAMETER;
+                double diamy = info.draw.height * Env.DIAMETER;
+
+               add_glassView_colors(human, graphics);
+
+                graphics.fillOval((int) (info.draw.x - 10 - diamx / 2), (int) (info.draw.y - 10 - diamy / 2), (int) (diamx + 20), (int) (diamy + 20));
+                super.draw(human, graphics, info);
+                graphics.setColor(Color.WHITE);
+                String result_s;
+                if (human.test_result_positive)
+                    result_s = "Agent "+human.aindex+ " Tested Positive (+ve)";
+                else result_s = "Agent "+human.aindex+ " Tested Negative (-ve)";
+                graphics.drawString(result_s, (int) (info.draw.x +50), (int) (info.draw.y + 4));
+
+                super.draw(human, graphics, info);
+            }
+        });
+
         // reschedule the displayer
-        Color backdrop_color = new Color(57, 78, 96);
-        display.reset();
-        display.setBackdrop(backdrop_color);
-        // redraw the display
-        display.repaint();
-
-        //reschedule the displayer
-        display2.reset();
-        display2.setBackdrop(backdrop_color);
-
-        // redraw the display
-        display2.repaint();
-
-
-        //reschedule the displayer
-        display3.reset();
-        display3.setBackdrop(backdrop_color);
-        // redraw the display
-        display3.repaint();
+        paint_displays(display);
+        paint_displays(display2);
+        paint_displays(display3);
+        paint_displays(display4);
     }
 
     public void init(Controller c) {
@@ -232,6 +234,15 @@ public class EnvUI extends GUIState {
         c.registerFrame(displayFrame3);   // register the frame so it appears in the "Display" list
         displayFrame3.setVisible(true);
         display3.attach(quarantinedBox, "Quarantined Agents");
+
+
+        display4 = new Display2D(800, 700, this);
+        display4.setScale(0.9);
+        displayFrame4 = display4.createFrame();
+        displayFrame4.setTitle("Testing Results");
+        c.registerFrame(displayFrame4);   // register the frame so it appears in the "Display" list
+        displayFrame4.setVisible(true);
+        display4.attach(testingdBox, "Testing Results");
     }
 
     public void quit() {
@@ -244,6 +255,14 @@ public class EnvUI extends GUIState {
         if (displayFrame2 != null) displayFrame2.dispose();
         displayFrame2 = null;
         display2 = null;
+
+        if (displayFrame3 != null) displayFrame3.dispose();
+        displayFrame3 = null;
+        display3 = null;
+
+        if (displayFrame4 != null) displayFrame4.dispose();
+        displayFrame4 = null;
+        display4 = null;
     }
 
 }

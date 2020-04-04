@@ -19,9 +19,7 @@ public /*strictfp*/ class Human extends Agent {
     public int overallHealth = 3; // health [0,1,2,3]
     public int sim_count = 0;
 
-    //agent test parameters
-    public boolean tested = false;
-    public boolean test_result_positive = false;
+
 
 
     public int get_age_score() {
@@ -93,6 +91,14 @@ public /*strictfp*/ class Human extends Agent {
 
         if (this.dead) return;
 
+        // run test once per day which means only on 1 virtual agent cycle
+        if (this.aindex==0){
+            if (sim_count %500 == 0)
+                Transitions.run_tests();
+            sim_count++;
+            return;
+        }
+
         // interaction of two agents when they are in infection distance
         Bag mysteriousObjects = Env.HumansEnvironment.getNeighborsWithinDistance(agentLocation, Env.INFECTION_DISTANCE);
         if (mysteriousObjects != null) {
@@ -162,7 +168,6 @@ public /*strictfp*/ class Human extends Agent {
             sim_count++;
             agentLocation = new Double2D(agentLocation.x + dx, agentLocation.y + dy);
             if (sim_count % 500 == 0) {
-
                 if (this.quarantined)
                     Transitions.countQuarantinedDays(this);
                 if (this.isExposed())
@@ -175,14 +180,12 @@ public /*strictfp*/ class Human extends Agent {
                     Transitions.calculateI2Transition(this);
                 else if (this.getInfectionState() == 3)
                     Transitions.calculateI3Transition(this);
+
             }
 
             if (this.isolated || this.quarantined) {
                 Double2D q_location = Env.QuarantinedEnvironment.getObjectLocation(this);
                 if (q_location != null) {
-//                    Double2D new_loc = hb.moveInQuarantineLoc(this);
-//                    if (new_loc !=null)
-//                        Env.QuarantinedEnvironment.setObjectLocation(this, new_loc);
                     return;
                 }
                 Env.QuarantinedEnvironment.setObjectLocation(this, Env.assignQurantineLocation(this));

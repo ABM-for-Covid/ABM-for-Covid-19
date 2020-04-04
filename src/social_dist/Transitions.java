@@ -3,7 +3,6 @@ import sim.util.Bag;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 public class Transitions {
     public static double inf_score_scaler = 5.0;
@@ -242,6 +241,11 @@ public class Transitions {
 
 
     public static void run_tests(){
+        // reset the env each day for fresh testing
+        Env.TestEnvironment.clear();
+        Env.t_dx = Env.uiIndent;
+        Env.t_dy = Env.uiIndent;
+
         // if env says no tests now
         if (Env.testing_capacity == 0)
             return;
@@ -270,19 +274,21 @@ public class Transitions {
             if (i<count_false_negative){
 
             if (hu.infected) hu.test_result_positive = false;
+            hu.tested = true;
             }
-
             else {
                 if (hu.infected){
                     hu.test_result_positive = true;
-                    if (Env.contactTracing)
+                    hu.tested = true;
+                    if (Env.contactTracing) {
                         hu.setPrime(true);
                         hu.setQuarantined(true);
                         hu.findAndMarkTraces();
+                    }
                 }
 
             }
-
+            Env.TestEnvironment.setObjectLocation(hu, Env.assignTestLocation());
         }
 
     }

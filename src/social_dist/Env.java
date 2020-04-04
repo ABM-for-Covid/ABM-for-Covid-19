@@ -117,6 +117,17 @@ public /*strictfp*/ class Env extends SimState {
     public static void setTest_delay(int test_delay) {
         Env.test_delay = test_delay;
     }
+    public static int t_dx = uiIndent;
+    public static int t_dy = uiIndent;
+
+    public static Double2D assignTestLocation() {
+        Double2D agentLocation;
+        agentLocation = new Double2D(t_dx, t_dy);
+        t_dy = t_dy + uiIndent;
+        return agentLocation;
+    }
+
+    /***************************************************************/
 
     public static int i1Period = 5;
     public static double i2ToDProbability = 0.8;
@@ -188,6 +199,7 @@ public /*strictfp*/ class Env extends SimState {
     public static Continuous2D HumansEnvironment = null;
     public static Continuous2D BlackBoxEnvironment = null;
     public static Continuous2D QuarantinedEnvironment = null;
+    public static Continuous2D TestEnvironment = null;
 
     /**
      * Add all the inspectors here
@@ -431,6 +443,7 @@ public /*strictfp*/ class Env extends SimState {
         HumansEnvironment = new Continuous2D(25.0, (XMAX - XMIN), (YMAX - YMIN));
         QuarantinedEnvironment = new Continuous2D(25.0, (Q_XMAX - XMIN), (Q_YMAX - YMIN));
         BlackBoxEnvironment = new Continuous2D(25.0, (XMAX - XMIN), (YMAX - YMIN));
+        TestEnvironment = new Continuous2D(25.0, (XMAX - XMIN), (YMAX - YMIN));
 
         int step_int = 0;
         for (int x = 0; x < num_humans; x++) {
@@ -480,8 +493,9 @@ public /*strictfp*/ class Env extends SimState {
                     break;
                 }
             } while (!acceptablePosition(agent, loc));
-            HumansEnvironment.setObjectLocation(agent, loc);
             agent.aindex = step_int;
+            if (agent.aindex> 0 )
+                HumansEnvironment.setObjectLocation(agent, loc);
             schedule.scheduleRepeating(agent);
             step_int++;
         }
