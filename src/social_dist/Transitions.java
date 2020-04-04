@@ -34,7 +34,7 @@ public class Transitions {
 
         // if weak immune person exposed, it will go to high chance to I1
         if (exposedHuman.weakImmune) {
-            if (getRandomBooleanRange(1 / Env.incubationMean, 1/(1+a_x))) {
+            if (getRandomBooleanRange(1 / Env.incubationMean, 1.0 / (1 + a_x))) {
                 exposedHuman.setInfected(true);
                 exposedHuman.setInfectionState(1);
                 exposedHuman.setExposed(false);
@@ -81,7 +81,6 @@ public class Transitions {
             i0Human.setRecovered(true);
             i0Human.setInfected(false);
             i0Human.setInfectionState(-1);
-            return;
         }
         // I0-> I1 -> transition into I1 depend on weakImmune and age
         // stay in I0
@@ -122,7 +121,7 @@ public class Transitions {
 
                 // if human is not isolated, then only do the contact tracing
                 // this sets contact tracing to single level.
-                if (Env.contactTracing && !human.quarantined){
+                if (Env.contactTracing && !human.quarantined) {
                     human.findAndMarkTraces();
                     human.setPrime(true);
                     human.setQuarantined(true);
@@ -203,7 +202,7 @@ public class Transitions {
 
         // no of days stayed in I3 has an impact on the score
         if (human.count_I3 > 4) {
-            inf_score = human.count_I3 /inf_score_scaler;
+            inf_score = human.count_I3 / inf_score_scaler;
         }
 
         // score ranges from -2 to 6

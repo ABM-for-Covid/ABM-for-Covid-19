@@ -2,15 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ccbf511a-894c-4a0b-892b-385dcb96ae2c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/social_dist/Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/Agent.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/Agent.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/EnvUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/EnvUI$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/EnvUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/EnvUI$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/Human.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/Human.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/Transitions.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/Transitions.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/env.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/env.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/envUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/envUI.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/social_dist/Agent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/social_dist/Agent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/social_dist/Env.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/social_dist/Env.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/social_dist/EnvUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/social_dist/EnvUI.java" afterDir="false" />
@@ -42,6 +38,7 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Language Defaults" />
   </component>
   <component name="RunManager" selected="Application.EnvUI">
@@ -134,6 +131,10 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
+    <state x="-84" y="-785" key="#Inspections" timestamp="1585914178834">
+      <screen x="-404" y="-900" width="1440" height="900" />
+    </state>
+    <state x="-84" y="-785" key="#Inspections/-404.-900.1440.900/0.0.1280.800@-404.-900.1440.900" timestamp="1585914178834" />
     <state x="-220" y="-788" width="1042" height="762" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1585905651258">
       <screen x="-404" y="-900" width="1440" height="900" />
     </state>
@@ -142,32 +143,32 @@
       <screen x="-404" y="-900" width="1440" height="900" />
     </state>
     <state x="129" y="-742" key="#com.intellij.ide.util.MemberChooser/-404.-900.1440.900/0.0.1280.800@-404.-900.1440.900" timestamp="1585733560517" />
-    <state width="1398" height="144" key="GridCell.Tab.0.bottom" timestamp="1585912856947">
+    <state width="926" height="144" key="GridCell.Tab.0.bottom" timestamp="1585915308512">
       <screen x="-404" y="-900" width="1440" height="900" />
     </state>
     <state width="1398" height="245" key="GridCell.Tab.0.bottom/-1440.0.1440.900/0.0.1280.800@-1440.0.1440.900" timestamp="1585052079594" />
-    <state width="1398" height="144" key="GridCell.Tab.0.bottom/-404.-900.1440.900/0.0.1280.800@-404.-900.1440.900" timestamp="1585912856947" />
+    <state width="926" height="144" key="GridCell.Tab.0.bottom/-404.-900.1440.900/0.0.1280.800@-404.-900.1440.900" timestamp="1585915308512" />
     <state width="1398" height="172" key="GridCell.Tab.0.bottom/-404.-900.1440.900/0.23.1280.777@-404.-900.1440.900" timestamp="1585561304634" />
     <state width="1238" height="253" key="GridCell.Tab.0.bottom/0.0.1280.800@0.0.1280.800" timestamp="1585820068261" />
-    <state width="1398" height="144" key="GridCell.Tab.0.center" timestamp="1585912856943">
+    <state width="926" height="144" key="GridCell.Tab.0.center" timestamp="1585915308509">
       <screen x="-404" y="-900" width="1440" height="900" />
     </state>
     <state width="1398" height="245" key="GridCell.Tab.0.center/-1440.0.1440.900/0.0.1280.800@-1440.0.1440.900" timestamp="1585052079591" />
-    <state width="1398" height="144" key="GridCell.Tab.0.center/-404.-900.1440.900/0.0.1280.800@-404.-900.1440.900" timestamp="1585912856943" />
+    <state width="926" height="144" key="GridCell.Tab.0.center/-404.-900.1440.900/0.0.1280.800@-404.-900.1440.900" timestamp="1585915308509" />
     <state width="1398" height="172" key="GridCell.Tab.0.center/-404.-900.1440.900/0.23.1280.777@-404.-900.1440.900" timestamp="1585561304631" />
     <state width="1238" height="253" key="GridCell.Tab.0.center/0.0.1280.800@0.0.1280.800" timestamp="1585820068258" />
-    <state width="1398" height="144" key="GridCell.Tab.0.left" timestamp="1585912856941">
+    <state width="926" height="144" key="GridCell.Tab.0.left" timestamp="1585915308506">
       <screen x="-404" y="-900" width="1440" height="900" />
     </state>
     <state width="1398" height="245" key="GridCell.Tab.0.left/-1440.0.1440.900/0.0.1280.800@-1440.0.1440.900" timestamp="1585052079589" />
-    <state width="1398" height="144" key="GridCell.Tab.0.left/-404.-900.1440.900/0.0.1280.800@-404.-900.1440.900" timestamp="1585912856941" />
+    <state width="926" height="144" key="GridCell.Tab.0.left/-404.-900.1440.900/0.0.1280.800@-404.-900.1440.900" timestamp="1585915308506" />
     <state width="1398" height="172" key="GridCell.Tab.0.left/-404.-900.1440.900/0.23.1280.777@-404.-900.1440.900" timestamp="1585561304630" />
     <state width="1238" height="253" key="GridCell.Tab.0.left/0.0.1280.800@0.0.1280.800" timestamp="1585820068256" />
-    <state width="1398" height="144" key="GridCell.Tab.0.right" timestamp="1585912856945">
+    <state width="926" height="144" key="GridCell.Tab.0.right" timestamp="1585915308511">
       <screen x="-404" y="-900" width="1440" height="900" />
     </state>
     <state width="1398" height="245" key="GridCell.Tab.0.right/-1440.0.1440.900/0.0.1280.800@-1440.0.1440.900" timestamp="1585052079592" />
-    <state width="1398" height="144" key="GridCell.Tab.0.right/-404.-900.1440.900/0.0.1280.800@-404.-900.1440.900" timestamp="1585912856945" />
+    <state width="926" height="144" key="GridCell.Tab.0.right/-404.-900.1440.900/0.0.1280.800@-404.-900.1440.900" timestamp="1585915308511" />
     <state width="1398" height="172" key="GridCell.Tab.0.right/-404.-900.1440.900/0.23.1280.777@-404.-900.1440.900" timestamp="1585561304633" />
     <state width="1238" height="253" key="GridCell.Tab.0.right/0.0.1280.800@0.0.1280.800" timestamp="1585820068259" />
     <state width="1398" height="303" key="GridCell.Tab.1.bottom" timestamp="1585639904950">

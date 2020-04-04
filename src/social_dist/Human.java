@@ -25,7 +25,7 @@ public /*strictfp*/ class Human extends Agent {
             a_x = 1;
         else if (age <= 60 && age > 40)
             a_x = 2;
-        else if (age <= 40 && age > 1)
+        else if (age <= 40)
             a_x = 3;
         return a_x;
     }
@@ -37,10 +37,6 @@ public /*strictfp*/ class Human extends Agent {
 
     public final boolean getIsGreedy() {
         return greedy;
-    }
-
-    public final void setIsGreedy(final boolean b) {
-        greedy = b;
     }
 
     public final boolean isInfected() {
@@ -78,13 +74,7 @@ public /*strictfp*/ class Human extends Agent {
     }
 
     Double2D desiredLocation = null;
-    Double2D suggestedLocation = null;
-    Bag nearbyHuman;
-    double[] distSqrTo;
-    public double x;
-    public double y;
     int steps = 0;
-
     public String toString() {
         return System.identityHashCode(this) + "\nHygiene: " + getHygiene() + "\nS->E" + this.getSusToExposeProb();
     }
@@ -99,13 +89,13 @@ public /*strictfp*/ class Human extends Agent {
         if (this.dead) return;
 
         // interaction of two agents when they are in infection distance
-        Bag mysteriousObjects = hb.HumansEnvironment.getNeighborsWithinDistance(agentLocation, Env.INFECTION_DISTANCE);
+        Bag mysteriousObjects = Env.HumansEnvironment.getNeighborsWithinDistance(agentLocation, Env.INFECTION_DISTANCE);
         if (mysteriousObjects != null) {
             for (int i = 0; i < mysteriousObjects.numObjs; i++) {
                 if (mysteriousObjects.objs[i] != null &&
                         mysteriousObjects.objs[i] != this) {
 
-                    if (!(((Agent) mysteriousObjects.objs[i]) instanceof Human))
+                    if (!(mysteriousObjects.objs[i] instanceof Human))
                         continue;
                     Human ta = (Human) (mysteriousObjects.objs[i]);
 
@@ -163,8 +153,7 @@ public /*strictfp*/ class Human extends Agent {
         }
         if (!hb.acceptablePosition(this, new Double2D(agentLocation.x + dx, agentLocation.y + dy))) {
             steps = 0;
-        }
-        else {
+        } else {
             sim_count++;
             agentLocation = new Double2D(agentLocation.x + dx, agentLocation.y + dy);
             if (sim_count % 500 == 0) {
@@ -185,7 +174,7 @@ public /*strictfp*/ class Human extends Agent {
 
             if (this.isolated || this.quarantined) {
                 Double2D q_location = Env.QuarantinedEnvironment.getObjectLocation(this);
-                if (q_location !=null){
+                if (q_location != null) {
 //                    Double2D new_loc = hb.moveInQuarantineLoc(this);
 //                    if (new_loc !=null)
 //                        Env.QuarantinedEnvironment.setObjectLocation(this, new_loc);
@@ -219,21 +208,17 @@ public /*strictfp*/ class Human extends Agent {
 
     public List<Human> fetch_contacts(int how_many) {
         Collection<Human> contacts = Env.contacts.get(this.id);
-        List<Human> cList = new ArrayList<Human>();
-        cList.addAll(contacts);
+        List<Human> cList = new ArrayList<>(contacts);
         Collections.reverse(cList);
 
-        Set<Human> set = new LinkedHashSet<Human>();
-        set.addAll(cList);
+        Set<Human> set = new LinkedHashSet<>(cList);
         cList.clear();
         cList.addAll(set);
-        return cList;
+        int lsize = cList.size();
+        // if we need more than the elements in the list, restrict how_many param.
+        if (how_many > lsize) how_many = lsize;
 
-//        int lsize = cList.size();
-//        // if we need more than the elements in the list, restrict how_many param.
-//        if (how_many > lsize) how_many = lsize;
-//
-//        // return last how_many human contacts.
-//        return cList.subList(0, how_many);
+        // return last how_many human contacts.
+        return cList.subList(0, how_many);
     }
 }

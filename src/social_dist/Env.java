@@ -31,18 +31,20 @@ public /*strictfp*/ class Env extends SimState {
      Contact Tracing Variables
      **************************/
     //contact tracing hashMap
-    //implement contact tracing
     public static Multimap<String, Human> contacts = LinkedListMultimap.create();
     public static boolean contactTracing = true;
+
     public static boolean isContactTracing() {
         return contactTracing;
     }
+
     public static void setContactTracing(boolean contactTracing) {
         Env.contactTracing = contactTracing;
     }
 
     //how many contact traces you can pull up.
-    public static int contact_trace_capacity = 5;
+    public static int contact_trace_capacity = 15;
+
     public static void setContact_trace_capacity(int contact_trace_capacity) {
         Env.contact_trace_capacity = contact_trace_capacity;
     }
@@ -52,6 +54,7 @@ public /*strictfp*/ class Env extends SimState {
     }
 
     public static int quarantine_day_limit = 21;
+
     public static void setQuarantine_day_limit(int quarantine_day_limit) {
         Env.quarantine_day_limit = quarantine_day_limit;
     }
@@ -59,45 +62,17 @@ public /*strictfp*/ class Env extends SimState {
     public static int getQuarantine_day_limit() {
         return quarantine_day_limit;
     }
+
     public static int uiIndent = 100;
-    public  static int q_dx = uiIndent;
-    public  static int q_dy = uiIndent;
+    public static int q_dx = uiIndent;
+    public static int q_dy = uiIndent;
 
-//    public ArrayList<Double2D> QuarntineBoundries = create_quarantine_env();
-//
-//    public ArrayList<Double2D> create_quarantine_env(){
-//
-//        ArrayList<Double2D> tempeBoundries = new ArrayList<>();
-//        for (int x = 0; x < num_humans; x++){
-//
-//            Double2D agentLocation;
-//
-//            if (q_dx == uiIndent && q_dy == uiIndent)
-//                agentLocation = new Double2D(q_dx, q_dy);
-//            else{
-//                if (q_dx >= Q_XMAX){
-//                    q_dy = q_dy + uiIndent;
-//                    q_dx = uiIndent;
-//                }
-//                agentLocation = new Double2D(q_dx, q_dy);
-//
-//            }
-//            tempeBoundries.add(agentLocation);
-//            q_dx = q_dx + uiIndent;
-//
-//        }
-//        return tempeBoundries;
-//
-//    }
-
-    public static Double2D assignQurantineLocation(Human hu){
-        // initial condition
+    public static Double2D assignQurantineLocation(Human hu) {
         Double2D agentLocation;
-
         if (q_dx == uiIndent && q_dy == uiIndent)
             agentLocation = new Double2D(q_dx, q_dy);
-        else{
-            if (q_dx >= Q_XMAX || hu.prime){
+        else {
+            if (q_dx >= Q_XMAX || hu.prime) {
                 q_dy = q_dy + uiIndent;
                 q_dx = uiIndent;
             }
@@ -108,38 +83,6 @@ public /*strictfp*/ class Env extends SimState {
 
         return agentLocation;
     }
-
-//    public Double2D moveInQuarantineLoc(Human hu){
-//        // create a new random location
-//        Double2D desiredLocation = new Double2D( (random.nextDouble() - 0.5) * (uiIndent / 5.0 - Env.DIAMETER) + hu.agentLocation.x ,
-//        (random.nextDouble() - 0.5) * (uiIndent / 5.0 - Env.DIAMETER) + hu.agentLocation.y);
-//
-//        double dx = desiredLocation.x - hu.agentLocation.x;
-//        double dy = desiredLocation.y - hu.agentLocation.y;
-//
-//        Double2D new_loc = new Double2D(hu.agentLocation.x + dx, hu.agentLocation.y + dy);
-//
-//        //get the central loc around which we will move it
-//        Double2D centralLoc = QuarntineBoundries.get(hu.aindex);
-//
-//        //check boundry condition
-//        if (new_loc.x < DIAMETER / 2 || new_loc.x > centralLoc.x + uiIndent/2.0 - DIAMETER / 2 ||
-//                new_loc.x < centralLoc.x - uiIndent/2.0 + DIAMETER / 2||
-//                new_loc.y < DIAMETER / 2 || new_loc.y >centralLoc.y + uiIndent/2.0 - DIAMETER / 2||
-//                new_loc.y < centralLoc.y - uiIndent/2.0 + DIAMETER / 2)
-//            return null;
-//
-//        return new_loc;
-//
-//    }
-
-
-    // todo - set some random locations as hospitals
-    // if I2 and I3 ->  update location of agent to hospital loc
-    // don't move the agent
-
-    //Inefection state related parameters
-    // period in which agent goes to R from I1, if doesn't transit to I2
 
     public static int i1Period = 5;
     public static double i2ToDProbability = 0.8;
@@ -160,7 +103,6 @@ public /*strictfp*/ class Env extends SimState {
     public static boolean socialDistancing = false;
 
 
-
     // flag to see actual glass view ( This will show each patient tested and event I0, R etc. )
     public static boolean glassView = true;
 
@@ -178,7 +120,6 @@ public /*strictfp*/ class Env extends SimState {
 
     public static int HospitalBedCount = 150;
     public static int icuCount = (int) (0.05 * HospitalBedCount);
-
 
 
     public static void setGlassView(boolean glassView) {
@@ -213,6 +154,7 @@ public /*strictfp*/ class Env extends SimState {
     public static Continuous2D HumansEnvironment = null;
     public static Continuous2D BlackBoxEnvironment = null;
     public static Continuous2D QuarantinedEnvironment = null;
+
     /**
      * Add all the inspectors here
      */
@@ -273,30 +215,26 @@ public /*strictfp*/ class Env extends SimState {
     }
 
     public static boolean checkICUAvailability() {
-        if (icuCount > 0)
-            return true;
-        else return false;
+        return icuCount > 0;
     }
 
-    public int getInfectedHumans()
-    //  return the count of infected humans to inspectors.*/
+    public int getInfected_Agents()
+    //  return the count of infected agents to inspectors.*/
     {
         int infCount = 0;
-
-        Bag mysteriousObjects = HumansEnvironment.getAllObjects();
-        for (int i = 0; i < mysteriousObjects.numObjs; i++) {
-            if (mysteriousObjects.objs[i] != null) {
-                Agent ta = (Agent) (mysteriousObjects.objs[i]);
+        Bag un_objects = HumansEnvironment.getAllObjects();
+        for (int i = 0; i < un_objects.numObjs; i++) {
+            if (un_objects.objs[i] != null) {
+                Agent ta = (Agent) (un_objects.objs[i]);
                 if (ta.infected) {
                     infCount++;
                 }
             }
         }
-
-        mysteriousObjects = QuarantinedEnvironment.getAllObjects();
-        for (int i = 0; i < mysteriousObjects.numObjs; i++) {
-            if (mysteriousObjects.objs[i] != null) {
-                Agent ta = (Agent) (mysteriousObjects.objs[i]);
+        un_objects = QuarantinedEnvironment.getAllObjects();
+        for (int i = 0; i < un_objects.numObjs; i++) {
+            if (un_objects.objs[i] != null) {
+                Agent ta = (Agent) (un_objects.objs[i]);
                 if (ta.infected) {
                     infCount++;
                 }
@@ -307,15 +245,23 @@ public /*strictfp*/ class Env extends SimState {
         return infCount;
     }
 
-    public int getExposedHumans()
-    //  return the count of exposed humans to inspectors.*/
+    public int getExposed_Agents()
+    //  return the count of exposed agents to inspectors.*/
     {
         int expoCount = 0;
-
-        Bag mysteriousObjects = HumansEnvironment.getAllObjects();
-        for (int i = 0; i < mysteriousObjects.numObjs; i++) {
-            if (mysteriousObjects.objs[i] != null) {
-                Agent ta = (Agent) (mysteriousObjects.objs[i]);
+        Bag un_objects = HumansEnvironment.getAllObjects();
+        for (int i = 0; i < un_objects.numObjs; i++) {
+            if (un_objects.objs[i] != null) {
+                Agent ta = (Agent) (un_objects.objs[i]);
+                if (ta.exposed) {
+                    expoCount++;
+                }
+            }
+        }
+        un_objects = QuarantinedEnvironment.getAllObjects();
+        for (int i = 0; i < un_objects.numObjs; i++) {
+            if (un_objects.objs[i] != null) {
+                Agent ta = (Agent) (un_objects.objs[i]);
                 if (ta.exposed) {
                     expoCount++;
                 }
@@ -324,14 +270,23 @@ public /*strictfp*/ class Env extends SimState {
         return expoCount;
     }
 
-    public int getRecoveredHumans()
-    //  return the count of recovered humans to inspectors.*/
+    public int getRecovered_Agents()
+    //  return the count of recovered agents to inspectors.*/
     {
         int recCount = 0;
-        Bag mysteriousObjects = HumansEnvironment.getAllObjects();
-        for (int i = 0; i < mysteriousObjects.numObjs; i++) {
-            if (mysteriousObjects.objs[i] != null) {
-                Agent ta = (Agent) (mysteriousObjects.objs[i]);
+        Bag un_objects = HumansEnvironment.getAllObjects();
+        for (int i = 0; i < un_objects.numObjs; i++) {
+            if (un_objects.objs[i] != null) {
+                Agent ta = (Agent) (un_objects.objs[i]);
+                if (ta.recovered) {
+                    recCount++;
+                }
+            }
+        }
+        un_objects = QuarantinedEnvironment.getAllObjects();
+        for (int i = 0; i < un_objects.numObjs; i++) {
+            if (un_objects.objs[i] != null) {
+                Agent ta = (Agent) (un_objects.objs[i]);
                 if (ta.recovered) {
                     recCount++;
                 }
@@ -341,23 +296,22 @@ public /*strictfp*/ class Env extends SimState {
     }
 
     public int getDeath_Count()
-    //  return the count of dead humans to inspectors.*/
+    //  return the count of dead agents to inspectors.*/
     {
         int deadCount = 0;
-
-        Bag mysteriousObjects = HumansEnvironment.getAllObjects();
-        for (int i = 0; i < mysteriousObjects.numObjs; i++) {
-            if (mysteriousObjects.objs[i] != null) {
-                Agent ta = (Agent) (mysteriousObjects.objs[i]);
+        Bag un_objects = HumansEnvironment.getAllObjects();
+        for (int i = 0; i < un_objects.numObjs; i++) {
+            if (un_objects.objs[i] != null) {
+                Agent ta = (Agent) (un_objects.objs[i]);
                 if (ta.dead) {
                     deadCount++;
                 }
             }
         }
-        mysteriousObjects = QuarantinedEnvironment.getAllObjects();
-        for (int i = 0; i < mysteriousObjects.numObjs; i++) {
-            if (mysteriousObjects.objs[i] != null) {
-                Agent ta = (Agent) (mysteriousObjects.objs[i]);
+        un_objects = QuarantinedEnvironment.getAllObjects();
+        for (int i = 0; i < un_objects.numObjs; i++) {
+            if (un_objects.objs[i] != null) {
+                Agent ta = (Agent) (un_objects.objs[i]);
                 if (ta.dead) {
                     deadCount++;
                 }
@@ -367,15 +321,23 @@ public /*strictfp*/ class Env extends SimState {
         return deadCount;
     }
 
-    public int getInfectiousAsymptomaticHumans()
-    //  return the count of exposed humans to inspectors.*/
+    public int getAsymptomatic_Agents()
+    //  return the count of asymptomatic agents to inspectors.*/
     {
         int infI0Count = 0;
-
-        Bag mysteriousObjects = HumansEnvironment.getAllObjects();
-        for (int i = 0; i < mysteriousObjects.numObjs; i++) {
-            if (mysteriousObjects.objs[i] != null) {
-                Agent ta = (Agent) (mysteriousObjects.objs[i]);
+        Bag un_object = HumansEnvironment.getAllObjects();
+        for (int i = 0; i < un_object.numObjs; i++) {
+            if (un_object.objs[i] != null) {
+                Agent ta = (Agent) (un_object.objs[i]);
+                if (ta.getInfectionState() == 0) {
+                    infI0Count++;
+                }
+            }
+        }
+        un_object = QuarantinedEnvironment.getAllObjects();
+        for (int i = 0; i < un_object.numObjs; i++) {
+            if (un_object.objs[i] != null) {
+                Agent ta = (Agent) (un_object.objs[i]);
                 if (ta.getInfectionState() == 0) {
                     infI0Count++;
                 }
@@ -401,13 +363,10 @@ public /*strictfp*/ class Env extends SimState {
     }
 
     boolean conflict(final Agent agent1, final Double2D a, final Agent agent2, final Double2D b) {
-        if (((a.x > b.x && a.x < b.x + DIAMETER) ||
+        return ((a.x > b.x && a.x < b.x + DIAMETER) ||
                 (a.x + DIAMETER > b.x && a.x + DIAMETER < b.x + DIAMETER)) &&
                 ((a.y > b.y && a.y < b.y + DIAMETER) ||
-                        (a.y + DIAMETER > b.y && a.y + DIAMETER < b.y + DIAMETER))) {
-            return true;
-        }
-        return false;
+                        (a.y + DIAMETER > b.y && a.y + DIAMETER < b.y + DIAMETER));
     }
 
     public boolean withinInfectionDistance(final Agent agent1, final Double2D a, final Agent agent2, final Double2D b) {
@@ -439,12 +398,10 @@ public /*strictfp*/ class Env extends SimState {
         QuarantinedEnvironment = new Continuous2D(25.0, (Q_XMAX - XMIN), (Q_YMAX - YMIN));
         BlackBoxEnvironment = new Continuous2D(25.0, (XMAX - XMIN), (YMAX - YMIN));
 
-        // Schedule the agents -- we could instead use a RandomSequence, which would be faster,
-        // but this is a good test of the scheduler
         int step_int = 0;
         for (int x = 0; x < num_humans; x++) {
-            Double2D loc = null;
-            Human agent = null;
+            Double2D loc;
+            Human agent;
             int times = 0;
             do {
                 loc = new Double2D(random.nextDouble() * (XMAX - XMIN - DIAMETER) + XMIN + DIAMETER / 2,
@@ -495,9 +452,6 @@ public /*strictfp*/ class Env extends SimState {
             step_int++;
         }
     }
-
-
-
 
     public double triangularDistribution(double low, double high, double peak) {
         double F = (peak - low) / (high - low);

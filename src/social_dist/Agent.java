@@ -51,7 +51,9 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
 
     public void setQuarantined(boolean quarantined) {
         this.quarantined = quarantined;
+        this.count_iso = 0;
     }
+
     public int getInfectionState() {
         return infectionState;
     }

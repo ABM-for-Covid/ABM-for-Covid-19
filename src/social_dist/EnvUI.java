@@ -113,9 +113,9 @@ public class EnvUI extends GUIState {
                                                     graphics.setColor(humanColor);
                                                 }
                                             }
-                                            if (! (human.isolated || human.quarantined))
+                                            if (!(human.isolated || human.quarantined))
                                                 graphics.fillOval((int) (info.draw.x - diamx / 2), (int) (info.draw.y - diamy / 2), (int) (diamx), (int) (diamy));
-                                                //graphics.drawOval((int) (info.draw.x - 2.5 - diamx / 2), (int) (info.draw.y - 2.5 - diamy / 2), (int) (diamx + 5), (int) (diamy + 5));
+                                            //graphics.drawOval((int) (info.draw.x - 2.5 - diamx / 2), (int) (info.draw.y - 2.5 - diamy / 2), (int) (diamx + 5), (int) (diamy + 5));
 
                                             super.draw(human, graphics, info);
                                         }
@@ -136,9 +136,9 @@ public class EnvUI extends GUIState {
                     humanColor = new Color(11, 172, 189, human.getOpacity());
                     graphics.setColor(humanColor);
                 }
-                if (! (human.isolated || human.quarantined))
+                if (!(human.isolated || human.quarantined))
                     graphics.fillOval((int) (info.draw.x - diamx / 2), (int) (info.draw.y - diamy / 2), (int) (diamx), (int) (diamy));
-                    //graphics.drawOval((int) (info.draw.x - 2.5 - diamx / 2), (int) (info.draw.y - 2.5 - diamy / 2), (int) (diamx + 5), (int) (diamy + 5));
+                //graphics.drawOval((int) (info.draw.x - 2.5 - diamx / 2), (int) (info.draw.y - 2.5 - diamy / 2), (int) (diamx + 5), (int) (diamy + 5));
 
                 super.draw(human, graphics, info);
             }
@@ -176,22 +176,22 @@ public class EnvUI extends GUIState {
                         graphics.drawOval((int) (info.draw.x - 12.5 - diamx / 2), (int) (info.draw.y - 12.5 - diamy / 2), (int) (diamx + 25), (int) (diamy + 25));
                     super.draw(human, graphics, info);
                     graphics.setColor(Color.BLACK);
-                    graphics.drawString(""+human.count_iso, (int) (info.draw.x - (diamx /2) - 4), (int) (info.draw.y+4));
+                    graphics.drawString("" + human.count_iso, (int) (info.draw.x - (diamx / 2) - 4), (int) (info.draw.y + 4));
                 }
                 super.draw(human, graphics, info);
             }
         });
 
         // reschedule the displayer
-        Color backdrop_color =new Color(221, 218, 228);
+        Color backdrop_color = new Color(57, 78, 96);
         display.reset();
-        display.setBackdrop(Color.DARK_GRAY);
+        display.setBackdrop(backdrop_color);
         // redraw the display
         display.repaint();
 
         //reschedule the displayer
         display2.reset();
-        display2.setBackdrop(Color.DARK_GRAY);
+        display2.setBackdrop(backdrop_color);
 
         // redraw the display
         display2.repaint();
@@ -199,7 +199,7 @@ public class EnvUI extends GUIState {
 
         //reschedule the displayer
         display3.reset();
-        display3.setBackdrop(Color.WHITE);
+        display3.setBackdrop(backdrop_color);
         // redraw the display
         display3.repaint();
     }
