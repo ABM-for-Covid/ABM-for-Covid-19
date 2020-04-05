@@ -136,12 +136,12 @@ public /*strictfp*/ class Human extends Agent {
 
 
         if (desiredLocation == null || steps <= 0) {
-            desiredLocation = new Double2D((state.random.nextDouble() - 0.5) * ((Env.XMAX - Env.XMIN) / 5 - Env.DIAMETER) +
+            desiredLocation = new Double2D((state.random.nextDouble() - 0.5) * ((Env.ENV_XMAX - Env.XMIN) / 5 - Env.DIAMETER) +
                     //infection.XMIN
                     agentLocation.x
                     //+infection.DIAMETER/2
                     ,
-                    (state.random.nextDouble() - 0.5) * ((Env.YMAX - Env.YMIN) / 5 - Env.DIAMETER) +
+                    (state.random.nextDouble() - 0.5) * ((Env.ENVYMAX - Env.YMIN) / 5 - Env.DIAMETER) +
                             agentLocation.y
                     //infection.YMIN
                     //+infection.DIAMETER/2

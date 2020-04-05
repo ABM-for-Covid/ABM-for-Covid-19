@@ -3,6 +3,7 @@
 ngrok
 # don't include third-party dependencies.
 !lib/README.md
+Test.java
 .DS_Store
 google/
 lib/

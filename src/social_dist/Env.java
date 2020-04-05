@@ -12,12 +12,7 @@ public /*strictfp*/ class Env extends SimState {
 
     //    all environment variables here
     public static final double XMIN = 0;
-    public static final double XMAX = 1000;
     public static final double YMIN = 0;
-    public static final double YMAX = 800;
-
-    public static final double Q_XMAX = 2000;
-    public static final double Q_YMAX = 1600;
 
     public static final double DIAMETER = 15;
     public static final double HYGIENE_CONST = 0.2;
@@ -26,6 +21,28 @@ public /*strictfp*/ class Env extends SimState {
     public static final double INCUBATION_PERIOD_High = 14;
     public static final double INFECTION_DISTANCE = DIAMETER + 3;
     public static final double INFECTION_DISTANCE_SQUARED = INFECTION_DISTANCE * INFECTION_DISTANCE;
+
+    public static  double ENV_XMAX = 1000;
+    public static  double ENVYMAX = 800;
+
+    public static final double Q_XMAX = ENV_XMAX*2;
+    public static final double Q_YMAX = ENVYMAX*2;
+
+    public static double getEnvXmax() {
+        return ENV_XMAX;
+    }
+
+    public static void setEnvXmax(double envXmax) {
+        ENV_XMAX = envXmax;
+    }
+
+    public static double getENVYMAX() {
+        return ENVYMAX;
+    }
+
+    public static void setENVYMAX(double ENVYMAX) {
+        Env.ENVYMAX = ENVYMAX;
+    }
 
     /**************************
      Contact Tracing Variables
@@ -43,7 +60,7 @@ public /*strictfp*/ class Env extends SimState {
     }
 
     //how many contact traces you can pull up.
-    public static int contact_trace_capacity = 15;
+    public static int contact_trace_capacity = 10;
 
     public static void setContact_trace_capacity(int contact_trace_capacity) {
         Env.contact_trace_capacity = contact_trace_capacity;
@@ -421,8 +438,8 @@ public /*strictfp*/ class Env extends SimState {
 
     boolean acceptablePosition(final Agent agent, final Double2D location) {
 
-        if (location.x < DIAMETER / 2 || location.x > (XMAX - XMIN)/*HumansEnvironment.getXSize()*/ - DIAMETER / 2 ||
-                location.y < DIAMETER / 2 || location.y > (YMAX - YMIN)/*HumansEnvironment.getYSize()*/ - DIAMETER / 2)
+        if (location.x < DIAMETER / 2 || location.x > (ENV_XMAX - XMIN)/*HumansEnvironment.getXSize()*/ - DIAMETER / 2 ||
+                location.y < DIAMETER / 2 || location.y > (ENVYMAX - YMIN)/*HumansEnvironment.getYSize()*/ - DIAMETER / 2)
             return false;
         Bag mysteriousObjects = HumansEnvironment.getNeighborsWithinDistance(location, 2 * DIAMETER);
         if (mysteriousObjects != null) {
@@ -440,10 +457,10 @@ public /*strictfp*/ class Env extends SimState {
 
     public void start() {
         super.start();  // clear out the schedule
-        HumansEnvironment = new Continuous2D(25.0, (XMAX - XMIN), (YMAX - YMIN));
+        HumansEnvironment = new Continuous2D(25.0, (ENV_XMAX - XMIN), (ENVYMAX - YMIN));
         QuarantinedEnvironment = new Continuous2D(25.0, (Q_XMAX - XMIN), (Q_YMAX - YMIN));
-        BlackBoxEnvironment = new Continuous2D(25.0, (XMAX - XMIN), (YMAX - YMIN));
-        TestEnvironment = new Continuous2D(25.0, (XMAX - XMIN), (YMAX - YMIN));
+        BlackBoxEnvironment = new Continuous2D(25.0, (ENV_XMAX - XMIN), (ENVYMAX - YMIN));
+        TestEnvironment = new Continuous2D(25.0, (ENV_XMAX - XMIN), (ENVYMAX - YMIN));
 
         int step_int = 0;
         for (int x = 0; x < num_humans; x++) {
@@ -451,8 +468,8 @@ public /*strictfp*/ class Env extends SimState {
             Human agent;
             int times = 0;
             do {
-                loc = new Double2D(random.nextDouble() * (XMAX - XMIN - DIAMETER) + XMIN + DIAMETER / 2,
-                        random.nextDouble() * (YMAX - YMIN - DIAMETER) + YMIN + DIAMETER / 2);
+                loc = new Double2D(random.nextDouble() * (ENV_XMAX - XMIN - DIAMETER) + XMIN + DIAMETER / 2,
+                        random.nextDouble() * (ENVYMAX - YMIN - DIAMETER) + YMIN + DIAMETER / 2);
 
 
                 agent = new Human("Human-" + x, loc);

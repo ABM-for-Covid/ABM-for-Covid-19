@@ -1,6 +1,7 @@
 
 package social_dist;
 
+import sim.display.ChartUtilities;
 import sim.display.Controller;
 import sim.display.Display2D;
 import sim.display.GUIState;
@@ -9,6 +10,7 @@ import sim.portrayal.DrawInfo2D;
 import sim.portrayal.Inspector;
 import sim.portrayal.SimplePortrayal2D;
 import sim.portrayal.continuous.ContinuousPortrayal2D;
+import sim.util.media.chart.TimeSeriesChartGenerator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,6 +32,13 @@ public class EnvUI extends GUIState {
     ContinuousPortrayal2D blackBox = new ContinuousPortrayal2D();
     ContinuousPortrayal2D quarantinedBox = new ContinuousPortrayal2D();
     ContinuousPortrayal2D testingdBox = new ContinuousPortrayal2D();
+
+
+    public sim.util.media.chart.TimeSeriesAttributes infectiousAgents;
+    public sim.util.media.chart.TimeSeriesAttributes exposedAgents;
+    public sim.util.media.chart.TimeSeriesAttributes recoveredAgents;
+    public sim.util.media.chart.TimeSeriesAttributes deathCount;
+    public TimeSeriesChartGenerator myChart;
 
     public Object getSimulationInspectedObject() {
         return state;
@@ -61,14 +70,35 @@ public class EnvUI extends GUIState {
     public void start() {
         super.start();
         setupPortrayals();
+        myChart.clearAllSeries();
+
+        //chart
+        ChartUtilities.scheduleSeries(this, infectiousAgents, new sim.util.Valuable() {
+            public double doubleValue() { return ((Env) state).getInfected_Agents(); }});
+
+        ChartUtilities.scheduleSeries(this, exposedAgents, new sim.util.Valuable() {
+            public double doubleValue() { return ((Env) state).getExposed_Agents(); }});
+
+        ChartUtilities.scheduleSeries(this, deathCount, new sim.util.Valuable() {
+            public double doubleValue() { return ((Env) state).getDeath_Count(); }});
+
+        ChartUtilities.scheduleSeries(this, recoveredAgents, new sim.util.Valuable() {
+            public double doubleValue() { return ((Env) state).getRecovered_Agents(); }});
     }
 
     public void load(SimState state) {
         super.load(state);
         setupPortrayals();
+
+        //chart
+        ChartUtilities.scheduleSeries(this, infectiousAgents, new sim.util.Valuable() {
+            public double doubleValue() {
+                return ((Env) state).getInfected_Agents();
+            }
+        });
     }
 
-    public void paint_displays(Display2D display){
+    public void paint_displays(Display2D display) {
         Color backdrop_color = new Color(57, 78, 96);
         display.reset();
         display.setBackdrop(backdrop_color);
@@ -86,7 +116,7 @@ public class EnvUI extends GUIState {
     protected Color recoveredColor = new Color(9, 255, 42);
 
 
-    public void add_glassView_colors(Human human, Graphics2D graphics){
+    public void add_glassView_colors(Human human, Graphics2D graphics) {
         if (human.isExposed()) {
             exposedColor = new Color(192, 156, 30, human.getOpacity());
             graphics.setColor(exposedColor);
@@ -106,7 +136,7 @@ public class EnvUI extends GUIState {
         }
     }
 
-    public void add_blackBoxView_colors(Human human, Graphics2D graphics){
+    public void add_blackBoxView_colors(Human human, Graphics2D graphics) {
         if (human.getInfectionState() == 1 || human.getInfectionState() == 2 || human.getInfectionState() == 3) {
             graphics.setColor(infectedColorI3);
         } else if (human.dead) graphics.setColor(deadColor);
@@ -184,16 +214,16 @@ public class EnvUI extends GUIState {
                 double diamx = info.draw.width * Env.DIAMETER;
                 double diamy = info.draw.height * Env.DIAMETER;
 
-               add_glassView_colors(human, graphics);
+                add_glassView_colors(human, graphics);
 
                 graphics.fillOval((int) (info.draw.x - 10 - diamx / 2), (int) (info.draw.y - 10 - diamy / 2), (int) (diamx + 20), (int) (diamy + 20));
                 super.draw(human, graphics, info);
                 graphics.setColor(Color.WHITE);
                 String result_s;
                 if (human.test_result_positive)
-                    result_s = "Agent "+human.aindex+ " Tested Positive (+ve)";
-                else result_s = "Agent "+human.aindex+ " Tested Negative (-ve)";
-                graphics.drawString(result_s, (int) (info.draw.x +50), (int) (info.draw.y + 4));
+                    result_s = "Agent " + human.aindex + " Tested Positive (+ve)";
+                else result_s = "Agent " + human.aindex + " Tested Negative (-ve)";
+                graphics.drawString(result_s, (int) (info.draw.x + 50), (int) (info.draw.y + 4));
 
                 super.draw(human, graphics, info);
             }
@@ -243,6 +273,19 @@ public class EnvUI extends GUIState {
         c.registerFrame(displayFrame4);   // register the frame so it appears in the "Display" list
         displayFrame4.setVisible(true);
         display4.attach(testingdBox, "Testing Results");
+
+
+        // infection curve chart
+        myChart = ChartUtilities.buildTimeSeriesChartGenerator(this, "Infection Curve", "Days*500");
+        myChart.setYAxisLabel("Count");
+        infectiousAgents = ChartUtilities.addSeries(myChart, "Infectious Agents");
+        exposedAgents = ChartUtilities.addSeries(myChart, "Exposed Agents");
+        recoveredAgents = ChartUtilities.addSeries(myChart, "Recovered Agents");
+        deathCount = ChartUtilities.addSeries(myChart, "Death Count");
+        infectiousAgents.setStrokeColor(infectedColorI3);
+        exposedAgents.setStrokeColor(exposedColor);
+        recoveredAgents.setStrokeColor(recoveredColor);
+        deathCount.setStrokeColor(deadColor);
     }
 
     public void quit() {
@@ -263,6 +306,7 @@ public class EnvUI extends GUIState {
         if (displayFrame4 != null) displayFrame4.dispose();
         displayFrame4 = null;
         display4 = null;
+        myChart.createImage(1600, 1200);
     }
 
 }
