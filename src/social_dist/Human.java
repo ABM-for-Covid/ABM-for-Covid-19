@@ -141,7 +141,7 @@ public /*strictfp*/ class Human extends Agent {
                     agentLocation.x
                     //+infection.DIAMETER/2
                     ,
-                    (state.random.nextDouble() - 0.5) * ((Env.ENVYMAX - Env.YMIN) / 5 - Env.DIAMETER) +
+                    (state.random.nextDouble() - 0.5) * ((Env.ENV_YMAX - Env.YMIN) / 5 - Env.DIAMETER) +
                             agentLocation.y
                     //infection.YMIN
                     //+infection.DIAMETER/2

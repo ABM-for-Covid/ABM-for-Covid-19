@@ -22,20 +22,49 @@ public /*strictfp*/ class Env extends SimState {
     public static final double INFECTION_DISTANCE = DIAMETER + 3;
     public static final double INFECTION_DISTANCE_SQUARED = INFECTION_DISTANCE * INFECTION_DISTANCE;
 
+
+    //scaling factors of environments
+    public static double agent_density = 0.0001;
+    public static double hospital_bed_per_agent = 0.1;
+    public static double icu_bed_per_hospital_bed = 0.05;
+
+
     //experiment
-    public static int num_humans = 2000;
-    public static double discreatization = 500.0;
-    public static  double ENV_XMAX = 20000;
-    public static  double ENVYMAX = 20000;
-
-//    public static int num_humans = 100;
-//    public static double discreatization = 25.0;
-//    public static  double ENV_XMAX = 1000;
-//    public static  double ENVYMAX = 1000;
-
-
+    public static int num_agents = 100;
+    public static double discreatization = 25.0;
+    public static  double ENV_XMAX = (int)Math.pow( (num_agents / agent_density), 0.5);
+    public static  double ENV_YMAX = ENV_XMAX;
     public static final double Q_XMAX = ENV_XMAX*2;
-    public static final double Q_YMAX = ENVYMAX*2;
+    public static final double Q_YMAX = ENV_YMAX *2;
+
+
+    public static double getAgent_density() {
+        return agent_density;
+    }
+
+    public static void setAgent_density(double agent_density) {
+        Env.agent_density = agent_density;
+    }
+
+    public static double getHospital_bed_per_agent() {
+        return hospital_bed_per_agent;
+    }
+
+    public static void setHospital_bed_per_agent(double hospital_bed_per_agent) {
+        Env.hospital_bed_per_agent = hospital_bed_per_agent;
+    }
+
+    public static double getIcu_bed_per_hospital_bed() {
+        return icu_bed_per_hospital_bed;
+    }
+
+    public static void setIcu_bed_per_hospital_bed(double icu_bed_per_hospital_bed) {
+        Env.icu_bed_per_hospital_bed = icu_bed_per_hospital_bed;
+    }
+
+
+    public static int HospitalBedCount = (int) (num_agents * hospital_bed_per_agent);
+    public static int icuCount = (int) (icu_bed_per_hospital_bed * HospitalBedCount);
 
 
     public static double getEnvXmax() {
@@ -46,12 +75,12 @@ public /*strictfp*/ class Env extends SimState {
         ENV_XMAX = envXmax;
     }
 
-    public static double getENVYMAX() {
-        return ENVYMAX;
+    public static double getEnvYmax() {
+        return ENV_YMAX;
     }
 
-    public static void setENVYMAX(double ENVYMAX) {
-        Env.ENVYMAX = ENVYMAX;
+    public static void setEnvYmax(double envYmax) {
+        Env.ENV_YMAX = envYmax;
     }
 
     /**************************
@@ -170,7 +199,7 @@ public /*strictfp*/ class Env extends SimState {
     }
 
     //    all model parameters here
-    public static double initialInfectionPercent = 0.1;
+    public static double initial_infection_percent = 0.1;
 
     // implement distancing
     public static boolean socialDistancing = false;
@@ -190,9 +219,6 @@ public /*strictfp*/ class Env extends SimState {
 
     // incubation period distribution - Average 5 with a positive skew, so sampling from an exponential distribution
     public static double incubationMean = 5;
-
-    public static int HospitalBedCount = 150;
-    public static int icuCount = (int) (0.05 * HospitalBedCount);
 
 
     public static void setGlassView(boolean glassView) {
@@ -280,12 +306,12 @@ public /*strictfp*/ class Env extends SimState {
         return agePeak;
     }
 
-    public static int getNum_humans() {
-        return num_humans;
+    public static int getNum_agents() {
+        return num_agents;
     }
 
-    public static void setNum_humans(int num_humans) {
-        Env.num_humans = num_humans;
+    public static void setNum_agents(int num_agents) {
+        Env.num_agents = num_agents;
     }
 
     public static boolean checkICUAvailability() {
@@ -421,12 +447,12 @@ public /*strictfp*/ class Env extends SimState {
     }
 
 
-    public static void setInitialInfectionPercent(double initialInfectionPercent) {
-        Env.initialInfectionPercent = initialInfectionPercent;
+    public static void setInitial_infection_percent(double initial_infection_percent) {
+        Env.initial_infection_percent = initial_infection_percent;
     }
 
-    public static double getInitialInfectionPercent() {
-        return initialInfectionPercent;
+    public static double getInitial_infection_percent() {
+        return initial_infection_percent;
     }
 
     /**
@@ -450,7 +476,7 @@ public /*strictfp*/ class Env extends SimState {
     boolean acceptablePosition(final Agent agent, final Double2D location) {
 
         if (location.x < DIAMETER / 2 || location.x > (ENV_XMAX - XMIN)/*HumansEnvironment.getXSize()*/ - DIAMETER / 2 ||
-                location.y < DIAMETER / 2 || location.y > (ENVYMAX - YMIN)/*HumansEnvironment.getYSize()*/ - DIAMETER / 2)
+                location.y < DIAMETER / 2 || location.y > (ENV_YMAX - YMIN)/*HumansEnvironment.getYSize()*/ - DIAMETER / 2)
             return false;
         Bag mysteriousObjects = HumansEnvironment.getNeighborsWithinDistance(location, 2 * DIAMETER);
         if (mysteriousObjects != null) {
@@ -468,24 +494,24 @@ public /*strictfp*/ class Env extends SimState {
 
     public void start() {
         super.start();  // clear out the schedule
-        HumansEnvironment = new Continuous2D(discreatization, (ENV_XMAX - XMIN), (ENVYMAX - YMIN));
+        HumansEnvironment = new Continuous2D(discreatization, (ENV_XMAX - XMIN), (ENV_YMAX - YMIN));
         QuarantinedEnvironment = new Continuous2D(discreatization, (Q_XMAX - XMIN), (Q_YMAX - YMIN));
-        BlackBoxEnvironment = new Continuous2D(discreatization, (ENV_XMAX - XMIN), (ENVYMAX - YMIN));
-        TestEnvironment = new Continuous2D(discreatization, (ENV_XMAX - XMIN), (ENVYMAX - YMIN));
+        BlackBoxEnvironment = new Continuous2D(discreatization, (ENV_XMAX - XMIN), (ENV_YMAX - YMIN));
+        TestEnvironment = new Continuous2D(discreatization, (ENV_XMAX - XMIN), (ENV_YMAX - YMIN));
 
         int step_int = 0;
-        for (int x = 0; x < num_humans; x++) {
+        for (int x = 0; x < num_agents; x++) {
             Double2D loc;
             Human agent;
             int times = 0;
             do {
                 loc = new Double2D(random.nextDouble() * (ENV_XMAX - XMIN - DIAMETER) + XMIN + DIAMETER / 2,
-                        random.nextDouble() * (ENVYMAX - YMIN - DIAMETER) + YMIN + DIAMETER / 2);
+                        random.nextDouble() * (ENV_YMAX - YMIN - DIAMETER) + YMIN + DIAMETER / 2);
 
 
                 agent = new Human("Human-" + x, loc);
                 //add agent as infected according to initial value
-                if (step_int < num_humans * initialInfectionPercent) {
+                if (step_int < num_agents * initial_infection_percent) {
                     agent.setInfected(true);
                     agent.setSusceptible(false);
                     agent.setInfectionState(0);

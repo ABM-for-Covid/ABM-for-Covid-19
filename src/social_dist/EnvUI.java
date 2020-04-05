@@ -239,7 +239,7 @@ public class EnvUI extends GUIState {
     public void init(Controller c) {
         super.init(c);
 
-        display = new Display2D(Env.ENV_XMAX, Env.ENVYMAX, this);
+        display = new Display2D(Env.ENV_XMAX, Env.ENV_YMAX, this);
         display.setScale(0.65);
         displayFrame = display.createFrame();
         displayFrame.setTitle("Glass View of Infection Spread ( SEI3R )");
@@ -248,35 +248,35 @@ public class EnvUI extends GUIState {
         display.attach(glassBox, "Agents");
 
 
-        display2 = new Display2D(Env.ENV_XMAX, Env.ENVYMAX, this);
+        display2 = new Display2D(Env.ENV_XMAX, Env.ENV_YMAX, this);
         display2.setScale(0.65);
         displayFrame2 = display2.createFrame();
         displayFrame2.setTitle("Black Box View of Infection Spread ( SEI3R ) ");
         c.registerFrame(displayFrame2);   // register the frame so it appears in the "Display" list
-        displayFrame2.setVisible(true);
+        displayFrame2.setVisible(false);
         display2.attach(blackBox, "Black Box View");
 
 
-        display3 = new Display2D(Env.ENV_XMAX, Env.ENVYMAX, this);
+        display3 = new Display2D(Env.ENV_XMAX, Env.ENV_YMAX, this);
         display3.setScale(0.9);
         displayFrame3 = display3.createFrame();
         displayFrame3.setTitle("Quarantined Box View");
         c.registerFrame(displayFrame3);   // register the frame so it appears in the "Display" list
-        displayFrame3.setVisible(true);
+        displayFrame3.setVisible(false);
         display3.attach(quarantinedBox, "Quarantined Agents");
 
 
-        display4 = new Display2D(Env.ENV_XMAX, Env.ENVYMAX, this);
+        display4 = new Display2D(Env.ENV_XMAX, Env.ENV_YMAX, this);
         display4.setScale(0.9);
         displayFrame4 = display4.createFrame();
         displayFrame4.setTitle("Testing Results");
         c.registerFrame(displayFrame4);   // register the frame so it appears in the "Display" list
-        displayFrame4.setVisible(true);
+        displayFrame4.setVisible(false);
         display4.attach(testingdBox, "Testing Results");
 
 
         // infection curve chart
-        myChart = ChartUtilities.buildTimeSeriesChartGenerator(this, "Infection Curve", "Days*500");
+        myChart = ChartUtilities.buildTimeSeriesChartGenerator(this, "Infection Curve", "Simulation Steps (1 Day = 500 steps");
         myChart.setYAxisLabel("Count");
         infectiousAgents = ChartUtilities.addSeries(myChart, "Infectious Agents");
         exposedAgents = ChartUtilities.addSeries(myChart, "Exposed Agents");
