@@ -28,6 +28,12 @@ public /*strictfp*/ class Env extends SimState {
     public static  double ENV_XMAX = 20000;
     public static  double ENVYMAX = 20000;
 
+//    public static int num_humans = 100;
+//    public static double discreatization = 25.0;
+//    public static  double ENV_XMAX = 1000;
+//    public static  double ENVYMAX = 1000;
+
+
     public static final double Q_XMAX = ENV_XMAX*2;
     public static final double Q_YMAX = ENVYMAX*2;
 
