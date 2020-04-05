@@ -75,8 +75,9 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
 
     public void setInfectionState(int infectionState) {
         this.infectionState = infectionState;
-        if (infectionState == 2 || infectionState == 3) this.setIsolation(true);
+        if (Env.socialIsolation && (infectionState == 2 || infectionState == 3)) this.setIsolation(true);
         else this.setIsolation(false);
+
         // when change infection state/ the tests are invalid
         tested = false;
         test_result_positive = false;

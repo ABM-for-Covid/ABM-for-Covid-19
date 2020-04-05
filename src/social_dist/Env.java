@@ -22,11 +22,15 @@ public /*strictfp*/ class Env extends SimState {
     public static final double INFECTION_DISTANCE = DIAMETER + 3;
     public static final double INFECTION_DISTANCE_SQUARED = INFECTION_DISTANCE * INFECTION_DISTANCE;
 
-    public static  double ENV_XMAX = 1000;
-    public static  double ENVYMAX = 800;
+    //experiment
+    public static int num_humans = 2000;
+    public static double discreatization = 500.0;
+    public static  double ENV_XMAX = 20000;
+    public static  double ENVYMAX = 20000;
 
     public static final double Q_XMAX = ENV_XMAX*2;
     public static final double Q_YMAX = ENVYMAX*2;
+
 
     public static double getEnvXmax() {
         return ENV_XMAX;
@@ -49,7 +53,8 @@ public /*strictfp*/ class Env extends SimState {
      **************************/
     //contact tracing hashMap
     public static Multimap<String, Human> contacts = LinkedListMultimap.create();
-    public static boolean contactTracing = true;
+    public static boolean contactTracing = false;
+    public static boolean socialIsolation = false;
 
     public static boolean isContactTracing() {
         return contactTracing;
@@ -61,6 +66,7 @@ public /*strictfp*/ class Env extends SimState {
 
     //how many contact traces you can pull up.
     public static int contact_trace_capacity = 10;
+
 
     public static void setContact_trace_capacity(int contact_trace_capacity) {
         Env.contact_trace_capacity = contact_trace_capacity;
@@ -158,7 +164,6 @@ public /*strictfp*/ class Env extends SimState {
     }
 
     //    all model parameters here
-    public static int num_humans = 50;
     public static double initialInfectionPercent = 0.1;
 
     // implement distancing
@@ -457,10 +462,10 @@ public /*strictfp*/ class Env extends SimState {
 
     public void start() {
         super.start();  // clear out the schedule
-        HumansEnvironment = new Continuous2D(25.0, (ENV_XMAX - XMIN), (ENVYMAX - YMIN));
-        QuarantinedEnvironment = new Continuous2D(25.0, (Q_XMAX - XMIN), (Q_YMAX - YMIN));
-        BlackBoxEnvironment = new Continuous2D(25.0, (ENV_XMAX - XMIN), (ENVYMAX - YMIN));
-        TestEnvironment = new Continuous2D(25.0, (ENV_XMAX - XMIN), (ENVYMAX - YMIN));
+        HumansEnvironment = new Continuous2D(discreatization, (ENV_XMAX - XMIN), (ENVYMAX - YMIN));
+        QuarantinedEnvironment = new Continuous2D(discreatization, (Q_XMAX - XMIN), (Q_YMAX - YMIN));
+        BlackBoxEnvironment = new Continuous2D(discreatization, (ENV_XMAX - XMIN), (ENVYMAX - YMIN));
+        TestEnvironment = new Continuous2D(discreatization, (ENV_XMAX - XMIN), (ENVYMAX - YMIN));
 
         int step_int = 0;
         for (int x = 0; x < num_humans; x++) {

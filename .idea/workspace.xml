@@ -3,13 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="ccbf511a-894c-4a0b-892b-385dcb96ae2c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/EnvUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/EnvUI$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/EnvUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/EnvUI$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/EnvUI$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/EnvUI$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/EnvUI$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/EnvUI$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/social_dist/Env.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/social_dist/Env.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/social_dist/EnvUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/social_dist/EnvUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/social_dist/Human.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/social_dist/Human.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
