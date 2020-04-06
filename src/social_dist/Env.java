@@ -63,8 +63,8 @@ public /*strictfp*/ class Env extends SimState {
     }
 
 
-    public static int HospitalBedCount = (int) (num_agents * hospital_bed_per_agent);
-    public static int icuCount = (int) (icu_bed_per_hospital_bed * HospitalBedCount);
+    public static int hospital_bed_capacity = (int) (num_agents * hospital_bed_per_agent);
+    public static int icu_capacity = (int) (icu_bed_per_hospital_bed * hospital_bed_capacity);
 
 
     public static double getEnvXmax() {
@@ -86,7 +86,7 @@ public /*strictfp*/ class Env extends SimState {
     /********* Policies ******************************/
     public static boolean policy_quarantine = false;
     public static boolean policy_daily_testing = false;
-    public static boolean policy_contactTracing = false;
+    public static boolean policy_contact_tracing = false;
     public static boolean policy_lockdown = false;
     public static boolean policy_social_distancing = false;
     public static boolean policy_hospitalization = false; // if i2 and i3 be isolated in a hospital.
@@ -133,12 +133,12 @@ public /*strictfp*/ class Env extends SimState {
     public static Multimap<String, Human> contacts = LinkedListMultimap.create();
 
 
-    public static boolean isPolicy_contactTracing() {
-        return policy_contactTracing;
+    public static boolean isPolicy_contact_tracing() {
+        return policy_contact_tracing;
     }
 
-    public static void setPolicy_contactTracing(boolean policy_contactTracing) {
-        Env.policy_contactTracing = policy_contactTracing;
+    public static void setPolicy_contact_tracing(boolean policy_contact_tracing) {
+        Env.policy_contact_tracing = policy_contact_tracing;
     }
 
     //how many contact traces you can pull up.
@@ -229,16 +229,11 @@ public /*strictfp*/ class Env extends SimState {
 
     /***************************************************************/
 
-    public static int i1Period = 5;
-    public static double i2ToDProbability = 0.8;
+    // number of days after expose when agent should move to recovery.
+    public static int infection_to_recovery_days = 21;
+    public static int expose_to_recovery_days = 12;
 
-    public static int getI1Period() {
-        return i1Period;
-    }
-
-    public static void setI1Period(int i1Period) {
-        Env.i1Period = i1Period;
-    }
+    public static double i2ToDProbability = 0.7;
 
     //    all model parameters here
     public static double initial_infection_percent = 0.1;
@@ -277,20 +272,20 @@ public /*strictfp*/ class Env extends SimState {
     }
 
 
-    public static int getHospitalBedCount() {
-        return HospitalBedCount;
+    public static int getHospital_bed_capacity() {
+        return hospital_bed_capacity;
     }
 
-    public static void setHospitalBedCount(int hospitalBedCount) {
-        Env.HospitalBedCount = hospitalBedCount;
+    public static void setHospital_bed_capacity(int hospital_bed_capacity) {
+        Env.hospital_bed_capacity = hospital_bed_capacity;
     }
 
-    public static int getIcuCount() {
-        return icuCount;
+    public static int getIcu_capacity() {
+        return icu_capacity;
     }
 
-    public static void setIcuCount(int icuCount) {
-        Env.icuCount = icuCount;
+    public static void setIcu_capacity(int icu_capacity) {
+        Env.icu_capacity = icu_capacity;
     }
 
     // recovery time - Uniform distribution between 21 and 42 days
@@ -353,7 +348,7 @@ public /*strictfp*/ class Env extends SimState {
     }
 
     public static boolean checkICUAvailability() {
-        return icuCount > 0;
+        return icu_capacity > 0;
     }
 
     public int getInfected_Agents()

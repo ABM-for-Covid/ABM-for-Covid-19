@@ -82,7 +82,7 @@ public class Transitions {
     public static void calculateI0Transition(Human i0Human) {
 
         // I0->R is based on the time duration agent stays in the i0 state probabilistically 
-        if (i0Human.count_EI0 >= 12) {
+        if (i0Human.count_EI0 >= Env.expose_to_recovery_days) {
             i0Human.setRecovered(true);
         }
         // I0-> I1 -> transition into I1 depend on weakImmune and age
@@ -111,7 +111,7 @@ public class Transitions {
         if (prob_score < 0) prob_score = 0;
 
         // transition to R
-        if (human.count_I1 > Env.i1Period && human.wantToMoveToI2 < 2) {
+        if (human.count_EI0 + human.count_I1 >= Env.infection_to_recovery_days && human.wantToMoveToI2 < 2) {
             human.setRecovered(true);
             return;
         }
@@ -119,11 +119,11 @@ public class Transitions {
         // transition to I2
         if (human.wantToMoveToI2 > 2 || getRandomBoolean((1 - prob_score))) {
             human.wantToMoveToI2++;
-            if (Env.HospitalBedCount > 0) {
+            if (Env.hospital_bed_capacity > 0) {
 
                 // if human is not isolated, then only do the contact tracing
                 // this sets contact tracing to single level.
-                if (Env.policy_contactTracing && !human.quarantined) {
+                if (Env.policy_contact_tracing && !human.quarantined) {
                     human.findAndMarkTraces();
                 }
                 if (Env.policy_quarantine) {
@@ -131,14 +131,14 @@ public class Transitions {
                     human.setQuarantined(true);
                 }
                 human.setInfectionState(2);
-                Env.HospitalBedCount--;
+                Env.hospital_bed_capacity--;
                 return;
             } else {
                 //calculate transition to D
                 if (getRandomBoolean((Env.I2toD_CONST * (1 - prob_score)))) {
                     human.setDead(true);
                     human.setInfected(false);
-                    Env.HospitalBedCount++;
+                    Env.hospital_bed_capacity++;
                     return;
                 }
 
@@ -167,7 +167,7 @@ public class Transitions {
         if (getRandomBoolean(1 - prob_score)) {
 
             // check availability
-            int icu_count = Env.getIcuCount();
+            int icu_count = Env.getIcu_capacity();
 
             //probability to D
             if (icu_count <= 0) {
@@ -175,14 +175,14 @@ public class Transitions {
                 if (getRandomBoolean(Env.i2ToDProbability)) {
                     human.setDead(true);
                     human.setInfected(false);
-                    Env.HospitalBedCount++;
+                    Env.hospital_bed_capacity++;
                     return;
                 }
             }
             //todo if already ICUed once, then increase the prob to D ? how?
             else {
                 human.setInfectionState(3);
-                Env.icuCount--;
+                Env.icu_capacity--;
                 return;
             }
         }
@@ -219,7 +219,7 @@ public class Transitions {
         if (getRandomBoolean(1 - prob_score)) {
             human.setDead(true);
             human.setInfected(false);
-            Env.icuCount++;
+            Env.icu_capacity++;
             return;
         }
 
@@ -229,7 +229,7 @@ public class Transitions {
         if (getRandomBoolean(prob_score)) {
             human.setInfectionState(2);
             human.count_I2 = 0;
-            Env.icuCount++;
+            Env.icu_capacity++;
             return;
         }
         human.count_I3++;
@@ -286,7 +286,7 @@ public class Transitions {
                         hu.setPrime(true);
                         hu.setQuarantined(true);
                     }
-                    if (Env.policy_contactTracing)
+                    if (Env.policy_contact_tracing)
                         hu.findAndMarkTraces();
                 }
             }

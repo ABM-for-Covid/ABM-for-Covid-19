@@ -112,7 +112,7 @@ public /*strictfp*/ class Human extends Agent {
 
                     if (hb.withinInfectionDistance(this, agentLocation, ta, ta.agentLocation)) {
                         //calculate S->E transition
-                        if (Env.policy_contactTracing && this.getInfectionState() >= 0)
+                        if (Env.policy_contact_tracing && this.getInfectionState() >= 0)
                             Env.contacts.put(id, ta);
 
                         if ((ta.getInfectionState() == 0 || ta.getInfectionState() == 1 || ta.getInfectionState() == 2) && this.isSusceptible()) {
