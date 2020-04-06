@@ -1,4 +1,5 @@
 package social_dist;
+
 import sim.util.Bag;
 
 import java.util.ArrayList;
@@ -122,8 +123,10 @@ public class Transitions {
 
                 // if human is not isolated, then only do the contact tracing
                 // this sets contact tracing to single level.
-                if (Env.contactTracing && !human.quarantined) {
+                if (Env.policy_contactTracing && !human.quarantined) {
                     human.findAndMarkTraces();
+                }
+                if (Env.policy_quarantine) {
                     human.setPrime(true);
                     human.setQuarantined(true);
                 }
@@ -234,13 +237,13 @@ public class Transitions {
     }
 
     public static void countQuarantinedDays(Human human) {
-        if (human.count_iso >= Env.quarantine_day_limit && human.infectionState <=0)
+        if (human.count_iso >= Env.quarantine_day_limit && human.infectionState <= 0)
             human.setQuarantined(false);
         else human.count_iso++;
     }
 
 
-    public static void run_tests(){
+    public static void run_tests() {
         // reset the env each day for fresh testing
         Env.TestEnvironment.clear();
         Env.t_dx = Env.uiIndent;
@@ -259,34 +262,33 @@ public class Transitions {
                 }
             }
         }
-        if(sample_list.size()==0) return;
+        if (sample_list.size() == 0) return;
 
         //shuffle the list to pick random agents
         Collections.shuffle(sample_list);
         int test_to_perform = Env.testing_capacity;
         if (sample_list.size() < Env.testing_capacity) test_to_perform = sample_list.size();
 
-        int count_false_negative = (int) (test_to_perform* Env.test_false_negative);
+        int count_false_negative = (int) (test_to_perform * Env.test_false_negative);
         for (int i = 0; i < test_to_perform; i++) {
             Human hu = sample_list.get(i);
 
             // generate result based on false negative %
-            if (i<count_false_negative){
+            if (i < count_false_negative) {
 
-            if (hu.infected) hu.test_result_positive = false;
-            hu.tested = true;
-            }
-            else {
-                if (hu.infected){
+                if (hu.infected) hu.test_result_positive = false;
+                hu.tested = true;
+            } else {
+                if (hu.infected) {
                     hu.test_result_positive = true;
                     hu.tested = true;
-                    if (Env.contactTracing) {
+                    if (Env.policy_quarantine) {
                         hu.setPrime(true);
                         hu.setQuarantined(true);
-                        hu.findAndMarkTraces();
                     }
+                    if (Env.policy_contactTracing)
+                        hu.findAndMarkTraces();
                 }
-
             }
             Env.TestEnvironment.setObjectLocation(hu, Env.assignTestLocation());
         }

@@ -83,20 +83,62 @@ public /*strictfp*/ class Env extends SimState {
         Env.ENV_YMAX = envYmax;
     }
 
+    /********* Policies ******************************/
+    public static boolean policy_quarantine = false;
+    public static boolean policy_daily_testing = false;
+    public static boolean policy_contactTracing = false;
+    public static boolean policy_lockdown = false;
+    public static boolean policy_social_distancing = false;
+    public static boolean policy_hospitalization = false; // if i2 and i3 be isolated in a hospital.
+
+
+    public static boolean isPolicy_social_distancing() {
+        return policy_social_distancing;
+    }
+
+    public static void setPolicy_social_distancing(boolean policy_social_distancing) {
+        Env.policy_social_distancing = policy_social_distancing;
+    }
+
+    public static boolean isPolicy_daily_testing() {
+        return policy_daily_testing;
+    }
+
+    public static void setPolicy_daily_testing(boolean policy_daily_testing) {
+        Env.policy_daily_testing = policy_daily_testing;
+    }
+
+    public static boolean isPolicy_quarantine() {
+        return policy_quarantine;
+    }
+
+    public static void setPolicy_quarantine(boolean policy_quarantine) {
+        Env.policy_quarantine = policy_quarantine;
+    }
+
+
+    public static boolean isPolicy_lockdown() {
+        return policy_lockdown;
+    }
+
+    public static void setPolicy_lockdown(boolean policy_lockdown) {
+        Env.policy_lockdown = policy_lockdown;
+    }
+
+
     /**************************
      Contact Tracing Variables
      **************************/
     //contact tracing hashMap
     public static Multimap<String, Human> contacts = LinkedListMultimap.create();
-    public static boolean contactTracing = false;
-    public static boolean socialIsolation = false;
 
-    public static boolean isContactTracing() {
-        return contactTracing;
+
+    public static boolean isPolicy_contactTracing() {
+        return policy_contactTracing;
     }
 
-    public static void setContactTracing(boolean contactTracing) {
-        Env.contactTracing = contactTracing;
+    public static void setPolicy_contactTracing(boolean policy_contactTracing) {
+        Env.policy_contactTracing = policy_contactTracing;
     }
 
     //how many contact traces you can pull up.
@@ -201,10 +243,6 @@ public /*strictfp*/ class Env extends SimState {
     //    all model parameters here
     public static double initial_infection_percent = 0.1;
 
-    // implement distancing
-    public static boolean socialDistancing = false;
-
-
     // flag to see actual glass view ( This will show each patient tested and event I0, R etc. )
     public static boolean glassView = true;
 
@@ -224,10 +262,20 @@ public /*strictfp*/ class Env extends SimState {
     public static void setGlassView(boolean glassView) {
         Env.glassView = glassView;
     }
-
     public static boolean isGlassView() {
         return glassView;
     }
+
+
+    /********  Hospital related variables *************/
+    public static boolean isPolicy_hospitalization() {
+        return policy_hospitalization;
+    }
+
+    public static void setPolicy_hospitalization(boolean policy_hospitalization) {
+        Env.policy_hospitalization = policy_hospitalization;
+    }
+
 
     public static int getHospitalBedCount() {
         return HospitalBedCount;
@@ -249,22 +297,12 @@ public /*strictfp*/ class Env extends SimState {
     public static int recoveryTimeMin = 21;
     public static int recoveryTimeMax = 42;
 
+    /***********************************************/
 
     public static Continuous2D HumansEnvironment = null;
     public static Continuous2D BlackBoxEnvironment = null;
     public static Continuous2D QuarantinedEnvironment = null;
     public static Continuous2D TestEnvironment = null;
-
-    /**
-     * Add all the inspectors here
-     */
-    public static void setSocialDistancing(boolean socialDistancing) {
-        Env.socialDistancing = socialDistancing;
-    }
-
-    public static boolean isSocialDistancing() {
-        return socialDistancing;
-    }
 
     public static double getHygieneMean() {
         return hygieneMean;
@@ -463,10 +501,15 @@ public /*strictfp*/ class Env extends SimState {
     }
 
     boolean conflict(final Agent agent1, final Double2D a, final Agent agent2, final Double2D b) {
-        return ((a.x > b.x && a.x < b.x + DIAMETER) ||
-                (a.x + DIAMETER > b.x && a.x + DIAMETER < b.x + DIAMETER)) &&
-                ((a.y > b.y && a.y < b.y + DIAMETER) ||
-                        (a.y + DIAMETER > b.y && a.y + DIAMETER < b.y + DIAMETER));
+        Double social_distance = DIAMETER;
+        if (Env.policy_social_distancing)
+            if(Transitions.getRandomBoolean(0.6))
+                social_distance = DIAMETER+3;
+
+        return ((a.x > b.x && a.x < b.x + social_distance) ||
+                (a.x + social_distance > b.x && a.x + social_distance < b.x + social_distance)) &&
+                ((a.y > b.y && a.y < b.y + social_distance) ||
+                        (a.y + social_distance > b.y && a.y + social_distance < b.y + social_distance));
     }
 
     public boolean withinInfectionDistance(final Agent agent1, final Double2D a, final Agent agent2, final Double2D b) {
@@ -539,6 +582,10 @@ public /*strictfp*/ class Env extends SimState {
 
                 //overall health
                 agent.overallHealth = random.nextInt(4);
+
+                //essential agents 10% of the population
+                if (Transitions.getRandomBoolean(0.3))
+                    agent.essential = true;
 
                 times++;
 

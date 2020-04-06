@@ -276,7 +276,7 @@ public class EnvUI extends GUIState {
 
 
         // infection curve chart
-        myChart = ChartUtilities.buildTimeSeriesChartGenerator(this, "Infection Curve", "Simulation Steps (1 Day = 500 steps");
+        myChart = ChartUtilities.buildTimeSeriesChartGenerator(this, "Infection Curve", "Simulation Steps (1 Day = 500 steps)");
         myChart.setYAxisLabel("Count");
         infectiousAgents = ChartUtilities.addSeries(myChart, "Infectious Agents");
         exposedAgents = ChartUtilities.addSeries(myChart, "Exposed Agents");

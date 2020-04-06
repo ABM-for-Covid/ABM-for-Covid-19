@@ -29,6 +29,7 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
     protected boolean recovered = false;
     protected boolean dead = false;
     public boolean prime = false;
+    public boolean essential = false;
 
     // agent mobility
     public boolean isolated = false;
@@ -75,7 +76,7 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
 
     public void setInfectionState(int infectionState) {
         this.infectionState = infectionState;
-        if (Env.socialIsolation && (infectionState == 2 || infectionState == 3)) this.setIsolation(true);
+        if (Env.policy_hospitalization && (infectionState == 2 || infectionState == 3)) this.setIsolation(true);
         else this.setIsolation(false);
 
         // when change infection state/ the tests are invalid

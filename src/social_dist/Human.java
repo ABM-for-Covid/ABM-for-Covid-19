@@ -92,8 +92,8 @@ public /*strictfp*/ class Human extends Agent {
         if (this.dead) return;
 
         // run test once per day which means only on 1 virtual agent cycle
-        if (this.aindex==0){
-            if (sim_count %500 == 0)
+        if (this.aindex==0 ){
+            if (sim_count %500 == 0 && Env.policy_daily_testing)
                 Transitions.run_tests();
             sim_count++;
             return;
@@ -112,7 +112,7 @@ public /*strictfp*/ class Human extends Agent {
 
                     if (hb.withinInfectionDistance(this, agentLocation, ta, ta.agentLocation)) {
                         //calculate S->E transition
-                        if (Env.contactTracing && this.getInfectionState() >= 0)
+                        if (Env.policy_contactTracing && this.getInfectionState() >= 0)
                             Env.contacts.put(id, ta);
 
                         if ((ta.getInfectionState() == 0 || ta.getInfectionState() == 1 || ta.getInfectionState() == 2) && this.isSusceptible()) {
@@ -193,6 +193,10 @@ public /*strictfp*/ class Human extends Agent {
                 Env.BlackBoxEnvironment.remove(this);
 
             } else {
+                //if lockdown then only essentials will run
+                if (Env.policy_lockdown && !this.essential)
+                    return;
+
                 Env.HumansEnvironment.setObjectLocation(this, agentLocation);
                 Env.BlackBoxEnvironment.setObjectLocation(this, agentLocation);
             }
