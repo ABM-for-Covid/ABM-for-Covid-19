@@ -91,11 +91,26 @@ public /*strictfp*/ class Human extends Agent {
 
         if (this.dead) return;
 
+        // if in traveler env, don't run the simulation
+        Double2D t_location = Env.TravelerEnvironment.getObjectLocation(this);
+        if (t_location != null) {
+            return;
+        }
+
         // run test once per day which means only on 1 virtual agent cycle
-        if (this.aindex==0 ){
-            if (sim_count %500 == 0 && Env.policy_daily_testing)
-                Transitions.run_tests();
+        if (this.aindex==0){
             sim_count++;
+            if (sim_count %500 == 0){
+
+                // run daily testing policy
+                if (Env.policy_daily_testing)
+                    Transitions.run_tests();
+
+                // if borders are open - add more infectious agents daily
+                if (!Env.policy_close_borders) {
+                    Transitions.add_new_infectious_agents();
+                }
+            }
             return;
         }
 

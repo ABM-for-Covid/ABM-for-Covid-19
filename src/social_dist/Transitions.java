@@ -1,12 +1,13 @@
 package social_dist;
-
 import sim.util.Bag;
-
+import sim.util.Double2D;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 public class Transitions {
     public static double inf_score_scaler = 5.0;
+    public static Random ran_1 = new Random();
 
     static boolean getRandomBoolean(double probability) {
         double randomValue = Math.random();  //0.0 to 0.99
@@ -236,10 +237,31 @@ public class Transitions {
 
     }
 
+
     public static void countQuarantinedDays(Human human) {
         if (human.count_iso >= Env.quarantine_day_limit && human.infectionState <= 0)
             human.setQuarantined(false);
         else human.count_iso++;
+    }
+
+    public static  void  add_new_infectious_agents(){
+        Bag all_agents = Env.TravelerEnvironment.getAllObjects();
+        all_agents.shuffle(ran_1);
+
+        int agents_to_add = ran_1.nextInt(Env.max_infection_incoming_pday);
+        if (all_agents.numObjs < Env.testing_capacity) agents_to_add = all_agents.numObjs;
+
+        // add new infectious agents to environment
+        for (int i = 0; i < agents_to_add; i++) {
+            Human traveler = (Human) all_agents.objs[i];
+            Double2D loc;
+            do {
+                loc = new Double2D(ran_1.nextDouble() * (Env.ENV_XMAX - Env.XMIN - Env.DIAMETER) + Env.XMIN + Env.DIAMETER / 2,
+                        ran_1.nextDouble() * (Env.ENV_YMAX - Env.YMIN - Env.DIAMETER) + Env.YMIN + Env.DIAMETER / 2);
+            } while (!Env.acceptablePosition(traveler, loc));
+            Env.TravelerEnvironment.remove(traveler);
+            Env.HumansEnvironment.setObjectLocation(traveler, loc);
+        }
     }
 
 

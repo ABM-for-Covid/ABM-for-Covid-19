@@ -89,10 +89,21 @@ public /*strictfp*/ class Env extends SimState {
     public static boolean policy_contact_tracing = false;
     public static boolean policy_lockdown = false;
     public static boolean policy_social_distancing = false;
+    public static boolean policy_close_borders = false;
     public static boolean policy_hospitalization = false; // if i2 and i3 be isolated in a hospital.
 
 
+    public static boolean isPolicy_close_borders() {
+        return policy_close_borders;
+    }
+
+    public static void setPolicy_close_borders(boolean policy_close_borders) {
+        Env.policy_close_borders = policy_close_borders;
+    }
+
+
     public static boolean isPolicy_social_distancing() {
+
         return policy_social_distancing;
     }
 
@@ -236,7 +247,10 @@ public /*strictfp*/ class Env extends SimState {
     public static double i2ToDProbability = 0.7;
 
     //    all model parameters here
-    public static double initial_infection_percent = 0.1;
+    public static double initial_infection_percent = 0.0;
+
+    // everyday maximum infection influx
+    public static int max_infection_incoming_pday = 10;
 
     // flag to see actual glass view ( This will show each patient tested and event I0, R etc. )
     public static boolean glassView = true;
@@ -298,6 +312,7 @@ public /*strictfp*/ class Env extends SimState {
     public static Continuous2D BlackBoxEnvironment = null;
     public static Continuous2D QuarantinedEnvironment = null;
     public static Continuous2D TestEnvironment = null;
+    public static Continuous2D TravelerEnvironment = null;
 
     public static double getHygieneMean() {
         return hygieneMean;
@@ -495,7 +510,7 @@ public /*strictfp*/ class Env extends SimState {
         super(seed);
     }
 
-    boolean conflict(final Agent agent1, final Double2D a, final Agent agent2, final Double2D b) {
+    static boolean conflict(final Agent agent1, final Double2D a, final Agent agent2, final Double2D b) {
         Double social_distance = DIAMETER;
         if (Env.policy_social_distancing)
             if(Transitions.getRandomBoolean(0.6))
@@ -511,7 +526,7 @@ public /*strictfp*/ class Env extends SimState {
         return ((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) <= INFECTION_DISTANCE_SQUARED);
     }
 
-    boolean acceptablePosition(final Agent agent, final Double2D location) {
+    static boolean acceptablePosition(final Agent agent, final Double2D location) {
 
         if (location.x < DIAMETER / 2 || location.x > (ENV_XMAX - XMIN)/*HumansEnvironment.getXSize()*/ - DIAMETER / 2 ||
                 location.y < DIAMETER / 2 || location.y > (ENV_YMAX - YMIN)/*HumansEnvironment.getYSize()*/ - DIAMETER / 2)
@@ -536,9 +551,10 @@ public /*strictfp*/ class Env extends SimState {
         QuarantinedEnvironment = new Continuous2D(discreatization, (Q_XMAX - XMIN), (Q_YMAX - YMIN));
         BlackBoxEnvironment = new Continuous2D(discreatization, (ENV_XMAX - XMIN), (ENV_YMAX - YMIN));
         TestEnvironment = new Continuous2D(discreatization, (ENV_XMAX - XMIN), (ENV_YMAX - YMIN));
+        TravelerEnvironment = new Continuous2D(discreatization, (ENV_XMAX - XMIN), (ENV_YMAX - YMIN));
 
         int step_int = 0;
-        for (int x = 0; x < num_agents; x++) {
+        for (int x = 0; x < num_agents+500; x++) {
             Double2D loc;
             Human agent;
             int times = 0;
@@ -555,6 +571,14 @@ public /*strictfp*/ class Env extends SimState {
                     agent.setInfectionState(0);
                 }
 
+                if( initial_infection_percent == 0){
+                    if (step_int < max_infection_incoming_pday){
+                        agent.setInfected(true);
+                        agent.setSusceptible(false);
+                        agent.setInfectionState(0);
+                    }
+                }
+
                 // set hygiene for every human
                 agent.hygiene = hygieneMean + random.nextGaussian() * Math.sqrt(hygieneVariance);
                 if (!(agent.hygiene > 0.0 && agent.hygiene <= 1))
@@ -565,7 +589,7 @@ public /*strictfp*/ class Env extends SimState {
                 if (agent.age > 100 || agent.age <= 1)
                     continue;
 
-                // imunity flag
+                // immunity flag
                 if (Transitions.getRandomBoolean(0.1))
                     agent.weakImmune = true;
 
@@ -590,8 +614,12 @@ public /*strictfp*/ class Env extends SimState {
                 }
             } while (!acceptablePosition(agent, loc));
             agent.aindex = step_int;
-            if (agent.aindex> 0 )
+            if (agent.aindex> 0 && agent.aindex < num_agents)
                 HumansEnvironment.setObjectLocation(agent, loc);
+            else{
+                agent.id = "Traveler-"+agent.aindex;
+                TravelerEnvironment.setObjectLocation(agent, loc); //add around 500 agents to traveler environment.
+            }
             schedule.scheduleRepeating(agent);
             step_int++;
         }
