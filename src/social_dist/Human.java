@@ -99,9 +99,7 @@ public /*strictfp*/ class Human extends Agent {
 
         // run test once per day which means only on 1 virtual agent cycle
         if (this.aindex==0){
-            sim_count++;
             if (sim_count %500 == 0){
-
                 // run daily testing policy
                 if (Env.policy_daily_testing)
                     Transitions.run_tests();
@@ -111,6 +109,7 @@ public /*strictfp*/ class Human extends Agent {
                     Transitions.add_new_infectious_agents();
                 }
             }
+            sim_count++;
             return;
         }
 

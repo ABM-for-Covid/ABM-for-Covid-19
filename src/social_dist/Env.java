@@ -30,9 +30,9 @@ public /*strictfp*/ class Env extends SimState {
 
 
     //experiment
-    public static int num_agents = 100;
+    public static int initial_num_agents = 100;
     public static double discreatization = 25.0;
-    public static  double ENV_XMAX = (int)Math.pow( (num_agents / agent_density), 0.5);
+    public static  double ENV_XMAX = (int)Math.pow( (initial_num_agents / agent_density), 0.5);
     public static  double ENV_YMAX = ENV_XMAX;
     public static final double Q_XMAX = ENV_XMAX*2;
     public static final double Q_YMAX = ENV_YMAX *2;
@@ -63,7 +63,7 @@ public /*strictfp*/ class Env extends SimState {
     }
 
 
-    public static int hospital_bed_capacity = (int) (num_agents * hospital_bed_per_agent);
+    public static int hospital_bed_capacity = (int) (initial_num_agents * hospital_bed_per_agent);
     public static int icu_capacity = (int) (icu_bed_per_hospital_bed * hospital_bed_capacity);
 
 
@@ -244,13 +244,23 @@ public /*strictfp*/ class Env extends SimState {
     public static int infection_to_recovery_days = 21;
     public static int expose_to_recovery_days = 12;
 
+    public static int traveler_agent_count = 500;
+
     public static double i2ToDProbability = 0.7;
 
     //    all model parameters here
     public static double initial_infection_percent = 0.0;
 
+    public static int getMax_infection_incoming_pday() {
+        return max_infection_incoming_pday;
+    }
+
+    public static void setMax_infection_incoming_pday(int max_infection_incoming_pday) {
+        Env.max_infection_incoming_pday = max_infection_incoming_pday;
+    }
+
     // everyday maximum infection influx
-    public static int max_infection_incoming_pday = 10;
+    public static int max_infection_incoming_pday = 5;
 
     // flag to see actual glass view ( This will show each patient tested and event I0, R etc. )
     public static boolean glassView = true;
@@ -354,12 +364,12 @@ public /*strictfp*/ class Env extends SimState {
         return agePeak;
     }
 
-    public static int getNum_agents() {
-        return num_agents;
+    public static int getInitial_num_agents() {
+        return initial_num_agents;
     }
 
-    public static void setNum_agents(int num_agents) {
-        Env.num_agents = num_agents;
+    public static void setInitial_num_agents(int initial_num_agents) {
+        Env.initial_num_agents = initial_num_agents;
     }
 
     public static boolean checkICUAvailability() {
@@ -494,6 +504,19 @@ public /*strictfp*/ class Env extends SimState {
         return infI0Count;
     }
 
+    public int getTotal_Agents()
+    //  return the number of total agents to inspectors.*/
+    {
+        Bag un_objects = HumansEnvironment.getAllObjects();
+        return un_objects.numObjs;
+    }
+
+    public static int getTotal_traveler_Agents() {
+        return total_traveler_Agents;
+    }
+
+    public static int total_traveler_Agents = 0;
+
 
     public static void setInitial_infection_percent(double initial_infection_percent) {
         Env.initial_infection_percent = initial_infection_percent;
@@ -554,7 +577,7 @@ public /*strictfp*/ class Env extends SimState {
         TravelerEnvironment = new Continuous2D(discreatization, (ENV_XMAX - XMIN), (ENV_YMAX - YMIN));
 
         int step_int = 0;
-        for (int x = 0; x < num_agents+500; x++) {
+        for (int x = 0; x < initial_num_agents + traveler_agent_count; x++) {
             Double2D loc;
             Human agent;
             int times = 0;
@@ -565,7 +588,7 @@ public /*strictfp*/ class Env extends SimState {
 
                 agent = new Human("Human-" + x, loc);
                 //add agent as infected according to initial value
-                if (step_int < num_agents * initial_infection_percent) {
+                if (step_int < initial_num_agents * initial_infection_percent) {
                     agent.setInfected(true);
                     agent.setSusceptible(false);
                     agent.setInfectionState(0);
@@ -613,10 +636,11 @@ public /*strictfp*/ class Env extends SimState {
                     break;
                 }
             } while (!acceptablePosition(agent, loc));
+
             agent.aindex = step_int;
-            if (agent.aindex> 0 && agent.aindex < num_agents)
+            if (agent.aindex > 0 && agent.aindex <= initial_num_agents)
                 HumansEnvironment.setObjectLocation(agent, loc);
-            else{
+            else if (agent.aindex > 0 ){
                 agent.id = "Traveler-"+agent.aindex;
                 TravelerEnvironment.setObjectLocation(agent, loc); //add around 500 agents to traveler environment.
             }
