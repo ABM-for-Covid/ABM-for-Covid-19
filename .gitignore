@@ -25,4 +25,5 @@ dump.rdb
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 load_test.py
+*.class
 !.idea/

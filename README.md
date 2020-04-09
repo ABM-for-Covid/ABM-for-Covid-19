@@ -27,7 +27,7 @@ social_natural/infectionUI
 For social distancing model run:
 
 ```
-social_dist/infectionUI
+abmforcovid/infectionUI
 ```
 
 ![](https://raw.githubusercontent.com/codeAshu/covid-19-Multiagent-Simulations/master/videos/social_distance.gif)
