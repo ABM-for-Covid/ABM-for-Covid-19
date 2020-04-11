@@ -2,23 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="94ef063a-dbba-4099-a295-12e5e0c91610" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/exp10.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/exp11.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/exp12.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/experiments.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/exp10.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/exp10.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/exp11.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/exp12.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/abmforcovid/Agent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/Agent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/abmforcovid/Env.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/Env.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/abmforcovid/EnvUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/EnvUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/abmforcovid/Human.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/Human.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/abmforcovid/Policies.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/Policies.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/abmforcovid/RunABM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/RunABM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/abmforcovid/Transitions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/Transitions.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,10 +57,10 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="453" y="108" key="#com.intellij.ide.util.MemberChooser" timestamp="1586432131730">
+    <state x="453" y="108" key="#com.intellij.ide.util.MemberChooser" timestamp="1586600707591">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state x="453" y="108" key="#com.intellij.ide.util.MemberChooser/0.0.1280.800@0.0.1280.800" timestamp="1586432131730" />
+    <state x="453" y="108" key="#com.intellij.ide.util.MemberChooser/0.0.1280.800@0.0.1280.800" timestamp="1586600707591" />
     <state x="264" y="2" key="CommitChangelistDialog2" timestamp="1586587608552">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
