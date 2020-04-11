@@ -100,7 +100,8 @@ public /*strictfp*/ class Human extends Agent {
 
             hb.checkAndInvokePolicy(sim_count);
             hb.stream_data(sim_count);
-            if (sim_count %500 == 0){
+
+            if (sim_count % Env.ini_sim_cycle_per_day == 0){
                 // run daily testing policy
                 if (Env.policy_daily_testing)
                     Transitions.run_tests();
@@ -109,6 +110,8 @@ public /*strictfp*/ class Human extends Agent {
                 if (!Env.policy_close_borders) {
                     Transitions.add_new_infectious_agents();
                 }
+                System.out.println("R0 for today is --------------------------------> "+hb.getAvg_infection());
+
             }
             sim_count++;
             return;
@@ -182,7 +185,8 @@ public /*strictfp*/ class Human extends Agent {
         } else {
             sim_count++;
             agentLocation = new Double2D(agentLocation.x + dx, agentLocation.y + dy);
-            if (sim_count % 500 == 0) {
+
+            if (sim_count % Env.ini_sim_cycle_per_day == 0) {
                 if (this.quarantined)
                     Transitions.countQuarantinedDays(this);
                 if (this.isExposed())

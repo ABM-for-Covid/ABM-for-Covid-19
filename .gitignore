@@ -5,10 +5,8 @@ ngrok
 !lib/README.md
 Test.java
 .DS_Store
-google/
 lib/
 temp/
-transcribe/
 .idea/
 ideas/
 .ipynb_checkpoints

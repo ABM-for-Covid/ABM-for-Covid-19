@@ -2,74 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="94ef063a-dbba-4099-a295-12e5e0c91610" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/abmforcovid/Policies.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/abmforcovid/RunABM.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/libraries.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/covid-19_social_distancing.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MCR scenairo hetro/mcr/IIITB/human/hetro/Crowd.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MCR scenairo hetro/mcr/IIITB/human/hetro/CrowdWithUI$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MCR scenairo hetro/mcr/IIITB/human/hetro/CrowdWithUI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MCR scenairo hetro/mcr/IIITB/human/hetro/DoorArea.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MCR scenairo hetro/mcr/IIITB/human/hetro/Human$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MCR scenairo hetro/mcr/IIITB/human/hetro/Human.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MCR scenairo hetro/mcr/IIITB/human/hetro/MarkingLines.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MCR scenairo hetro/mcr/IIITB/human/hetro/Obstacle.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MCR scenairo hetro/mcr/IIITB/human/hetro/Vector2D.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/case_0/human2/hetro/Crowd.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/case_0/human2/hetro/CrowdWithUI$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/case_0/human2/hetro/CrowdWithUI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/case_0/human2/hetro/Human$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/case_0/human2/hetro/Human.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/case_0/human2/hetro/Obstacle.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/case_0/human2/hetro/ObstacleGrid.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/case_0/human2/hetro/Vector2D.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/case_0/virus/Agent.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/case_0/virus/Evil.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/case_0/virus/Good.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/case_0/virus/Human.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/case_0/virus/VirusInfectionDemo.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/case_0/virus/VirusInfectionDemoWithUI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/META-INF/covid-19_social_distancing.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/Agent.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/EnvUI$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/EnvUI$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/EnvUI$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/EnvUI$4.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/EnvUI$5.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/EnvUI$6.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/EnvUI$7.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/EnvUI$8.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/EnvUI$9.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/Human.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/Transitions.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/Vector2D.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/env.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_dist/envUI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_natural/Agent.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_natural/Human.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_natural/Vector2D.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_natural/infection.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/covid-19_social_distancing/social_natural/infectionUI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/social_dist/Agent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/Agent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/social_dist/Env.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/Env.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/social_dist/EnvUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/EnvUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/social_dist/Human.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/Human.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/social_dist/Transitions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/Transitions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/social_dist/Vector2D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/Vector2D.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/social_natural/Agent.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/social_natural/Human.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/social_natural/Vector2D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/social_natural/infection.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/social_natural/infectionUI.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/exp10.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/exp11.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/exp12.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/experiments.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/exp10.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/exp10.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/exp11.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/exp12.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/abmforcovid/Agent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/Agent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/abmforcovid/Env.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/Env.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/abmforcovid/EnvUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/EnvUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/abmforcovid/Human.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/Human.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/abmforcovid/Policies.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/Policies.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/abmforcovid/RunABM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/RunABM.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/abmforcovid/Transitions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/Transitions.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,7 +29,13 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1aIglWny0E9rl4yhy3MyMYAXVp2" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
   </component>
@@ -118,21 +73,34 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1238" height="212" key="GridCell.Tab.0.bottom" timestamp="1586428796083">
+    <state x="453" y="108" key="#com.intellij.ide.util.MemberChooser" timestamp="1586432131730">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="212" key="GridCell.Tab.0.bottom/0.0.1280.800@0.0.1280.800" timestamp="1586428796083" />
-    <state width="1238" height="212" key="GridCell.Tab.0.center" timestamp="1586428796082">
+    <state x="453" y="108" key="#com.intellij.ide.util.MemberChooser/0.0.1280.800@0.0.1280.800" timestamp="1586432131730" />
+    <state x="264" y="2" key="CommitChangelistDialog2" timestamp="1586587608552">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="212" key="GridCell.Tab.0.center/0.0.1280.800@0.0.1280.800" timestamp="1586428796082" />
-    <state width="1238" height="212" key="GridCell.Tab.0.left" timestamp="1586428796079">
+    <state x="264" y="2" key="CommitChangelistDialog2/-404.-900.1440.900/0.0.1280.800@0.0.1280.800" timestamp="1586587608552" />
+    <state x="264" y="2" key="CommitChangelistDialog2/0.0.1280.800@0.0.1280.800" timestamp="1586431810418" />
+    <state width="1238" height="228" key="GridCell.Tab.0.bottom" timestamp="1586592213594">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="212" key="GridCell.Tab.0.left/0.0.1280.800@0.0.1280.800" timestamp="1586428796079" />
-    <state width="1238" height="212" key="GridCell.Tab.0.right" timestamp="1586428796083">
+    <state width="1238" height="228" key="GridCell.Tab.0.bottom/-404.-900.1440.900/0.0.1280.800@0.0.1280.800" timestamp="1586592213594" />
+    <state width="1238" height="212" key="GridCell.Tab.0.bottom/0.0.1280.800@0.0.1280.800" timestamp="1586511116969" />
+    <state width="1238" height="228" key="GridCell.Tab.0.center" timestamp="1586592213592">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="1238" height="212" key="GridCell.Tab.0.right/0.0.1280.800@0.0.1280.800" timestamp="1586428796083" />
+    <state width="1238" height="228" key="GridCell.Tab.0.center/-404.-900.1440.900/0.0.1280.800@0.0.1280.800" timestamp="1586592213592" />
+    <state width="1238" height="212" key="GridCell.Tab.0.center/0.0.1280.800@0.0.1280.800" timestamp="1586511116968" />
+    <state width="1238" height="228" key="GridCell.Tab.0.left" timestamp="1586592213591">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1238" height="228" key="GridCell.Tab.0.left/-404.-900.1440.900/0.0.1280.800@0.0.1280.800" timestamp="1586592213591" />
+    <state width="1238" height="212" key="GridCell.Tab.0.left/0.0.1280.800@0.0.1280.800" timestamp="1586511116967" />
+    <state width="1238" height="228" key="GridCell.Tab.0.right" timestamp="1586592213592">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1238" height="228" key="GridCell.Tab.0.right/-404.-900.1440.900/0.0.1280.800@0.0.1280.800" timestamp="1586592213592" />
+    <state width="1238" height="212" key="GridCell.Tab.0.right/0.0.1280.800@0.0.1280.800" timestamp="1586511116968" />
   </component>
 </project>

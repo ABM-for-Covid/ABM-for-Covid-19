@@ -15,6 +15,8 @@ public class RunABM {
     public String resultfile;
     //scaling factors of environments
     public  int num_agents = 100;
+    public  int sim_cycle_per_day = 500;
+    public  double essential_agent_percent = 0.05;
     public  double agent_density = 0.0001;
     public  double hospital_bed_per_agent = 0.1;
     public  double icu_bed_per_hospital_bed = 0.05;
@@ -29,12 +31,14 @@ public class RunABM {
     public  double distribution_hygiene_mean = 0.5;
     public  double distribution_hygiene_var = 1;
 
-    public  HashMap<Integer, Policies> strategy;
+    public  HashMap<Double, Policies> strategy;
 
     public void set_parameters() {
         System.out.println("Setting parameters for experiment "+ experiment);
         Env.setExperiment(experiment);
         Env.setResultFile(resultfile);
+        Env.setIni_sim_cycle_per_day(sim_cycle_per_day);
+        Env.setIni_essential_agent_percent(essential_agent_percent);
         Env.setIni_num_agents(num_agents);
         Env.setIni_agent_density(agent_density);
         Env.setIni_hospital_bed_per_agent(hospital_bed_per_agent);
@@ -56,7 +60,9 @@ public class RunABM {
     }
 
     public void check_policies(){
-        Policies first =  (Policies) strategy.get(500);
+        Policies first =  (Policies) strategy.get(5);
+        if (first == null)
+            return;
         System.out.println(first);
         if (first.p_quarantine != -1)
             System.out.println("invoking policy qurantine "+first.p_quarantine);
@@ -65,10 +71,13 @@ public class RunABM {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        // run a for loop on all the experimet files
+        // run a for loop on all the experiment files
             RunABM config = null;
             try {
                 //read a config file and create an object of the class
+                if (args.length == 0)
+                    System.out.println("Please provide the config file absolute path");
+
                 String filename =  args[0];
                 JsonReader reader = new JsonReader(new FileReader(filename));
                 Gson gson = new Gson();

@@ -31,6 +31,10 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
     public boolean prime = false;
     public boolean essential = false;
     public boolean active = true;
+    public boolean once_infected = false;
+
+    public int infection_producing_contacts = 0;
+    public int total_contacts = 0;
 
     // agent mobility
     public boolean isolated = false;
@@ -105,6 +109,7 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
         infected = b;
         if (!infected)
             infectionState = -1;
+        else once_infected = true;
     }
 
     public final void setExposed(boolean b) {
@@ -119,6 +124,7 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
         recovered = b;
         infectionState = -1;
         infected = false;
+        once_infected = false;
     }
 
     public final void setDead(boolean b) {

@@ -1,0 +1,1 @@
+{"sim_cycle_per_day": 100, "strategy": {"8": {"p_close_borders": 1}, "100": {"p_exit": 1}}, "num_agents": 2000, "experiment": "exp5d", "resultfile": "/Users/rusty/Desktop/covid-19/covid19_abm/results/exp5d.csv"}

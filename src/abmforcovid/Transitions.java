@@ -29,6 +29,7 @@ public class Transitions {
         if (getRandomBoolean(transition_prob)) {
             human.setExposed(true);
             human.setSusceptible(false);
+            infectedHuman.infection_producing_contacts++;
         }
     }
 
@@ -258,8 +259,8 @@ public class Transitions {
                 if (!(all_agents.objs[i] instanceof Human))
                     continue;
                 Human traveler = (Human) (all_agents.objs[i]);
-                traveler.setInfectionState(0);
                 traveler.setInfected(true);
+                traveler.setInfectionState(0);
                 Double2D loc;
                 do {
                     loc = new Double2D(ran_1.nextDouble() * (Env.ENV_XMAX - Env.XMIN - Env.DIAMETER) + Env.XMIN + Env.DIAMETER / 2,
@@ -272,7 +273,7 @@ public class Transitions {
                     Env.HumansEnvironment.setObjectLocation(traveler, loc);
                     Env.num_traveler_Agents++;
                 } catch (Exception e) {
-                    e.printStackTrace();
+                   continue;
                 }
             }
         }
@@ -329,6 +330,33 @@ public class Transitions {
             Env.TestEnvironment.setObjectLocation(hu, Env.assignTestLocation());
         }
 
+    }
+
+    public static void mark_essential_agents(){
+        // run it only once to mark a percentage of agents essential
+        ArrayList<Human> sample_list = new ArrayList<>();
+        Bag all_agents = Env.HumansEnvironment.getAllObjects();
+        for (int i = 0; i < all_agents.numObjs; i++) {
+            if (all_agents.objs[i] != null) {
+                Human ta = (Human) (all_agents.objs[i]);
+
+                // if not having infection and age is working age
+                if (ta.infectionState <= 1 && ta.age<60 && ta.age > 18) {
+                    sample_list.add(ta);
+                }
+            }
+        }
+        if (sample_list.size() == 0) return;
+
+        //shuffle the list to pick random agents
+        Collections.shuffle(sample_list);
+        int agents_to_mark = (int)(all_agents.size() * Env.ini_essential_agent_percent);
+        if (sample_list.size() < agents_to_mark) agents_to_mark = sample_list.size();
+
+        for (int i = 0; i < agents_to_mark; i++) {
+            Human hu = sample_list.get(i);
+            hu.essential = true;
+        }
     }
 
 }

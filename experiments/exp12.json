@@ -1,1 +1,0 @@
-{"strategy": {"1000": {"c_contact_trace": 10, "p_contact_tracing": 1, "p_quarantine": 1}, "2000": {"p_exit": 1}, "500": {"p_lockdown": 1}}, "num_agents": 10, "experiment": "exp12", "resultfile": "/Users/rusty/Desktop/covid-19/covid-19_social_distancing/results/exp12.csv"}

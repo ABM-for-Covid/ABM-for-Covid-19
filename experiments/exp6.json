@@ -1,0 +1,1 @@
+{"strategy": {"8": {"p_hospitalization": 1, "p_lockdown": 1, "p_close_borders": 1}, "100": {"p_exit": 1}}, "num_agents": 2000, "experiment": "exp6", "resultfile": "/Users/rusty/Desktop/covid-19/covid19_abm/results/exp6.csv"}
