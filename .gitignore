@@ -6,6 +6,8 @@ ngrok
 Test.java
 .DS_Store
 lib/
+results/
+experiments/
 temp/
 .idea/
 ideas/
@@ -25,3 +27,6 @@ dump.rdb
 load_test.py
 *.class
 !.idea/
+out/
+*.ipynb
+*.iml
