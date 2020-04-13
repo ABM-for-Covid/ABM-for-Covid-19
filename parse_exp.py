@@ -1,6 +1,8 @@
 from Constant import *
 import json
 import pandas as pd
+import os
+import subprocess
 
 class Policies:
     close_borders = "p_close_borders"  
@@ -46,10 +48,11 @@ def write_exp_file(d):
 
 def get_result_file(d):
     name = d.get('experiment')
-    res_file = "{}/results/{}.json".format(home, name)
+    res_file = "/results/{}.csv".format(name)
     return res_file
 
 def run_abm_process(d):
+#     d = json.loads(data)
     exp_file = write_exp_file(d)
     print "running for exp", exp_file
     try:

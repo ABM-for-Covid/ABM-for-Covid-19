@@ -1,18 +1,20 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 from werkzeug.exceptions import HTTPException
-import os
 import json
 from multiprocessing import Process
-import subprocess
-from Constants import *
+import time
+
+import Constant
 from parse_exp import *
+
+app = Flask(__name__)
+
 try:
     from flask_cors import CORS, cross_origin  # The typical way to import flask-cors
 
     CORS(app)
 except ImportError:
     import os
-
     parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     os.sys.path.insert(0, parentdir)
     from flask_cors import CORS, cross_origin
@@ -36,21 +38,33 @@ def server_error(e):
     """.format(e), 500
 
 
-@app.route('/run')
+@app.route('/run', methods=['POST'])
 def get_experiment():
     data = request.json
     env = data.get('env', 'prod')
-    if env == 'prod':
-        home = serve_home
     experiment = data.get('experiment')
     result_file = get_result_file(data)
     #create a resfile from the experiment name
-    data['resultfile'] = result_file
+    data['resultfile'] = "{}/{}".format(home, result_file)
     global p
-    p = Process(target=export.run_abm_process, args=(data))
+    p = Process(target=run_abm_process, args=(data,))
     p.start()
     #todo - change the filepath to filelink in server, which is also serverd and appended.
     return "Path of result_file {}".format(result_file), 200
+
+@app.route('/res')
+def get_res():
+    experiment = request.args.get('name')
+    res_file = "{}/results/{}.csv".format(home, experiment)
+
+    def generate(res_file):
+        with open(res_file, 'r') as fp:
+            data = fp.readlines()
+            last_10 = data[-100:]
+            time.sleep(1)
+        yield jsonify(last_10)
+
+    return Response(generate(res_file), mimetype='text/csv')
 
 
 
