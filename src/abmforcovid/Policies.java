@@ -16,7 +16,7 @@ public class Policies {
     public int c_icu_beds = -1;
     public int c_testing = -1;
 
-    public int a_false_negative_percent = -1;
-    public int a_social_distancing_efficiency = -1;
+    public double a_false_negative_percent = -1;
+    public double a_social_distancing_efficiency = -1;
 
 }
