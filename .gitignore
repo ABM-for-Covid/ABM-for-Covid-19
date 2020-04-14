@@ -8,10 +8,11 @@ Test.java
 lib/
 results/
 experiments/
+notebooks/
 temp/
 .idea/
 ideas/
-.ipynb_checkpoints
+notebooks/.ipynb_checkpoints
 log/
 model_data/
 data/
@@ -28,5 +29,6 @@ load_test.py
 *.class
 !.idea/
 out/
+
 *.ipynb
 *.iml
