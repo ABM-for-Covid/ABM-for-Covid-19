@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="94ef063a-dbba-4099-a295-12e5e0c91610" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/rusty.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/abmforcovid/Env.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/Env.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/abmforcovid/EnvUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/EnvUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/abmforcovid/Human.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/Human.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/abmforcovid/Transitions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/abmforcovid/Transitions.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,9 +30,27 @@
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="project.propCompiler" />
   </component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/notebooks" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.EnvUI">
+    <configuration name="Env" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="abmforcovid.Env" />
+      <module name="covid19_abm" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="abmforcovid.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="EnvUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="abmforcovid.EnvUI" />
       <module name="covid19_abm" />
@@ -44,6 +67,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.EnvUI" />
+        <item itemvalue="Application.Env" />
       </list>
     </recent_temporary>
   </component>
@@ -74,29 +98,38 @@
     </state>
     <state x="264" y="2" key="CommitChangelistDialog2/-404.-900.1440.900/0.0.1280.800@0.0.1280.800" timestamp="1586587608552" />
     <state x="264" y="2" key="CommitChangelistDialog2/0.0.1280.800@0.0.1280.800" timestamp="1586681821665" />
-    <state width="1238" height="228" key="GridCell.Tab.0.bottom" timestamp="1586748812896">
-      <screen x="0" y="0" width="1280" height="800" />
-    </state>
-    <state width="1238" height="228" key="GridCell.Tab.0.bottom/-404.-900.1440.900/0.0.1280.800@0.0.1280.800" timestamp="1586592213594" />
-    <state width="1238" height="228" key="GridCell.Tab.0.bottom/0.0.1280.800@0.0.1280.800" timestamp="1586748812896" />
-    <state width="1238" height="228" key="GridCell.Tab.0.center" timestamp="1586748812895">
-      <screen x="0" y="0" width="1280" height="800" />
-    </state>
-    <state width="1238" height="228" key="GridCell.Tab.0.center/-404.-900.1440.900/0.0.1280.800@0.0.1280.800" timestamp="1586592213592" />
-    <state width="1238" height="228" key="GridCell.Tab.0.center/0.0.1280.800@0.0.1280.800" timestamp="1586748812895" />
-    <state width="1238" height="228" key="GridCell.Tab.0.left" timestamp="1586748812893">
-      <screen x="0" y="0" width="1280" height="800" />
-    </state>
-    <state width="1238" height="228" key="GridCell.Tab.0.left/-404.-900.1440.900/0.0.1280.800@0.0.1280.800" timestamp="1586592213591" />
-    <state width="1238" height="228" key="GridCell.Tab.0.left/0.0.1280.800@0.0.1280.800" timestamp="1586748812893" />
-    <state width="1238" height="228" key="GridCell.Tab.0.right" timestamp="1586748812895">
-      <screen x="0" y="0" width="1280" height="800" />
-    </state>
-    <state width="1238" height="228" key="GridCell.Tab.0.right/-404.-900.1440.900/0.0.1280.800@0.0.1280.800" timestamp="1586592213592" />
-    <state width="1238" height="228" key="GridCell.Tab.0.right/0.0.1280.800@0.0.1280.800" timestamp="1586748812895" />
-    <state x="-196" y="-869" key="SettingsEditor" timestamp="1586766030310">
+    <state width="1398" height="228" key="GridCell.Tab.0.bottom" timestamp="1586941148933">
       <screen x="-404" y="-900" width="1440" height="900" />
     </state>
+    <state width="1398" height="228" key="GridCell.Tab.0.bottom/-404.-900.1440.900/0.0.1280.800@-404.-900.1440.900" timestamp="1586941148933" />
+    <state width="1238" height="228" key="GridCell.Tab.0.bottom/-404.-900.1440.900/0.0.1280.800@0.0.1280.800" timestamp="1586592213594" />
+    <state width="1238" height="228" key="GridCell.Tab.0.bottom/0.0.1280.800@0.0.1280.800" timestamp="1586873127916" />
+    <state width="1398" height="228" key="GridCell.Tab.0.center" timestamp="1586941148930">
+      <screen x="-404" y="-900" width="1440" height="900" />
+    </state>
+    <state width="1398" height="228" key="GridCell.Tab.0.center/-404.-900.1440.900/0.0.1280.800@-404.-900.1440.900" timestamp="1586941148930" />
+    <state width="1238" height="228" key="GridCell.Tab.0.center/-404.-900.1440.900/0.0.1280.800@0.0.1280.800" timestamp="1586592213592" />
+    <state width="1238" height="228" key="GridCell.Tab.0.center/0.0.1280.800@0.0.1280.800" timestamp="1586873127911" />
+    <state width="1398" height="228" key="GridCell.Tab.0.left" timestamp="1586941148929">
+      <screen x="-404" y="-900" width="1440" height="900" />
+    </state>
+    <state width="1398" height="228" key="GridCell.Tab.0.left/-404.-900.1440.900/0.0.1280.800@-404.-900.1440.900" timestamp="1586941148929" />
+    <state width="1238" height="228" key="GridCell.Tab.0.left/-404.-900.1440.900/0.0.1280.800@0.0.1280.800" timestamp="1586592213591" />
+    <state width="1238" height="228" key="GridCell.Tab.0.left/0.0.1280.800@0.0.1280.800" timestamp="1586873127909" />
+    <state width="1398" height="228" key="GridCell.Tab.0.right" timestamp="1586941148932">
+      <screen x="-404" y="-900" width="1440" height="900" />
+    </state>
+    <state width="1398" height="228" key="GridCell.Tab.0.right/-404.-900.1440.900/0.0.1280.800@-404.-900.1440.900" timestamp="1586941148932" />
+    <state width="1238" height="228" key="GridCell.Tab.0.right/-404.-900.1440.900/0.0.1280.800@0.0.1280.800" timestamp="1586592213592" />
+    <state width="1238" height="228" key="GridCell.Tab.0.right/0.0.1280.800@0.0.1280.800" timestamp="1586873127912" />
+    <state x="-196" y="-869" key="SettingsEditor" timestamp="1586939754748">
+      <screen x="-404" y="-900" width="1440" height="900" />
+    </state>
+    <state x="-196" y="-869" key="SettingsEditor/-404.-900.1440.900/0.0.1280.800@-404.-900.1440.900" timestamp="1586939754748" />
     <state x="-196" y="-869" key="SettingsEditor/-404.-900.1440.900/0.23.1280.777@-404.-900.1440.900" timestamp="1586766030310" />
+    <state x="-75" y="-725" width="782" height="550" key="find.popup" timestamp="1586940020752">
+      <screen x="-404" y="-900" width="1440" height="900" />
+    </state>
+    <state x="-75" y="-725" width="782" height="550" key="find.popup/-404.-900.1440.900/0.0.1280.800@-404.-900.1440.900" timestamp="1586940020752" />
   </component>
 </project>

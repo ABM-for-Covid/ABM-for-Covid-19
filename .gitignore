@@ -1,6 +1,7 @@
 *.pyc
 *.log
 ngrok
+*.xml
 # don't include third-party dependencies.
 !lib/README.md
 Test.java
@@ -29,6 +30,5 @@ load_test.py
 *.class
 !.idea/
 out/
-
 *.ipynb
 *.iml

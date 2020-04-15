@@ -248,7 +248,7 @@ public class EnvUI extends GUIState {
     public void init(Controller c) {
         super.init(c);
 
-        display = new Display2D(Env.ENV_XMAX, Env.ENV_YMAX, this);
+        display = new Display2D(1000, 1000, this);
         display.setScale(0.65);
         displayFrame = display.createFrame();
         displayFrame.setTitle("Glass View of Infection Spread ( SEI3R )");
@@ -257,7 +257,7 @@ public class EnvUI extends GUIState {
         display.attach(glassBox, "Agents");
 
 
-        display2 = new Display2D(Env.ENV_XMAX, Env.ENV_YMAX, this);
+        display2 = new Display2D(1000, 1000, this);
         display2.setScale(0.65);
         displayFrame2 = display2.createFrame();
         displayFrame2.setTitle("Black Box View of Infection Spread ( SEI3R ) ");
@@ -266,7 +266,7 @@ public class EnvUI extends GUIState {
         display2.attach(blackBox, "Black Box View");
 
 
-        display3 = new Display2D(Env.ENV_XMAX, Env.ENV_YMAX, this);
+        display3 = new Display2D(1000, 1000, this);
         display3.setScale(0.9);
         displayFrame3 = display3.createFrame();
         displayFrame3.setTitle("Quarantined Box View");
@@ -275,7 +275,7 @@ public class EnvUI extends GUIState {
         display3.attach(quarantinedBox, "Quarantined Agents");
 
 
-        display4 = new Display2D(Env.ENV_XMAX, Env.ENV_YMAX, this);
+        display4 = new Display2D(1000, 1000, this);
         display4.setScale(0.9);
         displayFrame4 = display4.createFrame();
         displayFrame4.setTitle("Testing Results");

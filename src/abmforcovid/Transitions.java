@@ -81,10 +81,10 @@ public class Transitions {
     }
 
 
-    public static void calculateI0Transition(Human i0Human) {
+    public static void calculateI0Transition(Human i0Human, Env hb) {
 
         // I0->R is based on the time duration agent stays in the i0 state probabilistically 
-        if (i0Human.count_EI0 >= Env.expose_to_recovery_days) {
+        if (i0Human.count_EI0 >= hb.expose_to_recovery_days) {
             i0Human.setRecovered(true);
         }
         // I0-> I1 -> transition into I1 depend on weakImmune and age
@@ -263,8 +263,8 @@ public class Transitions {
                 traveler.setInfectionState(0);
                 Double2D loc;
                 do {
-                    loc = new Double2D(ran_1.nextDouble() * (Env.ENV_XMAX - Env.XMIN - Env.DIAMETER) + Env.XMIN + Env.DIAMETER / 2,
-                            ran_1.nextDouble() * (Env.ENV_YMAX - Env.YMIN - Env.DIAMETER) + Env.YMIN + Env.DIAMETER / 2);
+                    loc = new Double2D(ran_1.nextDouble() * (Env.env_xmax - Env.XMIN - Env.DIAMETER) + Env.XMIN + Env.DIAMETER / 2,
+                            ran_1.nextDouble() * (Env.env_ymax - Env.YMIN - Env.DIAMETER) + Env.YMIN + Env.DIAMETER / 2);
                 } while (!Env.acceptablePosition(traveler, loc));
 //                System.out.println("removing traveler " + traveler.id + " from traveler env");
                 try {

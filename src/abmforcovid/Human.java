@@ -152,14 +152,13 @@ public /*strictfp*/ class Human extends Agent {
 
         steps--;
 
-
         if (desiredLocation == null || steps <= 0) {
-            desiredLocation = new Double2D((state.random.nextDouble() - 0.5) * ((Env.ENV_XMAX - Env.XMIN) / 5 - Env.DIAMETER) +
+            desiredLocation = new Double2D((state.random.nextDouble() - 0.5) * ((Env.env_xmax - Env.XMIN) / 5 - Env.DIAMETER) +
                     //infection.XMIN
                     agentLocation.x
                     //+infection.DIAMETER/2
                     ,
-                    (state.random.nextDouble() - 0.5) * ((Env.ENV_YMAX - Env.YMIN) / 5 - Env.DIAMETER) +
+                    (state.random.nextDouble() - 0.5) * ((Env.env_ymax - Env.YMIN) / 5 - Env.DIAMETER) +
                             agentLocation.y
                     //infection.YMIN
                     //+infection.DIAMETER/2
@@ -192,7 +191,7 @@ public /*strictfp*/ class Human extends Agent {
                 if (this.isExposed())
                     Transitions.calculateE_I0toI1(this);
                 else if (this.getInfectionState() == 0)
-                    Transitions.calculateI0Transition(this);
+                    Transitions.calculateI0Transition(this, hb);
                 else if (this.getInfectionState() == 1)
                     Transitions.calculateI1Transition(this);
                 else if (this.getInfectionState() == 2)

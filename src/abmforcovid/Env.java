@@ -16,20 +16,21 @@ import java.util.HashMap;
 import java.io.*;
 import java.util.List;
 
+import static java.lang.Math.pow;
+
 public /*strictfp*/ class Env extends SimState {
     private static final long serialVersionUID = 1;
 
     //Constant environment variables here
     public static final double XMIN = 0;
     public static final double YMIN = 0;
-
     public static final double DIAMETER = 15;
     public static final double HYGIENE_CONST = 0.8; // it was 0.8 before
     public static final double I2toD_CONST = 0.1;
-
     public static final double INCUBATION_PERIOD_High = 14;
     public static final double INFECTION_DISTANCE = DIAMETER + 10; // it was +5 before
     public static final double INFECTION_DISTANCE_SQUARED = INFECTION_DISTANCE * INFECTION_DISTANCE;
+
 
     //scaling factors of environments
     public static int ini_num_agents = 100;
@@ -52,10 +53,10 @@ public /*strictfp*/ class Env extends SimState {
 
     //experiments
     public static double discreatization = 25.0;
-    public static double ENV_XMAX = (int) Math.pow((ini_num_agents / ini_agent_density), 0.5);
-    public static double ENV_YMAX = ENV_XMAX;
-    public static final double Q_XMAX = ENV_XMAX * 2;
-    public static final double Q_YMAX = ENV_YMAX * 2;
+    public static double env_xmax;
+    public static double env_ymax;
+    public static double Q_XMAX;
+    public static double Q_YMAX;
 
     /********* Capacities ******************************/
     public static int capacity_contact_trace = 10;
@@ -314,20 +315,20 @@ public /*strictfp*/ class Env extends SimState {
     }
 
 
-    public static double getEnvXmax() {
-        return ENV_XMAX;
+    public static double getEnv_xmax() {
+        return env_xmax;
     }
 
-    public static void setEnvXmax(double envXmax) {
-        ENV_XMAX = envXmax;
+    public static void setEnv_xmax(double env_xmax) {
+        Env.env_xmax = env_xmax;
     }
 
-    public static double getEnvYmax() {
-        return ENV_YMAX;
+    public static double getEnv_ymax() {
+        return env_ymax;
     }
 
-    public static void setEnvYmax(double envYmax) {
-        Env.ENV_YMAX = envYmax;
+    public static void setEnv_ymax(double env_ymax) {
+        Env.env_ymax = env_ymax;
     }
 
 
@@ -476,7 +477,7 @@ public /*strictfp*/ class Env extends SimState {
 
     // number of days after expose when agent should move to recovery.
     public static int infection_to_recovery_days = 21;
-    public static int expose_to_recovery_days = 12;
+    public int expose_to_recovery_days = 12;
 
     public static int traveler_agent_count = 500;
 
@@ -628,7 +629,6 @@ public /*strictfp*/ class Env extends SimState {
     }
 
 
-
     static boolean conflict(final Agent agent1, final Double2D a, final Agent agent2, final Double2D b) {
         Double social_distance = DIAMETER;
         if (Env.policy_social_distancing) {
@@ -647,8 +647,8 @@ public /*strictfp*/ class Env extends SimState {
 
     static boolean acceptablePosition(final Agent agent, final Double2D location) {
 
-        if (location.x < DIAMETER / 2 || location.x > (ENV_XMAX - XMIN)/*HumansEnvironment.getXSize()*/ - DIAMETER / 2 ||
-                location.y < DIAMETER / 2 || location.y > (ENV_YMAX - YMIN)/*HumansEnvironment.getYSize()*/ - DIAMETER / 2)
+        if (location.x < DIAMETER / 2 || location.x > (env_xmax - XMIN)/*HumansEnvironment.getXSize()*/ - DIAMETER / 2 ||
+                location.y < DIAMETER / 2 || location.y > (env_ymax - YMIN)/*HumansEnvironment.getYSize()*/ - DIAMETER / 2)
             return false;
         Bag mysteriousObjects = HumansEnvironment.getNeighborsWithinDistance(location, 2 * DIAMETER);
         if (mysteriousObjects != null) {
@@ -666,11 +666,16 @@ public /*strictfp*/ class Env extends SimState {
 
     public void start() {
         super.start();  // clear out the schedule
-        HumansEnvironment = new Continuous2D(discreatization, (ENV_XMAX - XMIN), (ENV_YMAX - YMIN));
+        setEnv_xmax((int)( pow( (ini_num_agents/ini_agent_density), 0.5)));
+        setEnv_ymax(getEnv_xmax());
+        Q_XMAX = getEnv_xmax()*2;
+        Q_YMAX = getEnv_xmax()*2;
+
+        HumansEnvironment = new Continuous2D(discreatization, (getEnv_xmax() - XMIN), (getEnv_ymax() - YMIN));
         QuarantinedEnvironment = new Continuous2D(discreatization, (Q_XMAX - XMIN), (Q_YMAX - YMIN));
-        BlackBoxEnvironment = new Continuous2D(discreatization, (ENV_XMAX - XMIN), (ENV_YMAX - YMIN));
-        TestEnvironment = new Continuous2D(discreatization, (ENV_XMAX - XMIN), (ENV_YMAX - YMIN));
-        TravelerEnvironment = new Continuous2D(discreatization, (ENV_XMAX - XMIN), (ENV_YMAX - YMIN));
+        BlackBoxEnvironment = new Continuous2D(discreatization, (getEnv_xmax() - XMIN), (getEnv_ymax() - YMIN));
+        TestEnvironment = new Continuous2D(discreatization, (getEnv_xmax() - XMIN), (getEnv_ymax() - YMIN));
+        TravelerEnvironment = new Continuous2D(discreatization, (getEnv_xmax() - XMIN), (getEnv_ymax() - YMIN));
 
         int step_int = 0;
         for (int x = 0; x < ini_num_agents + traveler_agent_count; x++) {
@@ -678,8 +683,8 @@ public /*strictfp*/ class Env extends SimState {
             Human agent;
             int times = 0;
             do {
-                loc = new Double2D(random.nextDouble() * (ENV_XMAX - XMIN - DIAMETER) + XMIN + DIAMETER / 2,
-                        random.nextDouble() * (ENV_YMAX - YMIN - DIAMETER) + YMIN + DIAMETER / 2);
+                loc = new Double2D(random.nextDouble() * (env_xmax - XMIN - DIAMETER) + XMIN + DIAMETER / 2,
+                        random.nextDouble() * (env_ymax - YMIN - DIAMETER) + YMIN + DIAMETER / 2);
 
 
                 agent = new Human("Human-" + x, loc);
