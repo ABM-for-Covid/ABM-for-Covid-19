@@ -119,7 +119,7 @@ public class Transitions {
         }
 
         // transition to I2
-        if (human.wantToMoveToI2 > 2 || getRandomBoolean((1 - prob_score))) {
+        if (human.wantToMoveToI2 > 2 || getRandomBoolean(Env.I2toD_CONST *(1 - prob_score))) {
             human.wantToMoveToI2++;
             if (Env.capacity_hospital_bed > 0) {
 
@@ -166,7 +166,7 @@ public class Transitions {
         if (prob_score < 0) prob_score = 0;
 
         // probability to I3
-        if (getRandomBoolean(1 - prob_score)) {
+        if (getRandomBoolean((Env.I2toD_CONST * (1 - prob_score)))) {
 
             // check availability
             int icu_count = Env.getCapacity_icu_beds();
@@ -218,7 +218,7 @@ public class Transitions {
         if (prob_score < 0) prob_score = 0;
 
         // probability to D
-        if (getRandomBoolean(1 - prob_score)) {
+        if (getRandomBoolean((Env.I2toD_CONST * (1 - prob_score)))) {
             human.setDead(true);
             human.setInfected(false);
             Env.capacity_icu_beds++;

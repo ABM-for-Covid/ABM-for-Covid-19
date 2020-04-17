@@ -77,6 +77,15 @@ public /*strictfp*/ class Env extends SimState {
     public static int num_traveler_Agents = 0;
     public static double social_distancing_efficiency = 0.6;
 
+    /***********************************/
+    // Model this to get death rate under control
+    public static int infection_to_recovery_days = 15; //reduce it see the impact.
+    public int expose_to_recovery_days = 12;
+    public static int traveler_agent_count = 500;
+    public static double i2ToDProbability = 0.6; //reduced it to 0.6
+
+
+
     public int getNum_Infected_Agents()
     //  return the count of infected agents to inspectors.*/
     {
@@ -242,6 +251,13 @@ public /*strictfp*/ class Env extends SimState {
     {
         Bag un_objects = HumansEnvironment.getAllObjects();
         return un_objects.numObjs;
+    }
+
+    public int getBlack_Box(){
+        int count = getNum_Asymptomatic_Agents();
+        int total = getNum_Infected_Agents();
+        return (total- count);
+
     }
 
     public double getAvg_infection() {
@@ -475,13 +491,6 @@ public /*strictfp*/ class Env extends SimState {
 
     /***************************************************************/
 
-    // number of days after expose when agent should move to recovery.
-    public static int infection_to_recovery_days = 21;
-    public int expose_to_recovery_days = 12;
-
-    public static int traveler_agent_count = 500;
-
-    public static double i2ToDProbability = 0.7;
 
     //    all model parameters here
 
@@ -670,6 +679,8 @@ public /*strictfp*/ class Env extends SimState {
         setEnv_ymax(getEnv_xmax());
         Q_XMAX = getEnv_xmax()*2;
         Q_YMAX = getEnv_xmax()*2;
+
+        System.out.println("Env "+getEnv_xmax());
 
         HumansEnvironment = new Continuous2D(discreatization, (getEnv_xmax() - XMIN), (getEnv_ymax() - YMIN));
         QuarantinedEnvironment = new Continuous2D(discreatization, (Q_XMAX - XMIN), (Q_YMAX - YMIN));

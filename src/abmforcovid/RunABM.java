@@ -43,6 +43,9 @@ public class RunABM {
         Env.setIni_agent_density(agent_density);
         Env.setIni_hospital_bed_per_agent(hospital_bed_per_agent);
         Env.setIni_icu_bed_per_hospital_bed(icu_bed_per_hospital_bed);
+        int capacity_hospital_bed = (int) (num_agents * hospital_bed_per_agent);
+        Env.setCapacity_hospital_bed(capacity_hospital_bed);
+        Env.setCapacity_icu_beds((int) (icu_bed_per_hospital_bed * capacity_hospital_bed));
         Env.setIni_infection_percent(infection_percent);
         Env.setIni_distribution_age_min(distribution_age_min);
         Env.setIni_distribution_age_max(distribution_age_max);
