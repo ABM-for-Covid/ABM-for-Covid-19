@@ -828,6 +828,10 @@ public /*strictfp*/ class Env extends SimState {
                 boolean b = policy.p_social_distancing == 1;
                 Env.setPolicy_social_distancing(b);
             }
+            if (policy.p_age_lockdown == 0 || policy.p_age_lockdown == 1) {
+                boolean b = policy.p_age_lockdown == 1;
+                Env.setPolicy_age_based_lockdown(b);
+            }
 
             //capacities
             if (policy.c_contact_trace > 0)
@@ -846,6 +850,9 @@ public /*strictfp*/ class Env extends SimState {
 
             if (policy.a_social_distancing_efficiency>0)
                 Env.setSocial_distancing_efficiency(policy.a_social_distancing_efficiency);
+
+            if( policy.a_lockdown_threshhold>0)
+                Env.setAge_based_lockdown_threshhold(policy.a_lockdown_threshhold);
 
             if (policy.p_exit > 0)
                 finish();
