@@ -215,6 +215,13 @@ public /*strictfp*/ class Human extends Agent {
                 if (Env.policy_lockdown && !this.essential)
                     return;
 
+                //if age based lockdown then resetrict people above the limit
+                if(Env.policy_age_based_lockdown && this.age >= Env.age_based_lockdown_threshhold) {
+                    if (Env.policy_quarantine)
+                        this.setQuarantined(true);
+                    return;
+                }
+
                 Env.HumansEnvironment.setObjectLocation(this, agentLocation);
                 Env.BlackBoxEnvironment.setObjectLocation(this, agentLocation);
             }

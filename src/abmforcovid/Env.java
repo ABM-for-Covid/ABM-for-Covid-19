@@ -72,10 +72,12 @@ public /*strictfp*/ class Env extends SimState {
     public static boolean policy_social_distancing = false;
     public static boolean policy_close_borders = false;
     public static boolean policy_hospitalization = false; // if i2 and i3 be isolated in a hospital.
+    public static boolean policy_age_based_lockdown = false; // if i2 and i3 be isolated in a hospital.
 
     /********** count **********************************/
     public static int num_traveler_Agents = 0;
     public static double social_distancing_efficiency = 0.6;
+    public static int age_based_lockdown_threshhold = 60;
 
     /***********************************/
     // Model this to get death rate under control
@@ -83,7 +85,6 @@ public /*strictfp*/ class Env extends SimState {
     public int expose_to_recovery_days = 12;
     public static int traveler_agent_count = 500;
     public static double i2ToDProbability = 0.6; //reduced it to 0.6
-
 
 
     public int getNum_Infected_Agents()
@@ -302,6 +303,14 @@ public /*strictfp*/ class Env extends SimState {
         Env.ini_sim_cycle_per_day = ini_sim_cycle_per_day;
     }
 
+    public static int getTraveler_agent_count() {
+        return traveler_agent_count;
+    }
+
+    public static void setTraveler_agent_count(int traveler_agent_count) {
+        Env.traveler_agent_count = traveler_agent_count;
+    }
+
     public static int getNum_traveler_Agents() {
         return num_traveler_Agents;
     }
@@ -347,6 +356,21 @@ public /*strictfp*/ class Env extends SimState {
         Env.env_ymax = env_ymax;
     }
 
+    public static boolean isPolicy_age_based_lockdown() {
+        return policy_age_based_lockdown;
+    }
+
+    public static void setPolicy_age_based_lockdown(boolean policy_age_based_lockdown) {
+        Env.policy_age_based_lockdown = policy_age_based_lockdown;
+    }
+
+    public static int getAge_based_lockdown_threshhold() {
+        return age_based_lockdown_threshhold;
+    }
+
+    public static void setAge_based_lockdown_threshhold(int age_based_lockdown_threshhold) {
+        Env.age_based_lockdown_threshhold = age_based_lockdown_threshhold;
+    }
 
     public static boolean isPolicy_close_borders() {
         return policy_close_borders;
