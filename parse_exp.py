@@ -15,6 +15,7 @@ class Policies:
     daily_testing = "p_daily_testing"
     contact_tracing = "p_contact_tracing"
     social_distancing = "p_social_distancing"
+    age_lockdown = "p_age_lockdown"
     exit = "p_exit"
 
 class Capacity:
@@ -26,6 +27,7 @@ class Capacity:
 class ATTR:
     false_negative_percent = "a_false_negative_percent"
     social_distancing_efficiency = "a_social_distancing_efficiency"
+    lockdown_threshhold = "a_lockdown_threshhold"
 
 class Param:
     num_agents = "num_agents" #100;
