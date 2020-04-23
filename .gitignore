@@ -1,5 +1,6 @@
 *.pyc
 *.log
+*.class
 ngrok
 *.xml
 # don't include third-party dependencies.
@@ -13,7 +14,6 @@ notebooks/
 temp/
 .idea/
 ideas/
-notebooks/.ipynb_checkpoints
 log/
 model_data/
 data/
@@ -22,13 +22,7 @@ config
 nohup.out
 dump.rdb
 *.out
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
 load_test.py
-*.class
-!.idea/
 out/
 *.ipynb
 *.iml
