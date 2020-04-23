@@ -42,6 +42,7 @@ class Param:
     distribution_hygiene_mean = "distribution_hygiene_mean" #0.5;
     distribution_hygiene_var = "distribution_hygiene_var" #1;
     essential_agent_percent = "essential_agent_percent"
+    recovery_percent = "recovery_percent"
 
 
 

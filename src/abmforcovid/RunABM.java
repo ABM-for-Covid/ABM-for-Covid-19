@@ -17,6 +17,7 @@ public class RunABM {
     public  int num_agents = 100;
     public  int sim_cycle_per_day = 500;
     public  double essential_agent_percent = 0.05;
+    public  double recovery_percent = 0.0;
     public  double agent_density = 0.0001;
     public  double hospital_bed_per_agent = 0.1;
     public  double icu_bed_per_hospital_bed = 0.05;
@@ -39,6 +40,7 @@ public class RunABM {
         Env.setResultFile(resultfile);
         Env.setIni_sim_cycle_per_day(sim_cycle_per_day);
         Env.setIni_essential_agent_percent(essential_agent_percent);
+        Env.setIni_recovery_percent(recovery_percent);
         Env.setIni_num_agents(num_agents);
         Env.setIni_agent_density(agent_density);
         Env.setIni_hospital_bed_per_agent(hospital_bed_per_agent);

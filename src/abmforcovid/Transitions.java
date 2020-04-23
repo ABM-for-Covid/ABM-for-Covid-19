@@ -359,6 +359,31 @@ public class Transitions {
         }
     }
 
+    public static void mark_recovered_agents() {
+        // run it only once to mark a percentage of agents essential
+        ArrayList<Human> sample_list = new ArrayList<>();
+        Bag all_agents = Env.HumansEnvironment.getAllObjects();
+        for (int i = 0; i < all_agents.numObjs; i++) {
+            if (all_agents.objs[i] != null) {
+                Human ta = (Human) (all_agents.objs[i]);
+
+                // if not having infection and age is working age
+                if (ta.infectionState <= 1 && ta.age<60 && ta.age > 18) {
+                    sample_list.add(ta);
+                }
+            }
+        }
+        if (sample_list.size() == 0) return;
+        //shuffle the list to pick random agents
+        Collections.shuffle(sample_list);
+        int agents_to_mark = (int)(all_agents.size() * Env.ini_recovery_percent);
+        if (sample_list.size() < agents_to_mark) agents_to_mark = sample_list.size();
+
+        for (int i = 0; i < agents_to_mark; i++) {
+            Human hu = sample_list.get(i);
+            hu.recovered = true;
+        }
+    }
 }
 
 

@@ -110,8 +110,6 @@ public /*strictfp*/ class Human extends Agent {
                 if (!Env.policy_close_borders) {
                     Transitions.add_new_infectious_agents();
                 }
-                System.out.println("R0 for today is --------------------------------> "+hb.getAvg_infection());
-
             }
             sim_count++;
             return;
