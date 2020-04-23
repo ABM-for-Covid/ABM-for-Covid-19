@@ -109,11 +109,16 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
         infected = b;
         if (!infected)
             infectionState = -1;
-        else once_infected = true;
+        else {
+            once_infected = true;
+            setExposed(false);
+        }
     }
 
     public final void setExposed(boolean b) {
         exposed = b;
+        if(exposed)
+            setSusceptible(false);
     }
 
     public final void setSusceptible(boolean b) {
@@ -123,8 +128,10 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
     public final void setRecovered(boolean b) {
         recovered = b;
         if (recovered) {
-            infectionState = -1;
+            susceptible = false;
+            exposed = false;
             infected = false;
+            infectionState = -1;
             once_infected = false;
         }
     }
@@ -132,8 +139,10 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
     public final void setDead(boolean b) {
         dead = b;
         if(dead){
-            infectionState = -1;
+            susceptible = false;
+            exposed = false;
             infected = false;
+            infectionState = -1;
             once_infected = false;
         }
     }

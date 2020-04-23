@@ -381,7 +381,7 @@ public class Transitions {
 
         for (int i = 0; i < agents_to_mark; i++) {
             Human hu = sample_list.get(i);
-            hu.recovered = true;
+            hu.setRecovered(true);
         }
     }
 }
