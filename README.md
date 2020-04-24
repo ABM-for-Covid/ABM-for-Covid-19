@@ -1,56 +1,79 @@
-# COVID-19 (Coronavirus) ABM(Agent Based Model)  🦠
+# ABM for COVID-19 🦠
 
-Agent based model and simulations of social strategies to stop the spread of covid-19 disease.
-
-
-## How to start
-
-Have Java in your machine; Adding all the jar files here for quick setup.
+Modeling the Spread and Control of COVID-19.
 
 
 # Agent Parameters 
-![](https://raw.githubusercontent.com/codeAshu/covid-19-Multiagent-Simulations/master/results/exp-2/parameters.png)
+**Age** - An integer attribute sampled from a triangular distribution between 1 and 90 with a peak of 25.
+
+**Hygiene** A value between 0 and 1, where 1 corresponds to perfect hygiene. High hygine level indicate in real life washing hands, wearing masks etc., which leads to less exposure of virus.
+
+**Overall health** - An integer value between 0 and 3, both inclusive. A higher value corresponds to strong health and a lower value cor-responds to poor health.
+
+**Comorbidity** An integer value between 0 and -2, both inclusive.  A co-morbidity value of zero corresponds to an agent with nocomorbid  conditions,  and  a  lower  value  corresponds  toprevalence of more serious comorbid conditions.
+
+**Immunity** A value of either 0 or 1, where 0 corresponds to weak immunity and 1 corresponds to strong immunity.
 
 
-### Natural spread
-Natural spread case run:
+# Policies
+Many policies can be applied at any time during the simulation. These policies change and control agent behaviour and also update environmental resources. 
+
+**Boarder Close** This policy is applied to stop the incoming infectious agents in the environment.
+
+**Lockdown** Lockdown is applied to control the movement of the agents in the simulation. When applied it can make some agents static in the environment. 
+
+**Age Based Lockdown** This lockdown is applied with a threshhold age. All the agents above the threshhold will be under lockdown.
+
+**Quarantine** This policy, if applied -- can remove certain agents from the environment. Sick and positively tested agents can be quarantined. 
+
+**Daily Testing** When this policy is applied -- Daily, a random number of agents are being sampled and tested. There are  parameters which can be modified to control capcity of daily testing and false negative percentage of test results. 
+
+**Contact Tracing** This policy trace back to a certain number of contacts of an agent when it is tested positive. If Quarantine is also invoked, the traced agents will be isolated from the environment. 
+
+**Social Distancing** This policy when applied -- It controls how close any one agent come to another one. 
+
+**Hospitalization** If this policy is invoked, very sick agents goes gets isolated and moved to hospital environment. Subject to availability of hospital beds. 
+
+**Reinforcement** Hospital beds and ICU beds can be always modified during the simulation. 
+
+
+
+## How to start
+- Compile all java classes. 
+
 ```
-social_natural/infectionUI
-```
-![](https://raw.githubusercontent.com/codeAshu/covid-19-Multiagent-Simulations/master/videos/social_natural.gif)
-
-
-
-### Simulation of social distancing
-[Similar to the  Washington Post Article: Why outbreaks like coronavirus spread exponentially, and how to “flatten the curve” - Washington Post](https://www.washingtonpost.com/graphics/2020/world/corona-simulator/)
-
-For social distancing model run:
-
-```
-abmforcovid/infectionUI
+cd src
+javac abmforcovid/*.java
 ```
 
-![](https://raw.githubusercontent.com/codeAshu/covid-19-Multiagent-Simulations/master/videos/social_distance.gif)
-
-
+- Start the server in background. 
 ```
-Graphs
+nohup python server.py &
 ```
-![](https://raw.githubusercontent.com/codeAshu/covid-19-Multiagent-Simulations/master/videos/exp-2.gif)
+- Assuming server running at `http://localhost:8080`
 
-# INFECTION CURVE
-![](https://raw.githubusercontent.com/codeAshu/covid-19-Multiagent-Simulations/master/results/exp-2/infection.png)
+- Define an experiment in json file (you can see example experiment file in `experiments/` dir)
 
+- Check the `notebooks/` dir for jupyter notebooks with different experiments.
+
+- Call function with the json
+`run_exp`
+
+- Check the result `csv` with the same name as the experiment in `results/` dir. 
+
+
+- Note - Have Java in your machine; Adding all the jar files here for quick setup.
+
+### If you want to run with the UI. 
+
+- Compile all the java classes
+- Run EnvUI class
+- It will open all the views related to the simulation.
 
 ## Future work
 - Create environment and define mobility.
-- Test more lock-down strategies.
 - Improve the code and suggestions to scale.
 
 
 # Reference
-
-This code is using Multi agent simulator [MASON](https://cs.gmu.edu/~eclab/projects/mason/).
-This library has great multithreading
-and nice framework to generate large visual simulations. It is still in old Java applet based framework, so it's hard to
-show it on web.
+Using Multi agent simulator [MASON](https://cs.gmu.edu/~eclab/projects/mason/)
