@@ -42,7 +42,10 @@ def server_error(e):
 
 @app.route('/run', methods=['POST'])
 def get_experiment():
-    data = json.loads(request.data)
+    if conf.env == 'prod':
+        data = request.json()
+    else:
+        data = json.loads(request.data)
     experiment = data.get('experiment')
     result_file = get_result_file(data)
     #create a resfile from the experiment name
