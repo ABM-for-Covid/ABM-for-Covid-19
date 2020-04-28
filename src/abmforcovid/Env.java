@@ -9,6 +9,10 @@ import sim.util.Double2D;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -252,9 +256,9 @@ public /*strictfp*/ class Env extends SimState {
     //  return the number of total agents to inspectors.*/
     {
         Bag un_objects = HumansEnvironment.getAllObjects();
-        int c =  un_objects.numObjs;
+        int c = un_objects.numObjs;
         Bag q_objects = QuarantinedEnvironment.getAllObjects();
-        return c+q_objects.numObjs;
+        return c + q_objects.numObjs;
     }
 
     public int getBlack_Box() {
@@ -888,6 +892,35 @@ public /*strictfp*/ class Env extends SimState {
 
     public static String dailyFile;
 
+    public void send_data(Integer day) {
+        // call api /res with the information
+        try {
+            int total_agents = getNum_Agents();
+            String infected = String.format("%.2f", ((100.0 * getNum_Infected_Agents()) / total_agents));
+            String exposed = String.format("%.2f", ((100.0 * getNum_Exposed_Agents()) / total_agents));
+            String recovered = String.format("%.2f", ((100.0 * getNum_Recovered_Agents()) / total_agents));
+            String dead = String.format("%.2f", ((100.0 * getNum_Death_Count()) / total_agents));
+            String asympt = String.format("%.2f", ((100.0 * getNum_Asymptomatic_Agents()) / total_agents));
+            String suscept = String.format("%.2f", ((100.0 * getNum_Susceptible_agents()) / total_agents));
+
+            String url = "http://localhost:8080/res?experiment=" + experiment + "&day=" + day + "&infected_agents=" + infected +
+                    "&exposed_agents=" + exposed + "&recovered_agents=" + recovered + "&dead_agents=" + dead + "&asympt_agents=" +
+                    asympt + "&suscept_agents=" + suscept;
+
+            URL urlForGetRequest = new URL(url);
+            HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
+            conection.setRequestMethod("GET");
+            int responseCode = conection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                System.out.println("Data updated in db");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
     public void daily_data(Integer day) {
         if (dailyFile == null) return;
         String filename = dailyFile;
@@ -899,17 +932,17 @@ public /*strictfp*/ class Env extends SimState {
                 int total_agents = getNum_Agents();
                 List<String> rowdata = new ArrayList<String>();
                 rowdata.add(day.toString());
-                rowdata.add(String.format("%.2f",  ( (100.0 * getNum_Infected_Agents())/total_agents )));
-                rowdata.add(String.format("%.2f",  ( (100.0 * getNum_Exposed_Agents())/total_agents )));
-                rowdata.add(String.format("%.2f",  ( (100.0 * getNum_Recovered_Agents())/total_agents )));
-                rowdata.add(String.format("%.2f",  ( (100.0 * getNum_Death_Count())/total_agents )));
-                rowdata.add(String.format("%.2f",  ( (100.0 * getNum_Asymptomatic_Agents())/total_agents )));
+                rowdata.add(String.format("%.2f", ((100.0 * getNum_Infected_Agents()) / total_agents)));
+                rowdata.add(String.format("%.2f", ((100.0 * getNum_Exposed_Agents()) / total_agents)));
+                rowdata.add(String.format("%.2f", ((100.0 * getNum_Recovered_Agents()) / total_agents)));
+                rowdata.add(String.format("%.2f", ((100.0 * getNum_Death_Count()) / total_agents)));
+                rowdata.add(String.format("%.2f", ((100.0 * getNum_Asymptomatic_Agents()) / total_agents)));
                 for (int i = 0; i < rowdata.size(); i++) {
                     String data = rowdata.get(i);
                     file.append(data);
                     file.append(",");
                 }
-                file.append(String.format("%.2f",  ( (100.0 * getNum_Susceptible_agents())/total_agents )));
+                file.append(String.format("%.2f", ((100.0 * getNum_Susceptible_agents()) / total_agents)));
                 file.newLine();
                 file.flush();
                 file.close();
@@ -933,17 +966,17 @@ public /*strictfp*/ class Env extends SimState {
 
                 List<String> rowdata = new ArrayList<String>();
                 rowdata.add(day.toString());
-                rowdata.add(String.format("%.2f",  ( (100.0 * getNum_Infected_Agents())/total_agents )));
-                rowdata.add(String.format("%.2f",  ( (100.0 * getNum_Exposed_Agents())/total_agents )));
-                rowdata.add(String.format("%.2f",  ( (100.0 * getNum_Recovered_Agents())/total_agents )));
-                rowdata.add(String.format("%.2f",  ( (100.0 * getNum_Death_Count())/total_agents )));
-                rowdata.add(String.format("%.2f",  ( (100.0 * getNum_Asymptomatic_Agents())/total_agents )));
+                rowdata.add(String.format("%.2f", ((100.0 * getNum_Infected_Agents()) / total_agents)));
+                rowdata.add(String.format("%.2f", ((100.0 * getNum_Exposed_Agents()) / total_agents)));
+                rowdata.add(String.format("%.2f", ((100.0 * getNum_Recovered_Agents()) / total_agents)));
+                rowdata.add(String.format("%.2f", ((100.0 * getNum_Death_Count()) / total_agents)));
+                rowdata.add(String.format("%.2f", ((100.0 * getNum_Asymptomatic_Agents()) / total_agents)));
                 for (int i = 0; i < rowdata.size(); i++) {
                     String data = rowdata.get(i);
                     file.append(data);
                     file.append(",");
                 }
-                file.append(String.format("%.2f",  ( (100.0 * getNum_Susceptible_agents())/total_agents )));
+                file.append(String.format("%.2f", ((100.0 * getNum_Susceptible_agents()) / total_agents)));
                 file.newLine();
                 file.flush();
                 file.close();

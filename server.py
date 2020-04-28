@@ -4,6 +4,7 @@ import json
 from multiprocessing import Process
 import time
 import conf
+from database import *
 
 import Constant
 from parse_exp import *
@@ -26,7 +27,7 @@ except ImportError:
 @app.route('/')
 def hello():
     """Return a friendly HTTP greeting."""
-    msg = "Dev release April 13 2020"
+    msg = "Dev release April 28 2020"
     return msg, 200
 
 
@@ -50,24 +51,13 @@ def get_experiment():
     global p
     p = Process(target=run_abm_process, args=(data,))
     p.start()
-    #todo - change the filepath to filelink in server, which is also serverd and appended.
-    return "Path of result_file {}".format(result_file), 200
+    return experiment, 200
 
 @app.route('/res')
 def get_res():
-    experiment = request.args.get('name')
-    res_file = "{}/results/{}.csv".format(home, experiment)
-
-    def generate(res_file):
-        with open(res_file, 'r') as fp:
-            data = fp.readlines()
-            last_10 = data[-100:]
-            time.sleep(1)
-        yield jsonify(last_10)
-
-    return Response(generate(res_file), mimetype='text/csv')
-
-
+    experiment = request.args.get('experiment')
+    write_result(experiment, request.args)
+    return "OK", 200
 
 if __name__ == '__main__':
     if Constant.env == 'prod':
