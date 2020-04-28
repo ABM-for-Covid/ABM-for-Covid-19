@@ -45,7 +45,7 @@ def get_experiment():
     if conf.env == 'prod':
         data = request.json()
     else:
-        data = json.loads(request.data)
+        data = json.loads(request.data.decode(), parse_float=float)
     experiment = data.get('experiment')
     result_file = get_result_file(data)
     #create a resfile from the experiment name
