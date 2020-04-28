@@ -102,6 +102,7 @@ public /*strictfp*/ class Human extends Agent {
             hb.stream_data(sim_count);
 
             if (sim_count % Env.ini_sim_cycle_per_day == 0){
+
                 // run daily testing policy
                 if (Env.policy_daily_testing)
                     Transitions.run_tests();
@@ -110,6 +111,9 @@ public /*strictfp*/ class Human extends Agent {
                 if (!Env.policy_close_borders) {
                     Transitions.add_new_infectious_agents();
                 }
+
+                int day = sim_count/Env.ini_sim_cycle_per_day;
+                hb.daily_data(day);
             }
             sim_count++;
             return;

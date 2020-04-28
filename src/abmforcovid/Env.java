@@ -252,13 +252,15 @@ public /*strictfp*/ class Env extends SimState {
     //  return the number of total agents to inspectors.*/
     {
         Bag un_objects = HumansEnvironment.getAllObjects();
-        return un_objects.numObjs;
+        int c =  un_objects.numObjs;
+        Bag q_objects = QuarantinedEnvironment.getAllObjects();
+        return c+q_objects.numObjs;
     }
 
-    public int getBlack_Box(){
+    public int getBlack_Box() {
         int count = getNum_Asymptomatic_Agents();
         int total = getNum_Infected_Agents();
-        return (total- count);
+        return (total - count);
 
     }
 
@@ -518,8 +520,6 @@ public /*strictfp*/ class Env extends SimState {
 
 
     //    all model parameters here
-
-
     public static int getInfected_traveler_pday_limit() {
         return infected_traveler_pday_limit;
     }
@@ -708,12 +708,12 @@ public /*strictfp*/ class Env extends SimState {
 
     public void start() {
         super.start();  // clear out the schedule
-        setEnv_xmax((int)( pow( (ini_num_agents/ini_agent_density), 0.5)));
+        setEnv_xmax((int) (pow((ini_num_agents / ini_agent_density), 0.5)));
         setEnv_ymax(getEnv_xmax());
-        Q_XMAX = getEnv_xmax()*2;
-        Q_YMAX = getEnv_xmax()*2;
+        Q_XMAX = getEnv_xmax() * 2;
+        Q_YMAX = getEnv_xmax() * 2;
 
-        System.out.println("Env "+getEnv_xmax());
+        System.out.println("Env " + getEnv_xmax());
 
         HumansEnvironment = new Continuous2D(discreatization, (getEnv_xmax() - XMIN), (getEnv_ymax() - YMIN));
         QuarantinedEnvironment = new Continuous2D(discreatization, (Q_XMAX - XMIN), (Q_YMAX - YMIN));
@@ -859,10 +859,10 @@ public /*strictfp*/ class Env extends SimState {
             if (policy.a_false_negative_percent > 0)
                 Env.setTest_false_negative_percent(policy.a_false_negative_percent);
 
-            if (policy.a_social_distancing_efficiency>0)
+            if (policy.a_social_distancing_efficiency > 0)
                 Env.setSocial_distancing_efficiency(policy.a_social_distancing_efficiency);
 
-            if( policy.a_lockdown_threshhold>0)
+            if (policy.a_lockdown_threshhold > 0)
                 Env.setAge_based_lockdown_threshhold(policy.a_lockdown_threshhold);
 
             if (policy.p_exit > 0)
@@ -881,6 +881,78 @@ public /*strictfp*/ class Env extends SimState {
     }
 
     public static String resultFile;
+
+    public static void setDailyFile(String dailyFile) {
+        Env.dailyFile = dailyFile;
+    }
+
+    public static String dailyFile;
+
+    public void daily_data(Integer day) {
+        if (dailyFile == null) return;
+        String filename = dailyFile;
+        File csvFile = new File(filename);
+        try {
+            if (csvFile.isFile()) {
+
+                BufferedWriter file = new BufferedWriter(new FileWriter(filename, true));
+                int total_agents = getNum_Agents();
+                List<String> rowdata = new ArrayList<String>();
+                rowdata.add(day.toString());
+                rowdata.add(String.format("%.2f",  ( (100.0 * getNum_Infected_Agents())/total_agents )));
+                rowdata.add(String.format("%.2f",  ( (100.0 * getNum_Exposed_Agents())/total_agents )));
+                rowdata.add(String.format("%.2f",  ( (100.0 * getNum_Recovered_Agents())/total_agents )));
+                rowdata.add(String.format("%.2f",  ( (100.0 * getNum_Death_Count())/total_agents )));
+                rowdata.add(String.format("%.2f",  ( (100.0 * getNum_Asymptomatic_Agents())/total_agents )));
+                for (int i = 0; i < rowdata.size(); i++) {
+                    String data = rowdata.get(i);
+                    file.append(data);
+                    file.append(",");
+                }
+                file.append(String.format("%.2f",  ( (100.0 * getNum_Susceptible_agents())/total_agents )));
+                file.newLine();
+                file.flush();
+                file.close();
+            } else {
+                int total_agents = getNum_Agents();
+                BufferedWriter file = new BufferedWriter(new FileWriter(filename, true));
+                file.append("day");
+                file.append(",");
+                file.append("infected_agents");
+                file.append(",");
+                file.append("exposed_agents");
+                file.append(",");
+                file.append("recovered_agents");
+                file.append(",");
+                file.append("dead_agents");
+                file.append(",");
+                file.append("asympt_agents");
+                file.append(",");
+                file.append("suscept_agents");
+                file.newLine();
+
+                List<String> rowdata = new ArrayList<String>();
+                rowdata.add(day.toString());
+                rowdata.add(String.format("%.2f",  ( (100.0 * getNum_Infected_Agents())/total_agents )));
+                rowdata.add(String.format("%.2f",  ( (100.0 * getNum_Exposed_Agents())/total_agents )));
+                rowdata.add(String.format("%.2f",  ( (100.0 * getNum_Recovered_Agents())/total_agents )));
+                rowdata.add(String.format("%.2f",  ( (100.0 * getNum_Death_Count())/total_agents )));
+                rowdata.add(String.format("%.2f",  ( (100.0 * getNum_Asymptomatic_Agents())/total_agents )));
+                for (int i = 0; i < rowdata.size(); i++) {
+                    String data = rowdata.get(i);
+                    file.append(data);
+                    file.append(",");
+                }
+                file.append(String.format("%.2f",  ( (100.0 * getNum_Susceptible_agents())/total_agents )));
+                file.newLine();
+                file.flush();
+                file.close();
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void stream_data(Integer step_int) {
 
@@ -929,11 +1001,11 @@ public /*strictfp*/ class Env extends SimState {
                 file.append(",");
                 file.append("suscept_agents");
                 file.append(",");
-                file.append("hospital_beds");
+                file.append("i1_agents");
                 file.append(",");
-                file.append("icu_beds");
+                file.append("i2_agents");
                 file.append(",");
-                file.append("avg_infection");
+                file.append("i3_agents");
 
                 file.newLine();
 

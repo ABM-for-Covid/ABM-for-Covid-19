@@ -3,6 +3,7 @@ from werkzeug.exceptions import HTTPException
 import json
 from multiprocessing import Process
 import time
+import conf
 
 import Constant
 from parse_exp import *
@@ -40,12 +41,12 @@ def server_error(e):
 
 @app.route('/run', methods=['POST'])
 def get_experiment():
-    data = request.json
-    env = data.get('env', 'prod')
+    data = json.loads(request.data)
     experiment = data.get('experiment')
     result_file = get_result_file(data)
     #create a resfile from the experiment name
     data['resultfile'] = "{}/{}".format(home, result_file)
+    data['dailyfile'] = "{}/{}".format(home, get_daily_res_file(data))
     global p
     p = Process(target=run_abm_process, args=(data,))
     p.start()

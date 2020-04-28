@@ -6,6 +6,7 @@ import random
 import numpy as np
 import requests
 from Constant import *
+import subprocess
 
 class Policies:
     close_borders = "p_close_borders"
@@ -43,8 +44,6 @@ class Param:
     distribution_hygiene_var = "distribution_hygiene_var" #1;
     essential_agent_percent = "essential_agent_percent"
     recovery_percent = "recovery_percent"
-
-
 
 
 def run_exp(d):
@@ -180,21 +179,24 @@ def mix_plot(*args):
     plt.show()
     plt.subplots_adjust(left=0.16, bottom=0.39, top=0.82)
 
-
-
 def get_result_file(d):
     name = d.get('experiment')
-    res_file = "/results/{}.csv".format(name)
+    res_file = "results/{}.csv".format(name)
     return res_file
 
+def get_daily_res_file(d):
+    name = d.get('experiment')
+    res_file = "results/d_{}.csv".format(name)
+    return res_file
+
+
 def run_abm_process(d):
-#     d = json.loads(data)
     exp_file = write_exp_file(d)
-    print "running for exp", exp_file
+    print("running for exp", exp_file)
     try:
         os.chdir("src/")
         command = "java abmforcovid/RunABM {}".format(exp_file)
-        print "running command", command
+        print ("running command", command)
         res = subprocess.check_output(command, shell=True)
         print (res)
     except Exception as e:

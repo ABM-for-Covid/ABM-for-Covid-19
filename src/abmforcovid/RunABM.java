@@ -13,6 +13,7 @@ public class RunABM {
 
     public String experiment;
     public String resultfile;
+    public String dailyfile;
     //scaling factors of environments
     public  int num_agents = 100;
     public  int sim_cycle_per_day = 500;
@@ -32,12 +33,18 @@ public class RunABM {
     public  double distribution_hygiene_mean = 0.5;
     public  double distribution_hygiene_var = 1;
 
+    //frontend
+    public double a_false_negative_percent = 0.3;
+    public int c_contact_trace = 5;
+    public double a_social_distancing_efficiency = 0.6;
+
     public  HashMap<Double, Policies> strategy;
 
     public void set_parameters() {
         System.out.println("Setting parameters for experiment "+ experiment);
         Env.setExperiment(experiment);
         Env.setResultFile(resultfile);
+        Env.setDailyFile(dailyfile);
         Env.setIni_sim_cycle_per_day(sim_cycle_per_day);
         Env.setIni_essential_agent_percent(essential_agent_percent);
         Env.setIni_recovery_percent(recovery_percent);
@@ -54,6 +61,12 @@ public class RunABM {
         Env.setIni_distribution_age_peak(distribution_age_peak);
         Env.setIni_distribution_hygiene_mean(distribution_hygiene_mean);
         Env.setIni_distribution_hygiene_var(distribution_hygiene_var);
+
+        //frontend
+        Env.setCapacity_contact_trace(c_contact_trace);
+        Env.setTest_false_negative_percent(a_false_negative_percent);
+        Env.setSocial_distancing_efficiency(a_social_distancing_efficiency);
+
         Env.setStrategy(strategy);
 
     }
