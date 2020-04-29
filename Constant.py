@@ -1,5 +1,6 @@
 # variables ( Later put in a config file)
-from conf import env
-from conf import home
+import conf
 home = conf.home
+env = conf.env
+
 
