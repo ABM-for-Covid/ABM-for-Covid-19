@@ -45,7 +45,6 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
     public int previousState = -1;
     public int wantToMoveToI2 = 0;
 
-    // state counters ( considering 10 simulation count as 1 day)
     public int count_EI0 = 0;
     public int count_I1 = 0;
     public int count_I2 = 0;
@@ -88,6 +87,10 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
         tested = false;
         test_result_positive = false;
 
+        if(infectionState==0) Env.c_i0++;
+        if(infectionState==1) Env.c_i1++;
+        if(infectionState==2) Env.c_i2++;
+        if(infectionState==3) Env.c_i3++;
     }
 
     public void setState(String state) {

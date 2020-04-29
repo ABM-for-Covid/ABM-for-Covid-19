@@ -92,6 +92,13 @@ public /*strictfp*/ class Env extends SimState {
     public static double i2ToDProbability = 0.6; //reduced it to 0.6
 
 
+    //current counts
+    public static int c_i0 = 0;
+    public static int c_i1 = 0;
+    public static int c_i2 = 0;
+    public static int c_i3 = 0;
+
+
     public int getNum_Infected_Agents()
     //  return the count of infected agents to inspectors.*/
     {
@@ -917,8 +924,6 @@ public /*strictfp*/ class Env extends SimState {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     public void daily_data(Integer day) {
@@ -927,59 +932,59 @@ public /*strictfp*/ class Env extends SimState {
         File csvFile = new File(filename);
         try {
             if (csvFile.isFile()) {
-
                 BufferedWriter file = new BufferedWriter(new FileWriter(filename, true));
-                int total_agents = getNum_Agents();
-                List<String> rowdata = new ArrayList<String>();
-                rowdata.add(day.toString());
-                rowdata.add(String.format("%.2f", ((100.0 * getNum_Infected_Agents()) / total_agents)));
-                rowdata.add(String.format("%.2f", ((100.0 * getNum_Exposed_Agents()) / total_agents)));
-                rowdata.add(String.format("%.2f", ((100.0 * getNum_Recovered_Agents()) / total_agents)));
-                rowdata.add(String.format("%.2f", ((100.0 * getNum_Death_Count()) / total_agents)));
-                rowdata.add(String.format("%.2f", ((100.0 * getNum_Asymptomatic_Agents()) / total_agents)));
+                List<Integer> rowdata = new ArrayList<Integer>();
+                rowdata.add(day);
+                rowdata.add(Env.c_i0);
+                rowdata.add(Env.c_i1);
+                rowdata.add(Env.c_i2);
                 for (int i = 0; i < rowdata.size(); i++) {
-                    String data = rowdata.get(i);
-                    file.append(data);
+                    Integer data = rowdata.get(i);
+                    file.append(data.toString());
                     file.append(",");
                 }
-                file.append(String.format("%.2f", ((100.0 * getNum_Susceptible_agents()) / total_agents)));
+                Integer i3 = Env.c_i3;
+                file.append(i3.toString());
                 file.newLine();
                 file.flush();
                 file.close();
+                Env.c_i0 = 0;
+                Env.c_i1 = 0;
+                Env.c_i2 = 0;
+                Env.c_i3 = 0;
+
             } else {
-                int total_agents = getNum_Agents();
                 BufferedWriter file = new BufferedWriter(new FileWriter(filename, true));
                 file.append("day");
                 file.append(",");
-                file.append("infected_agents");
+                file.append("daily_i0");
                 file.append(",");
-                file.append("exposed_agents");
+                file.append("daily_i1");
                 file.append(",");
-                file.append("recovered_agents");
+                file.append("daily_i2");
                 file.append(",");
-                file.append("dead_agents");
-                file.append(",");
-                file.append("asympt_agents");
-                file.append(",");
-                file.append("suscept_agents");
+                file.append("daily_i3");
                 file.newLine();
 
-                List<String> rowdata = new ArrayList<String>();
-                rowdata.add(day.toString());
-                rowdata.add(String.format("%.2f", ((100.0 * getNum_Infected_Agents()) / total_agents)));
-                rowdata.add(String.format("%.2f", ((100.0 * getNum_Exposed_Agents()) / total_agents)));
-                rowdata.add(String.format("%.2f", ((100.0 * getNum_Recovered_Agents()) / total_agents)));
-                rowdata.add(String.format("%.2f", ((100.0 * getNum_Death_Count()) / total_agents)));
-                rowdata.add(String.format("%.2f", ((100.0 * getNum_Asymptomatic_Agents()) / total_agents)));
+                List<Integer> rowdata = new ArrayList<Integer>();
+                rowdata.add(day);
+                rowdata.add(Env.c_i0);
+                rowdata.add(Env.c_i1);
+                rowdata.add(Env.c_i2);
                 for (int i = 0; i < rowdata.size(); i++) {
-                    String data = rowdata.get(i);
-                    file.append(data);
+                    Integer data = rowdata.get(i);
+                    file.append(data.toString());
                     file.append(",");
                 }
-                file.append(String.format("%.2f", ((100.0 * getNum_Susceptible_agents()) / total_agents)));
+                Integer i3 = Env.c_i3;
+                file.append(i3.toString());
                 file.newLine();
                 file.flush();
                 file.close();
+                Env.c_i0 = 0;
+                Env.c_i1 = 0;
+                Env.c_i2 = 0;
+                Env.c_i3 = 0;
 
             }
         } catch (IOException e) {
@@ -1039,6 +1044,7 @@ public /*strictfp*/ class Env extends SimState {
                 file.append("i2_agents");
                 file.append(",");
                 file.append("i3_agents");
+
 
                 file.newLine();
 

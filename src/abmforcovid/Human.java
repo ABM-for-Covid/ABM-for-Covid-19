@@ -114,6 +114,7 @@ public /*strictfp*/ class Human extends Agent {
 
                 int day = sim_count/Env.ini_sim_cycle_per_day;
                 hb.send_data(day);
+                hb.daily_data(day);
             }
             sim_count++;
             return;
