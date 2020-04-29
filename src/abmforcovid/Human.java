@@ -99,7 +99,7 @@ public /*strictfp*/ class Human extends Agent {
         if (this.aindex==0){
 
             hb.checkAndInvokePolicy(sim_count);
-//            hb.stream_data(sim_count);
+            hb.stream_data(sim_count);
 
             if (sim_count % Env.ini_sim_cycle_per_day == 0){
 
