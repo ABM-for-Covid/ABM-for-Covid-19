@@ -193,7 +193,6 @@ def get_daily_res_file(d):
 
 def run_abm_process(d):
     exp_file = write_exp_file(d)
-    write_exp(d.get('experiment'), d)
     try:
         os.chdir("src/")
         command = "java abmforcovid/RunABM {}".format(exp_file)

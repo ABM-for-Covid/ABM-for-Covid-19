@@ -17,6 +17,7 @@ try:
     CORS(app)
 except ImportError:
     import os
+
     parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     os.sys.path.insert(0, parentdir)
     from flask_cors import CORS, cross_origin
@@ -42,31 +43,31 @@ def server_error(e):
 
 @app.route('/run', methods=['POST'])
 def get_experiment():
-   if conf.env == 'prod':
-       data = json.loads(request.data.decode(), parse_float=float)
-   else:
-       data = request.data
+    if conf.env == 'prod':
+        data = json.loads(request.data.decode(), parse_float=float)
+    else:
+        data = json.loads(request.data)
     experiment = data.get('experiment')
     result_file = get_result_file(data)
-    #create a resfile from the experiment name
+    # create a resfile from the experiment name
     data['resultfile'] = "{}/{}".format(home, result_file)
     data['dailyfile'] = "{}/{}".format(home, get_daily_res_file(data))
+    write_exp(experiment, data)
     global p
     p = Process(target=run_abm_process, args=(data,))
     p.start()
     return experiment, 200
 
+
 @app.route('/res')
 def get_res():
-    experiment = request.args.get('experiment')
-    write_result(experiment, request.args)
+    data = request.args.copy()
+    write_result(data)
     return "OK", 200
+
 
 if __name__ == '__main__':
     if Constant.env == 'prod':
         app.run(host='0.0.0.0', port=8080)
     else:
         app.run(host='0.0.0.0', port=8080, debug=True)
-
-
-
