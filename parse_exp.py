@@ -7,6 +7,7 @@ import numpy as np
 import requests
 from Constant import *
 import subprocess
+from database import write_exp
 
 class Policies:
     close_borders = "p_close_borders"
@@ -192,7 +193,7 @@ def get_daily_res_file(d):
 
 def run_abm_process(d):
     exp_file = write_exp_file(d)
-    print("running for exp", exp_file)
+    write_exp(d.get('experiment'), d)
     try:
         os.chdir("src/")
         command = "java abmforcovid/RunABM {}".format(exp_file)
