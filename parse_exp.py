@@ -7,7 +7,6 @@ import numpy as np
 import requests
 from Constant import *
 import subprocess
-from database import write_exp
 
 class Policies:
     close_borders = "p_close_borders"

@@ -1,9 +1,5 @@
-from flask import Flask, request, jsonify, Response
-from werkzeug.exceptions import HTTPException
-import json
+from flask import Flask, request
 from multiprocessing import Process
-import time
-import conf
 from database import *
 
 import Constant

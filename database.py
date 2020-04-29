@@ -1,8 +1,5 @@
-import firebase_admin
-from firebase_admin import credentials
 import conf
 import pyrebase
-import json
 
 firebase = pyrebase.initialize_app(conf.FireBaseConfig)
 db = firebase.database()
