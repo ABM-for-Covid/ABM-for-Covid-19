@@ -1,6 +1,7 @@
 *.pyc
 *.log
 *.class
+.idea/workspace.xml
 ngrok
 *.xml
 # don't include third-party dependencies.

@@ -10,5 +10,4 @@ def write_result(data):
     db.child('experiments').child(experiment).child('res').child(day).update(data)
 
 def write_exp(experiment, data):
-    print("Writing exp config to db")
     db.child('experiments').child(experiment).child('exp').update(data)
