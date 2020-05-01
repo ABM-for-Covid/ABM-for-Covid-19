@@ -234,6 +234,31 @@ public /*strictfp*/ class Env extends SimState {
         return sus_count;
     }
 
+    public int get_infection_count(int state){
+        int count = 0;
+        Bag un_object = HumansEnvironment.getAllObjects();
+        for (int i = 0; i < un_object.numObjs; i++) {
+            if (un_object.objs[i] != null) {
+                Agent ta = (Agent) (un_object.objs[i]);
+                if (ta.getInfectionState() == state) {
+                    count++;
+                }
+            }
+        }
+        un_object = QuarantinedEnvironment.getAllObjects();
+        for (int i = 0; i < un_object.numObjs; i++) {
+            if (un_object.objs[i] != null) {
+                Agent ta = (Agent) (un_object.objs[i]);
+                if (ta.getInfectionState() == state) {
+                    count++;
+                }
+            }
+        }
+        return count;
+
+    }
+
+
     public int getNum_Asymptomatic_Agents()
     //  return the count of asymptomatic agents to inspectors.*/
     {
@@ -1011,15 +1036,16 @@ public /*strictfp*/ class Env extends SimState {
                 rowdata.add(getNum_Death_Count());
                 rowdata.add(getNum_Asymptomatic_Agents());
                 rowdata.add(getNum_Susceptible_agents());
-                rowdata.add(getCapacity_hospital_bed());
-                rowdata.add(getCapacity_icu_beds());
+                rowdata.add(get_infection_count(1));
+                rowdata.add(get_infection_count(2));
+
                 for (int i = 0; i < rowdata.size(); i++) {
                     Integer data = rowdata.get(i);
                     file.append(data.toString());
                     file.append(",");
-
                 }
-                file.append(String.format("%.2f", getAvg_infection()));
+                Integer c_i3 = get_infection_count(3);
+                file.append(c_i3.toString());
                 file.newLine();
                 file.flush();
                 file.close();
@@ -1047,7 +1073,6 @@ public /*strictfp*/ class Env extends SimState {
 
 
                 file.newLine();
-
                 List<Integer> rowdata = new ArrayList<Integer>();
                 rowdata.add(step_int);
                 rowdata.add(getNum_Infected_Agents());
@@ -1056,19 +1081,19 @@ public /*strictfp*/ class Env extends SimState {
                 rowdata.add(getNum_Death_Count());
                 rowdata.add(getNum_Asymptomatic_Agents());
                 rowdata.add(getNum_Susceptible_agents());
-                rowdata.add(getCapacity_hospital_bed());
-                rowdata.add(getCapacity_icu_beds());
+                rowdata.add(get_infection_count(1));
+                rowdata.add(get_infection_count(2));
 
                 for (int i = 0; i < rowdata.size(); i++) {
                     Integer data = rowdata.get(i);
                     file.append(data.toString());
                     file.append(",");
                 }
-                file.append(String.format("%.2f", 0.0));
+                Integer c_i3 = get_infection_count(3);
+                file.append(c_i3.toString());
                 file.newLine();
                 file.flush();
                 file.close();
-
             }
         } catch (IOException e) {
             e.printStackTrace();

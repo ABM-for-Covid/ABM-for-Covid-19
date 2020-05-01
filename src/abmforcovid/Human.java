@@ -111,9 +111,8 @@ public /*strictfp*/ class Human extends Agent {
                 if (!Env.policy_close_borders) {
                     Transitions.add_new_infectious_agents();
                 }
-
                 int day = sim_count/Env.ini_sim_cycle_per_day;
-                hb.send_data(day);
+//                hb.send_data(day);
                 hb.daily_data(day);
             }
             sim_count++;
