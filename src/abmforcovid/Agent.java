@@ -120,8 +120,10 @@ public abstract /*strictfp*/ class Agent extends SimplePortrayal2D implements St
 
     public final void setExposed(boolean b) {
         exposed = b;
-        if(exposed)
+        if(exposed){
             setSusceptible(false);
+            Env.c_expose++;
+    }
     }
 
     public final void setSusceptible(boolean b) {

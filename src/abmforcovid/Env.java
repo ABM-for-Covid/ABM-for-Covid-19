@@ -97,6 +97,7 @@ public /*strictfp*/ class Env extends SimState {
     public static int c_i1 = 0;
     public static int c_i2 = 0;
     public static int c_i3 = 0;
+    public static int c_expose = 0;
 
 
     public int getNum_Infected_Agents()
@@ -960,6 +961,7 @@ public /*strictfp*/ class Env extends SimState {
                 BufferedWriter file = new BufferedWriter(new FileWriter(filename, true));
                 List<Integer> rowdata = new ArrayList<Integer>();
                 rowdata.add(day);
+                rowdata.add(Env.c_expose);
                 rowdata.add(Env.c_i0);
                 rowdata.add(Env.c_i1);
                 rowdata.add(Env.c_i2);
@@ -973,6 +975,7 @@ public /*strictfp*/ class Env extends SimState {
                 file.newLine();
                 file.flush();
                 file.close();
+                Env.c_expose = 0;
                 Env.c_i0 = 0;
                 Env.c_i1 = 0;
                 Env.c_i2 = 0;
@@ -981,6 +984,8 @@ public /*strictfp*/ class Env extends SimState {
             } else {
                 BufferedWriter file = new BufferedWriter(new FileWriter(filename, true));
                 file.append("day");
+                file.append(",");
+                file.append("daily_expose");
                 file.append(",");
                 file.append("daily_i0");
                 file.append(",");
@@ -993,6 +998,7 @@ public /*strictfp*/ class Env extends SimState {
 
                 List<Integer> rowdata = new ArrayList<Integer>();
                 rowdata.add(day);
+                rowdata.add(Env.c_expose);
                 rowdata.add(Env.c_i0);
                 rowdata.add(Env.c_i1);
                 rowdata.add(Env.c_i2);
