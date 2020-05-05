@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
+import sun.util.locale.provider.FallbackLocaleProviderAdapter;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -14,6 +15,7 @@ public class RunABM {
     public String experiment;
     public String resultfile;
     public String dailyfile;
+    public boolean stream_data = true;
     //scaling factors of environments
     public  int num_agents = 100;
     public  int sim_cycle_per_day = 500;
@@ -45,6 +47,7 @@ public class RunABM {
         Env.setExperiment(experiment);
         Env.setResultFile(resultfile);
         Env.setDailyFile(dailyfile);
+        Env.setStream_data(stream_data);
         Env.setIni_sim_cycle_per_day(sim_cycle_per_day);
         Env.setIni_essential_agent_percent(essential_agent_percent);
         Env.setIni_recovery_percent(recovery_percent);

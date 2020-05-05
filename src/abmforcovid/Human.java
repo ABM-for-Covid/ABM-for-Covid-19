@@ -99,7 +99,8 @@ public /*strictfp*/ class Human extends Agent {
         if (this.aindex==0){
 
             hb.checkAndInvokePolicy(sim_count);
-//            hb.stream_data(sim_count);
+            if (Env.stream_data)
+                hb.stream_data(sim_count);
 
             if (sim_count % Env.ini_sim_cycle_per_day == 0){
 
@@ -112,7 +113,8 @@ public /*strictfp*/ class Human extends Agent {
                     Transitions.add_new_infectious_agents();
                 }
                 int day = sim_count/Env.ini_sim_cycle_per_day;
-                hb.send_data(day);
+                if (!Env.stream_data)
+                    hb.send_data(day);
                 hb.daily_data(day);
             }
             sim_count++;

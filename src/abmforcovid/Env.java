@@ -63,6 +63,13 @@ public /*strictfp*/ class Env extends SimState {
     public static double env_ymax;
     public static double Q_XMAX;
     public static double Q_YMAX;
+    public static boolean stream_data = true;
+
+    public static void setStream_data(boolean stream_data) {
+        stream_data = stream_data;
+    }
+
+
 
     /********* Capacities ******************************/
     public static int capacity_contact_trace = 10;

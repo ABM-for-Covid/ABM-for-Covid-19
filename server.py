@@ -48,7 +48,10 @@ def get_experiment():
     # create a resfile from the experiment name
     data['resultfile'] = "{}/{}".format(home, result_file)
     data['dailyfile'] = "{}/{}".format(home, get_daily_res_file(data))
-    # write_exp(experiment, data)
+    if conf.abmserver:
+        data['stream_data'] = False
+    if conf.abmserver:
+        write_exp(experiment, data)
     global p
     p = Process(target=run_abm_process, args=(data,))
     p.start()
