@@ -45,6 +45,7 @@ public /*strictfp*/ class Env extends SimState {
     public static double ini_essential_agent_percent = 0.05;
     public static double ini_infection_percent = 0.0;
     public static double ini_recovery_percent = 0.0;
+    public static double ini_weak_immune_percent = 0.03;
 
     // age is a triangular distribution between 1, 90 with peak at 25
     public static double ini_distribution_age_min = 1;
@@ -651,6 +652,14 @@ public /*strictfp*/ class Env extends SimState {
         Env.ini_distribution_age_peak = ini_distribution_age_peak;
     }
 
+    public static double getIni_weak_immune_percent() {
+        return ini_weak_immune_percent;
+    }
+
+    public static void setIni_weak_immune_percent(double ini_weak_immune_percent) {
+        Env.ini_weak_immune_percent = ini_weak_immune_percent;
+    }
+
     public static double getIni_recovery_percent() {
         return ini_recovery_percent;
     }
@@ -794,12 +803,8 @@ public /*strictfp*/ class Env extends SimState {
                 if (agent.age > 100 || agent.age <= 1)
                     continue;
 
-                // immunity flag
-                if (Transitions.getRandomBoolean(0.1))
-                    agent.weakImmune = true;
-
                 //co-morbidity
-                if (Transitions.getRandomBoolean(0.1))
+                if (Transitions.getRandomBoolean(0.05))
                     agent.coMorbid_score = -2;
                 else if (Transitions.getRandomBoolean(0.23))
                     agent.coMorbid_score = -1;
@@ -825,8 +830,10 @@ public /*strictfp*/ class Env extends SimState {
             step_int++;
         }
         Transitions.mark_essential_agents();
+        Transitions.mark_weak_immune_agents();
         if (Env.ini_recovery_percent > 0)
             Transitions.mark_recovered_agents();
+
     }
 
     public static void setStrategy(HashMap strategy) {
@@ -909,6 +916,10 @@ public /*strictfp*/ class Env extends SimState {
 
     public static void setExperiment(String experiment) {
         Env.experiment = experiment;
+    }
+
+    public static String getExperiment() {
+        return experiment;
     }
 
     public static String experiment;

@@ -115,10 +115,10 @@ public class EnvUI extends GUIState {
     }
 
 
-    protected Color humanColor = new Color(15, 165, 189);
-    protected Color exposedColor = new Color(84, 127, 57);
-    protected Color infectedColorI0 = new Color(255, 122, 47);
-    protected Color infectedColorI1 = new Color(230, 23, 255);
+    protected Color humanColor = new Color(90, 155, 165, 255);
+    protected Color exposedColor = new Color(12, 5, 227, 255);
+    protected Color infectedColorI0 = new Color(9, 255, 42);//new Color(255, 122, 47);
+    protected Color infectedColorI1 =new Color(255, 122, 47); // new Color(230, 23, 255);
     protected Color infectedColorI2 = new Color(255, 27, 59);
     protected Color infectedColorI3 = new Color(78, 43, 48);
     protected Color deadColor = new Color(15, 19, 17);
@@ -129,13 +129,13 @@ public class EnvUI extends GUIState {
         int opacity = human.getOpacity();
         opacity = 255;
         if (human.isExposed()) {
-            exposedColor = new Color(192, 156, 30, opacity);
+//            exposedColor = new Color(192, 156, 30, opacity);
             graphics.setColor(exposedColor);
         } else if (human.getInfectionState() == 0) {
-            infectedColorI0 = new Color(255, 122, 47, opacity);
+//            infectedColorI0 = new Color(255, 122, 47, opacity);
             graphics.setColor(infectedColorI0);
         } else if (human.getInfectionState() == 1) {
-            infectedColorI1 = new Color(230, 23, 255, opacity);
+//            infectedColorI1 = new Color(230, 23, 255, opacity);
             graphics.setColor(infectedColorI1);
         } else if (human.getInfectionState() == 2 || human.getInfectionState() == 3) {
             graphics.setColor(infectedColorI3);

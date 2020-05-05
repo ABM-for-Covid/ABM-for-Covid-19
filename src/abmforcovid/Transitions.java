@@ -7,6 +7,8 @@ import java.util.Random;
 
 public class Transitions {
     public static double inf_score_scaler = 5.0;
+    public static double inf_i1_transition_scaler = 4.0;
+
     public static Random ran_1 = new Random();
 
     static boolean getRandomBoolean(double probability) {
@@ -58,7 +60,7 @@ public class Transitions {
                 return;
             }
         } else {
-            if (getRandomBoolean(1 / Env.INCUBATION_PERIOD_High)) {
+            if (getRandomBoolean( 1 /(inf_i1_transition_scaler * Env.INCUBATION_PERIOD_High))) {
                 exposedHuman.setInfected(true);
                 exposedHuman.setInfectionState(1);
                 exposedHuman.setExposed(false);
@@ -366,11 +368,7 @@ public class Transitions {
         for (int i = 0; i < all_agents.numObjs; i++) {
             if (all_agents.objs[i] != null) {
                 Human ta = (Human) (all_agents.objs[i]);
-
-                // if not having infection and age is working age
-                if (ta.infectionState <= 1 && ta.age<60 && ta.age > 18) {
                     sample_list.add(ta);
-                }
             }
         }
         if (sample_list.size() == 0) return;
@@ -382,6 +380,28 @@ public class Transitions {
         for (int i = 0; i < agents_to_mark; i++) {
             Human hu = sample_list.get(i);
             hu.setRecovered(true);
+        }
+    }
+
+    public static void mark_weak_immune_agents() {
+        // run it only once to mark a percentage of agents essential
+        ArrayList<Human> sample_list = new ArrayList<>();
+        Bag all_agents = Env.HumansEnvironment.getAllObjects();
+        for (int i = 0; i < all_agents.numObjs; i++) {
+            if (all_agents.objs[i] != null) {
+                Human ta = (Human) (all_agents.objs[i]);
+                    sample_list.add(ta);
+            }
+        }
+        if (sample_list.size() == 0) return;
+        //shuffle the list to pick random agents
+        Collections.shuffle(sample_list);
+        int agents_to_mark = (int)(all_agents.size() * Env.ini_weak_immune_percent);
+        if (sample_list.size() < agents_to_mark) agents_to_mark = sample_list.size();
+
+        for (int i = 0; i < agents_to_mark; i++) {
+            Human hu = sample_list.get(i);
+            hu.weakImmune = true;
         }
     }
 }
