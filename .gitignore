@@ -12,7 +12,7 @@ results/
 experiments/
 notebooks/
 temp/
-.idea/
+.idea/*
 ideas/
 log/
 model_data/
