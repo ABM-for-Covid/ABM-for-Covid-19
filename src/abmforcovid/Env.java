@@ -45,6 +45,7 @@ public /*strictfp*/ class Env extends SimState {
     public static double ini_essential_agent_percent = 0.05;
     public static double ini_infection_percent = 0.0;
     public static double ini_recovery_percent = 0.0;
+    public static double ini_weak_immune_percent = 0.03;
 
     // age is a triangular distribution between 1, 90 with peak at 25
     public static double ini_distribution_age_min = 1;
@@ -97,6 +98,7 @@ public /*strictfp*/ class Env extends SimState {
     public static int c_i1 = 0;
     public static int c_i2 = 0;
     public static int c_i3 = 0;
+    public static int c_expose = 0;
 
 
     public int getNum_Infected_Agents()
@@ -233,6 +235,31 @@ public /*strictfp*/ class Env extends SimState {
 
         return sus_count;
     }
+
+    public int get_infection_count(int state){
+        int count = 0;
+        Bag un_object = HumansEnvironment.getAllObjects();
+        for (int i = 0; i < un_object.numObjs; i++) {
+            if (un_object.objs[i] != null) {
+                Agent ta = (Agent) (un_object.objs[i]);
+                if (ta.getInfectionState() == state) {
+                    count++;
+                }
+            }
+        }
+        un_object = QuarantinedEnvironment.getAllObjects();
+        for (int i = 0; i < un_object.numObjs; i++) {
+            if (un_object.objs[i] != null) {
+                Agent ta = (Agent) (un_object.objs[i]);
+                if (ta.getInfectionState() == state) {
+                    count++;
+                }
+            }
+        }
+        return count;
+
+    }
+
 
     public int getNum_Asymptomatic_Agents()
     //  return the count of asymptomatic agents to inspectors.*/
@@ -625,6 +652,14 @@ public /*strictfp*/ class Env extends SimState {
         Env.ini_distribution_age_peak = ini_distribution_age_peak;
     }
 
+    public static double getIni_weak_immune_percent() {
+        return ini_weak_immune_percent;
+    }
+
+    public static void setIni_weak_immune_percent(double ini_weak_immune_percent) {
+        Env.ini_weak_immune_percent = ini_weak_immune_percent;
+    }
+
     public static double getIni_recovery_percent() {
         return ini_recovery_percent;
     }
@@ -768,12 +803,8 @@ public /*strictfp*/ class Env extends SimState {
                 if (agent.age > 100 || agent.age <= 1)
                     continue;
 
-                // immunity flag
-                if (Transitions.getRandomBoolean(0.1))
-                    agent.weakImmune = true;
-
                 //co-morbidity
-                if (Transitions.getRandomBoolean(0.1))
+                if (Transitions.getRandomBoolean(0.05))
                     agent.coMorbid_score = -2;
                 else if (Transitions.getRandomBoolean(0.23))
                     agent.coMorbid_score = -1;
@@ -799,8 +830,10 @@ public /*strictfp*/ class Env extends SimState {
             step_int++;
         }
         Transitions.mark_essential_agents();
+        Transitions.mark_weak_immune_agents();
         if (Env.ini_recovery_percent > 0)
             Transitions.mark_recovered_agents();
+
     }
 
     public static void setStrategy(HashMap strategy) {
@@ -885,6 +918,10 @@ public /*strictfp*/ class Env extends SimState {
         Env.experiment = experiment;
     }
 
+    public static String getExperiment() {
+        return experiment;
+    }
+
     public static String experiment;
 
     public static void setResultFile(String resultFile) {
@@ -935,6 +972,7 @@ public /*strictfp*/ class Env extends SimState {
                 BufferedWriter file = new BufferedWriter(new FileWriter(filename, true));
                 List<Integer> rowdata = new ArrayList<Integer>();
                 rowdata.add(day);
+                rowdata.add(Env.c_expose);
                 rowdata.add(Env.c_i0);
                 rowdata.add(Env.c_i1);
                 rowdata.add(Env.c_i2);
@@ -948,6 +986,7 @@ public /*strictfp*/ class Env extends SimState {
                 file.newLine();
                 file.flush();
                 file.close();
+                Env.c_expose = 0;
                 Env.c_i0 = 0;
                 Env.c_i1 = 0;
                 Env.c_i2 = 0;
@@ -956,6 +995,8 @@ public /*strictfp*/ class Env extends SimState {
             } else {
                 BufferedWriter file = new BufferedWriter(new FileWriter(filename, true));
                 file.append("day");
+                file.append(",");
+                file.append("daily_expose");
                 file.append(",");
                 file.append("daily_i0");
                 file.append(",");
@@ -968,6 +1009,7 @@ public /*strictfp*/ class Env extends SimState {
 
                 List<Integer> rowdata = new ArrayList<Integer>();
                 rowdata.add(day);
+                rowdata.add(Env.c_expose);
                 rowdata.add(Env.c_i0);
                 rowdata.add(Env.c_i1);
                 rowdata.add(Env.c_i2);
@@ -1011,15 +1053,16 @@ public /*strictfp*/ class Env extends SimState {
                 rowdata.add(getNum_Death_Count());
                 rowdata.add(getNum_Asymptomatic_Agents());
                 rowdata.add(getNum_Susceptible_agents());
-                rowdata.add(getCapacity_hospital_bed());
-                rowdata.add(getCapacity_icu_beds());
+                rowdata.add(get_infection_count(1));
+                rowdata.add(get_infection_count(2));
+
                 for (int i = 0; i < rowdata.size(); i++) {
                     Integer data = rowdata.get(i);
                     file.append(data.toString());
                     file.append(",");
-
                 }
-                file.append(String.format("%.2f", getAvg_infection()));
+                Integer c_i3 = get_infection_count(3);
+                file.append(c_i3.toString());
                 file.newLine();
                 file.flush();
                 file.close();
@@ -1047,7 +1090,6 @@ public /*strictfp*/ class Env extends SimState {
 
 
                 file.newLine();
-
                 List<Integer> rowdata = new ArrayList<Integer>();
                 rowdata.add(step_int);
                 rowdata.add(getNum_Infected_Agents());
@@ -1056,19 +1098,19 @@ public /*strictfp*/ class Env extends SimState {
                 rowdata.add(getNum_Death_Count());
                 rowdata.add(getNum_Asymptomatic_Agents());
                 rowdata.add(getNum_Susceptible_agents());
-                rowdata.add(getCapacity_hospital_bed());
-                rowdata.add(getCapacity_icu_beds());
+                rowdata.add(get_infection_count(1));
+                rowdata.add(get_infection_count(2));
 
                 for (int i = 0; i < rowdata.size(); i++) {
                     Integer data = rowdata.get(i);
                     file.append(data.toString());
                     file.append(",");
                 }
-                file.append(String.format("%.2f", 0.0));
+                Integer c_i3 = get_infection_count(3);
+                file.append(c_i3.toString());
                 file.newLine();
                 file.flush();
                 file.close();
-
             }
         } catch (IOException e) {
             e.printStackTrace();

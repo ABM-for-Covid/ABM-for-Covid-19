@@ -110,48 +110,52 @@ public class EnvUI extends GUIState {
     public void paint_displays(Display2D display) {
         Color backdrop_color = new Color(57, 78, 96);
         display.reset();
-        display.setBackdrop(backdrop_color);
+        display.setBackdrop(Color.white);
         display.repaint();
     }
 
 
-    protected Color humanColor = new Color(15, 165, 189);
-    protected Color exposedColor = new Color(192, 183, 76);
-    protected Color infectedColorI0 = new Color(255, 122, 47);
-    protected Color infectedColorI1 = new Color(230, 23, 255);
+    protected Color humanColor = new Color(90, 155, 165, 255);
+    protected Color exposedColor = new Color(12, 5, 227, 255);
+    protected Color infectedColorI0 = new Color(9, 255, 42);//new Color(255, 122, 47);
+    protected Color infectedColorI1 =new Color(255, 122, 47); // new Color(230, 23, 255);
     protected Color infectedColorI2 = new Color(255, 27, 59);
-    protected Color infectedColorI3 = new Color(255, 27, 59);
+    protected Color infectedColorI3 = new Color(78, 43, 48);
     protected Color deadColor = new Color(15, 19, 17);
     protected Color recoveredColor = new Color(9, 255, 42);
 
 
     public void add_glassView_colors(Human human, Graphics2D graphics) {
+        int opacity = human.getOpacity();
+        opacity = 255;
         if (human.isExposed()) {
-            exposedColor = new Color(192, 156, 30, human.getOpacity());
+//            exposedColor = new Color(192, 156, 30, opacity);
             graphics.setColor(exposedColor);
         } else if (human.getInfectionState() == 0) {
-            infectedColorI0 = new Color(255, 122, 47, human.getOpacity());
+//            infectedColorI0 = new Color(255, 122, 47, opacity);
             graphics.setColor(infectedColorI0);
         } else if (human.getInfectionState() == 1) {
-            infectedColorI1 = new Color(230, 23, 255, human.getOpacity());
+//            infectedColorI1 = new Color(230, 23, 255, opacity);
             graphics.setColor(infectedColorI1);
         } else if (human.getInfectionState() == 2 || human.getInfectionState() == 3) {
             graphics.setColor(infectedColorI3);
         } else if (human.dead) graphics.setColor(deadColor);
         else if (human.recovered) graphics.setColor(recoveredColor);
         else {
-            humanColor = new Color(11, 172, 189, human.getOpacity());
+            humanColor = new Color(11, 172, 189, opacity);
             graphics.setColor(humanColor);
         }
     }
 
     public void add_blackBoxView_colors(Human human, Graphics2D graphics) {
+        int opacity = human.getOpacity();
+        opacity = 255;
         if (human.getInfectionState() == 1 || human.getInfectionState() == 2 || human.getInfectionState() == 3) {
-            graphics.setColor(infectedColorI3);
+            graphics.setColor(infectedColorI2);
         } else if (human.dead) graphics.setColor(deadColor);
 
         else {
-            humanColor = new Color(11, 172, 189, human.getOpacity());
+            humanColor = new Color(11, 172, 189, opacity);
             graphics.setColor(humanColor);
         }
     }
