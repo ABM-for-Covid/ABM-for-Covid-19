@@ -133,10 +133,10 @@ public /*strictfp*/ class Human extends Agent {
                     Human ta = (Human) (mysteriousObjects.objs[i]);
 
                     if (hb.withinInfectionDistance(this, agentLocation, ta, ta.agentLocation)) {
-                        //calculate S->E transition
-                        if (Env.policy_contact_tracing && this.getInfectionState() >= 0)
-                            Env.contacts.put(id, ta);
 
+                        if (Env.policy_contact_tracing|| Env.policy_trace_and_test)
+                            Env.contacts.put(id, ta);
+                        //calculate S->E transition
                         if ((ta.getInfectionState() == 0 || ta.getInfectionState() == 1 || ta.getInfectionState() == 2) && this.isSusceptible()) {
                             Transitions.calculateStoE(this, ta);
                         }
@@ -239,6 +239,39 @@ public /*strictfp*/ class Human extends Agent {
         else
             return "Healthy Human";
     }
+
+    public void recursiveTraceandTest() {
+        ArrayList<Human> sample_list = new ArrayList<>();
+        List<Human> traces = fetch_contacts(Env.capacity_contact_trace);
+        for (Human h : traces) {
+            if (h.infectionState <= 1 && !h.tested && !h.quarantined) {
+                sample_list.add(h);
+            }
+        }
+        System.out.println("Testing agents ->"+sample_list.size());
+        if (sample_list.size() == 0) return;
+        Collections.shuffle(sample_list);
+        int count_false_negative = (int) (Env.capacity_contact_trace * Env.test_false_negative_percent);
+        int test_to_perform = sample_list.size();
+
+        for (int i = 0; i < test_to_perform; i++) {
+            Human hu = sample_list.get(i);
+            if (i < count_false_negative) {
+                if (hu.infected) hu.test_result_positive = false;
+                hu.tested = true;
+            }
+            else {
+                if (hu.infected) {
+                    hu.test_result_positive = true;
+                    hu.tested = true;
+//                    hu.setPrime(true);
+                    hu.setQuarantined(true);
+                    hu.recursiveTraceandTest();
+                }
+            }
+        }
+    }
+
 
     public void findAndMarkTraces() {
         List<Human> traces = fetch_contacts(Env.capacity_contact_trace);

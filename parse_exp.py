@@ -17,6 +17,7 @@ class Policies:
     contact_tracing = "p_contact_tracing"
     social_distancing = "p_social_distancing"
     age_lockdown = "p_age_lockdown"
+    trace_test = "p_test_trace"
     exit = "p_exit"
 
 class Capacity:

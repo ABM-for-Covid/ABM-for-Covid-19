@@ -10,6 +10,7 @@ public class Policies {
     public int p_close_borders = -1;
     public int p_hospitalization = -1;
     public int p_age_lockdown = -1;
+    public int p_test_trace = -1;
     public int p_exit = -1;
 
     public int c_contact_trace = -1;

@@ -117,8 +117,8 @@ public class EnvUI extends GUIState {
 
     protected Color humanColor = new Color(90, 155, 165, 255);
     protected Color exposedColor = new Color(12, 5, 227, 255);
-    protected Color infectedColorI0 = new Color(9, 255, 42);//new Color(255, 122, 47);
-    protected Color infectedColorI1 =new Color(255, 122, 47); // new Color(230, 23, 255);
+    protected Color infectedColorI0 = new Color(255, 122, 47);
+    protected Color infectedColorI1 = new Color(230, 23, 255);
     protected Color infectedColorI2 = new Color(255, 27, 59);
     protected Color infectedColorI3 = new Color(78, 43, 48);
     protected Color deadColor = new Color(15, 19, 17);

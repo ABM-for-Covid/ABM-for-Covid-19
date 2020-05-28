@@ -37,7 +37,7 @@ public /*strictfp*/ class Env extends SimState {
 
 
     //scaling factors of environments
-    public static int ini_num_agents = 100;
+    public static int ini_num_agents = 200;
     public static double ini_agent_density = 0.0001;
     public static double ini_hospital_bed_per_agent = 0.1;
     public static double ini_icu_bed_per_hospital_bed = 0.05;
@@ -65,6 +65,7 @@ public /*strictfp*/ class Env extends SimState {
     public static double Q_YMAX;
     public static boolean stream_data = true;
 
+
     public static void setStream_data(boolean stream_data) {
         stream_data = stream_data;
     }
@@ -72,7 +73,7 @@ public /*strictfp*/ class Env extends SimState {
 
 
     /********* Capacities ******************************/
-    public static int capacity_contact_trace = 10;
+    public static int capacity_contact_trace = 5;
     public static int capacity_hospital_bed = (int) (ini_num_agents * ini_hospital_bed_per_agent);
     public static int capacity_icu_beds = (int) (ini_icu_bed_per_hospital_bed * capacity_hospital_bed);
     public static int capacity_testing = 5;
@@ -86,6 +87,7 @@ public /*strictfp*/ class Env extends SimState {
     public static boolean policy_close_borders = false;
     public static boolean policy_hospitalization = false; // if i2 and i3 be isolated in a hospital.
     public static boolean policy_age_based_lockdown = false; // if i2 and i3 be isolated in a hospital.
+    public static boolean policy_trace_and_test = true;
 
     /********** count **********************************/
     public static int num_traveler_Agents = 0;
@@ -387,6 +389,13 @@ public /*strictfp*/ class Env extends SimState {
         Env.ini_icu_bed_per_hospital_bed = ini_icu_bed_per_hospital_bed;
     }
 
+    public static boolean isPolicy_trace_and_test() {
+        return policy_trace_and_test;
+    }
+
+    public static void setPolicy_trace_and_test(boolean policy_trace_and_test) {
+        Env.policy_trace_and_test = policy_trace_and_test;
+    }
 
     public static double getEnv_xmax() {
         return env_xmax;
@@ -893,6 +902,10 @@ public /*strictfp*/ class Env extends SimState {
             if (policy.p_age_lockdown == 0 || policy.p_age_lockdown == 1) {
                 boolean b = policy.p_age_lockdown == 1;
                 Env.setPolicy_age_based_lockdown(b);
+            }
+            if (policy.p_test_trace == 0 || policy.p_test_trace == 1) {
+                boolean b = policy.p_test_trace == 1;
+                Env.setPolicy_trace_and_test(b);
             }
 
             //capacities

@@ -105,6 +105,13 @@ public class Transitions {
             inf_score = human.count_I1 / inf_score_scaler;
         }
 
+        if (human.count_I1 == 2 && Env.policy_trace_and_test && !human.quarantined){
+                human.setPrime(true);
+                human.setQuarantined(true);
+                human.recursiveTraceandTest();
+
+        }
+
         // score ranges from -2 to 6
         double score = a_x + human.overallHealth + human.coMorbid_score + 2;
         double score_days_spent = score - inf_score;
@@ -314,7 +321,6 @@ public class Transitions {
 
             // generate result based on false negative %
             if (i < count_false_negative) {
-
                 if (hu.infected) hu.test_result_positive = false;
                 hu.tested = true;
             } else {
