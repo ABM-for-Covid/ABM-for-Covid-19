@@ -108,7 +108,7 @@ public class Transitions {
         if (human.count_I1 == 2 && Env.policy_trace_and_test && !human.quarantined){
                 human.setPrime(true);
                 human.setQuarantined(true);
-                human.recursiveTraceandTest();
+                human.recursiveTraceandTest(0);
 
         }
 

@@ -240,7 +240,8 @@ public /*strictfp*/ class Human extends Agent {
             return "Healthy Human";
     }
 
-    public void recursiveTraceandTest() {
+    public void recursiveTraceandTest(int r) {
+        if(r>=5) return;
         ArrayList<Human> sample_list = new ArrayList<>();
         List<Human> traces = fetch_contacts(Env.capacity_contact_trace);
         for (Human h : traces) {
@@ -266,7 +267,7 @@ public /*strictfp*/ class Human extends Agent {
                     hu.tested = true;
 //                    hu.setPrime(true);
                     hu.setQuarantined(true);
-                    hu.recursiveTraceandTest();
+                    hu.recursiveTraceandTest(r++);
                 }
             }
         }
