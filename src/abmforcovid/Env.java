@@ -87,7 +87,7 @@ public /*strictfp*/ class Env extends SimState {
     public static boolean policy_close_borders = false;
     public static boolean policy_hospitalization = false; // if i2 and i3 be isolated in a hospital.
     public static boolean policy_age_based_lockdown = false; // if i2 and i3 be isolated in a hospital.
-    public static boolean policy_trace_and_test = true;
+    public static boolean policy_trace_and_test = false;
 
     /********** count **********************************/
     public static int num_traveler_Agents = 0;

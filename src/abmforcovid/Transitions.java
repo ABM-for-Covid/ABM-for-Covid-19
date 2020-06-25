@@ -105,12 +105,12 @@ public class Transitions {
             inf_score = human.count_I1 / inf_score_scaler;
         }
 
-        if (human.count_I1 == 2 && Env.policy_trace_and_test && !human.quarantined){
-                human.setPrime(true);
-                human.setQuarantined(true);
-                human.recursiveTraceandTest(0);
-
-        }
+//        if (human.count_I1 == 2 && Env.policy_trace_and_test && !human.quarantined){
+//                human.setPrime(true);
+//                human.setQuarantined(true);
+//                human.recursiveTraceandTest(0);
+//
+//        }
 
         // score ranges from -2 to 6
         double score = a_x + human.overallHealth + human.coMorbid_score + 2;
