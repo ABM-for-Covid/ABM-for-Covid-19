@@ -20,7 +20,7 @@ public class RunABM {
     public  double essential_agent_percent = 0.05;
     public  double recovery_percent = 0.0;
     public  double agent_density = 0.0001;
-    public  double hospital_bed_per_agent = 0.1;
+    public  double hospital_bed_per_agent = 0.002;
     public  double icu_bed_per_hospital_bed = 0.05;
 
     public  double infection_percent = 0.0;
