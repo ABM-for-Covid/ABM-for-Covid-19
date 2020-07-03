@@ -910,13 +910,13 @@ public /*strictfp*/ class Env extends SimState {
 
             //capacities
             if (policy.c_contact_trace > 0)
-                Env.setCapacity_contact_trace(policy.c_contact_trace);
+                Env.setCapacity_contact_trace(policy.c_contact_trace +getCapacity_contact_trace());
             if (policy.c_hospital_bed > 0)
                 Env.setCapacity_hospital_bed(policy.c_hospital_bed+ getCapacity_hospital_bed());
             if (policy.c_icu_beds > 0)
                 Env.setCapacity_icu_beds(policy.c_icu_beds + getCapacity_icu_beds());
             if (policy.c_testing > 0)
-                Env.setCapacity_testing(policy.c_testing);
+                Env.setCapacity_testing(policy.c_testing +getCapacity_testing());
 
 
             // attributes
